@@ -1,0 +1,28 @@
+{
+  "name": "fullstackproject",
+  "version": "1.0.0",
+  "description": "This is a web app made by Steven Rivadeneira.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steven-rr/fullstackProject.git"
+  },
+  "keywords": [
+    "web",
+    "app",
+    "steven",
+    "rivadeneira"
+  ],
+  "author": "Steven Rivadeneira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/steven-rr/fullstackProject/issues"
+  },
+  "homepage": "https://github.com/steven-rr/fullstackProject#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
