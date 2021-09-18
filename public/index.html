@@ -17,9 +17,16 @@
             body: JSON.stringify(data)
         }
 
+        // async function fetchFromAPI()
+        // {
+        //     const response = await fetch('/api', options);
+        //     const json = await response.json();
+        //     console.log(json)
+        // }
         async function fetchFromAPI()
         {
-            const response = await fetch('/api', options);
+            const api_url = '/weather';
+            const response = await fetch(api_url);
             const json = await response.json();
             console.log(json)
         }
