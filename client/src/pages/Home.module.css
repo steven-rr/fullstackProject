@@ -1,0 +1,38 @@
+
+.homeContainer
+{
+    background-color: rgb(29, 29, 29);
+    height: 100%;
+}
+
+.textStyle
+{   
+    display: block;
+    padding-top: 50px;
+    color: #fff;
+    font-size: 50px;
+    
+}
+.buttnContainer
+{
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content: space-between;
+    color: #fff;
+    width: 60%;
+    height: 200px;
+    padding-top: 50px;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+@media screen and (max-width: 1000px)
+{
+    .buttnContainer
+    {
+        flex-direction: column;
+
+    }
+
+}
