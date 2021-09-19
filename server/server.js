@@ -13,11 +13,11 @@ const app = express()
 /// run on port specified, else run on 3001.
 const PORT = process.env.PORT || 3001 
 
-// setting up such that db is loaded .
-db.sequelize.sync().then ( () => {
-    app.listen(PORT, () => console.log(`listening at ${PORT}`))
-
-});  
+// setting up such that db is loaded . ** may be redundant, callback + async.
+app.listen(PORT,async () => {
+    console.log(`listening at ${PORT}`)
+    await db.sequelize.sync()
+})
 
 // loading in static HTML.
 app.use(express.static('public')) 
