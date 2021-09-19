@@ -30,7 +30,10 @@
     "concurrently": "^6.2.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "node-fetch": "^2.0.0"
+    "mysql2": "^2.3.0",
+    "node-fetch": "^2.0.0",
+    "sequelize": "^6.6.5",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

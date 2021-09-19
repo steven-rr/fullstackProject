@@ -1,12 +1,41 @@
+
+
 const fetch = require("node-fetch")
 const express = require('express');
+const db = require('./models')
+const {Posts}= require('./models')
+
 require('dotenv').config();
 
-const app = express()
-app.listen(3001, () => console.log('listening at 3001'))
 
-app.use(express.static('public'))
-app.use(express.json({limit : '1mb'}))
+const app = express()
+
+/// run on port specified, else run on 3001.
+const PORT = process.env.PORT || 3001 
+
+// setting up such that db is loaded .
+db.sequelize.sync().then ( () => {
+    app.listen(PORT, () => console.log(`listening at ${PORT}`))
+
+});  
+
+// loading in static HTML.
+app.use(express.static('public')) 
+// allowing express to parse JSON.
+app.use(express.json({limit : '1mb'})) 
+
+// some routes.
+app.get('/posts/', async (request, response) => {
+    const post = {
+        title: "bob",
+        username: "karinsteve",
+        postText: "it's working!"
+
+    }
+    await Posts.create(post);
+    response.json(post);
+})
+
 
 app.post('/api', (request, response) =>
 {
