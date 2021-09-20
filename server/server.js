@@ -25,7 +25,7 @@ app.use('/api/posts', require('./routes/posts'))
 app.use('/misc', require('./routes/misc'))
 
 // listen.
-// setting up such that db is loaded .
+// setting up such that db is loaded before server begins to listen.
 db.sequelize.sync().then ( () => {
     app.listen(PORT, () => console.log(`listening at ${PORT}`))
 
