@@ -52,31 +52,30 @@ const Form = () => {
             <div className= {FormCSS.textStyle}>Create an Account, Steven! </div>
             <form className= {FormCSS.formClass}>
                 <div className={FormCSS.inputsClass}>
-                    
-                    <label>Username</label>
-                    <input
-                        type= "text"
-                        name="username"
-                        onChange={handleChange}
-                        placeholder="Username..."
+                    <TextField
+                        label={"Username"}
+                        name={"username"} 
+                        type={"text"} 
+                        placeholder={"Username.."} 
+                        handleChange={handleChange} 
+                        inputErr={inputErrors.usernameErr}
                     />
-                    {inputErrors.usernameErr}
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        onChange={handleChange}
-                        placeholder= "Password..." 
+                    <TextField
+                        label={"Password"}
+                        name={"password"} 
+                        type={"password"} 
+                        placeholder={"Password.."} 
+                        handleChange={handleChange} 
+                        inputErr={inputErrors.passwordErr}
                     />
-                    {inputErrors.passwordErr}
-                    <label>Email</label>
-                    <input
-                        type= "text"
-                        name="email"
-                        onChange={handleChange}
-                        placeholder="Email..."
+                    <TextField
+                        label={"Email"}
+                        name={"email"} 
+                        type={"text"} 
+                        placeholder={"Email.."} 
+                        handleChange={handleChange} 
+                        inputErr={inputErrors.emailErr}
                     />
-                    {inputErrors.emailErr}
                 </div>
                 <div>
                     <button onClick={handleSubmit}>Create Account</button>
