@@ -1,5 +1,5 @@
 import React from 'react'
-
+import FormTextFieldCSS from "./FormTextField.module.css"
 const FormTextField = ({label,name, type, placeholder, handleChange, inputErr }) => {
     return (
         <div>
@@ -10,7 +10,7 @@ const FormTextField = ({label,name, type, placeholder, handleChange, inputErr })
                 onChange={handleChange}
                 placeholder="Username..."
             />
-            {inputErr}
+            <div className={FormTextFieldCSS.errMsgClass}> {inputErr} </div>
         </div>
     )
 }
