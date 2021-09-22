@@ -1,5 +1,6 @@
 import React,  { useState, useEffect } from 'react'
 import FormCSS from "./Form.module.css"
+import axios from   "axios" 
 
 const Form = () => {
 
@@ -13,6 +14,17 @@ const Form = () => {
         setValues({...values, [name]:value})
     }
 
+    const handleSubmit = async (e) => 
+    {
+        e.preventDefault();
+        const response = await axios
+                                .post('/api/users',values)
+                                .then( res => {
+                                    console.log(res)
+                                })
+                                .catch( (err) => console.log("Error:", err ) );
+
+    }
     return (
         <div className={FormCSS.formContainer}>
             <div className= {FormCSS.textStyle}>Create an Account, Steven! </div>
@@ -41,7 +53,7 @@ const Form = () => {
                     />
                 </div>
                 <div>
-                    <button>Create Account</button>
+                    <button onClick={handleSubmit}>Create Account</button>
                 </div>
             </form>
         </div>
