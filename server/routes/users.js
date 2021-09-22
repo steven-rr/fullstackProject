@@ -3,7 +3,9 @@ const router = express.Router();
 const {Users}= require('../models');
 const bcrypt = require("bcrypt")
 
-// register a user..
+// register a user.
+// should check if username is taken.
+    
 router.post('/register', async (request, response) => {
     const {username , password, email} = request.body;
     
