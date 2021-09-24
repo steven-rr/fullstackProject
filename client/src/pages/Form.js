@@ -11,7 +11,7 @@ const Form = () => {
 
     const [values, setValues] = useState({username: '', password: '', email: '' })
     const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
-
+    const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
     // handles input errors.
     const handleErrors = (name, value) => {
         // handle errors:
@@ -19,20 +19,26 @@ const Form = () => {
         {
             inputErrors.usernameErr = 
                             (value.length < 3 && value.length>0)  ? "minimum of 3 characters required": "";
+            invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
         }
         else if(name === "password")
         {
             inputErrors.passwordErr= (value.length < 6 && value.length>0) ? "minimum of 6 characters required": "";
+            invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
         }
         else if(name === "email")
         {
             inputErrors.emailErr= (emailRegex.test(value) || value.length === 0) ? "":"invalid email";
+            invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
         }
 
     }
     const handleChange = e => {
         const {name, value} = e.target;
+        // set errors when appropriate.
         handleErrors(name, value);
+        // if any errors are activated, don't allow user to submit.
+        invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
         setValues({...values, [name]:value})
     }
 
@@ -78,7 +84,7 @@ const Form = () => {
                     />
                 </div>
                 <div>
-                    <button onClick={handleSubmit}>Create Account</button>
+                    <button onClick={handleSubmit} disabled={invalidFlags.submitInvalid}>Create Account</button>
                 </div>
             </form>
         </div>
