@@ -1,0 +1,37 @@
+
+.loginContainer
+{
+    background-color: rgb(29, 29, 29);
+    height: 100%;
+}
+
+.textStyle
+{   
+    display: block;
+    padding-top: 50px;
+    color: #fff;
+    font-size: 50px;
+    
+}
+
+.formClass
+{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputsClass
+{
+    width: 10px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.errMsgClass
+{
+	color: red;
+	
+}
