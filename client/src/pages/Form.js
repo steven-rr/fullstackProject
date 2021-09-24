@@ -18,17 +18,17 @@ const Form = () => {
         if(name === "username")
         {
             inputErrors.usernameErr = 
-                            (value.length < 3 && value.length>0)  ? "minimum of 3 characters required": "";
+                            (value.length < 3)  ? "minimum of 3 characters required": "";
             invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
         }
         else if(name === "password")
         {
-            inputErrors.passwordErr= (value.length < 6 && value.length>0) ? "minimum of 6 characters required": "";
+            inputErrors.passwordErr= (value.length < 6 ) ? "minimum of 6 characters required": "";
             invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
         }
         else if(name === "email")
         {
-            inputErrors.emailErr= (emailRegex.test(value) || value.length === 0) ? "":"invalid email";
+            inputErrors.emailErr= (emailRegex.test(value)) ? "":"invalid email";
             invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
         }
 
