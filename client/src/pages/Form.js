@@ -8,10 +8,13 @@ const emailRegex = RegExp(
   );
 
 const Form = () => {
-
+    const [rerender, setRerender] = useState(false)
     const [values, setValues] = useState({username: '', password: '', email: '' })
     const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
+    useEffect( () => {
+        setRerender(!rerender)
+    }, [values.usernameErr])
     // handles input errors.
     const handleErrors = (name, value) => {
         // handle errors:
@@ -41,14 +44,20 @@ const Form = () => {
         invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
         setValues({...values, [name]:value})
     }
-
+    
     const handleSubmit = async (e) => 
     {
-        e.preventDefault();
         const response = await axios
                                 .post('/api/users/register',values)
                                 .then( res => {
-                                    console.log(res)
+                                    console.log(inputErrors.usernameErr)
+                                    if(res.data.userNameErr || res.data.emailErr)
+                                    {
+                                        inputErrors.usernameErr = res.data.userNameErr;
+                                        inputErrors.emailErr = res.data.emailErr;
+                                    }
+                                    console.log(inputErrors.usernameErr)
+                                    console.log(inputErrors.emailErr)
                                 })
                                 .catch( (err) => console.log("Error:", err ) );
 
@@ -84,7 +93,7 @@ const Form = () => {
                     />
                 </div>
                 <div>
-                    <button onClick={handleSubmit} disabled={invalidFlags.submitInvalid}>Create Account</button>
+                    <button onClick={handleSubmit} disabled={invalidFlags.submitInvalid} type="button" >Create Account</button>
                 </div>
             </form>
         </div>
