@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt")
 
 // register a user.
 // should check if username is taken.
-    
+// should enforce password and username and email restrictions. dont create if these failed.
 router.post('/register', async (request, response) => {
     const {username , password, email} = request.body;
     
