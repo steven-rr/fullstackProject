@@ -37,7 +37,7 @@ const Posts = () => {
             <button onClick = {createPost}>Create Post</button>
             {postData.map((value, key) =>{
                 return (
-                    <div className={PostsCSS.postContainer}> 
+                    <div className={PostsCSS.postContainer} key = {key}> 
                         <div className = {PostsCSS.postTitle}>{value.title} </div>
                         <div className = {PostsCSS.postContent}>{value.contentText} </div>
                         <div className = {PostsCSS.postContent}>{value.username} </div>

@@ -60,16 +60,14 @@ const Navbar = ({onClick}) => {
         <div className={ `${NavbarCSS.containerMain}` }> 
             <div className={NavbarCSS.navLinkItems}>
                 <div className={NavbarCSS.navHome}>
-                    <Link to="/" className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} spy={true} smooth='easeInQuart' activeClass={NavbarCSS.active}> HOME</Link> 
+                    <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} activeClassName={NavbarCSS.active}> HOME</NavLink> 
                 </div>
 
                 <div className={NavbarCSS.navMain}>
                     <ul className={NavbarCSS.navMainUl}>
-                        <li className={NavbarCSS.navMainLi}><Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="form" offset={-70}  spy={true}  smooth='easeInQuart' activeClass={NavbarCSS.active}>  SIGNUP</Link> </li>
-                        <li className={NavbarCSS.navMainLi}><Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="blog"  offset={-70} spy={true} smooth='easeInQuart' activeClass={NavbarCSS.active}> POSTS </Link> </li>
-                        <li className={NavbarCSS.navMainLi}><Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="login" offset={-70} spy={true} smooth='easeInQuart' activeClass={NavbarCSS.active}>   LOGIN </Link> </li>
-                        {/* <li className={NavbarCSS.navMainLi}><Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="contact"  offset={-70}  spy={true} smooth='easeInQuart' activeClass={NavbarCSS.active}>   CONTACT </Link> </li> */}
-                        {/* <li className={NavbarCSS.navMainLi}><a className={NavbarCSS.resumeButtn} href={resumePDF} download="StevenRivadeneiraResume.pdf"> RESUME </a></li> */}
+                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
+                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
+                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li>
                     </ul>
                 </div>
             </div>
