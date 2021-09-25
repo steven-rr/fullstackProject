@@ -190,7 +190,7 @@ width: 100%;
 	transition: all 0.1s ease-out;
 }
 
-@media screen and (max-width: 1000px)
+@media screen and (max-width: 500px)
 {
 	.resumeButtn
 	{

@@ -56,7 +56,6 @@ const Navbar = ({onClick}) => {
   
         
     return (
-        // <div onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain} ${state.menuOpen ? NavbarCSS.open : '' } ${state.fade ? NavbarCSS.transition : '' } ` }>
         <div className={ `${NavbarCSS.containerMain}` }> 
             <div className={NavbarCSS.navLinkItems}>
                 <div className={NavbarCSS.navHome}>
@@ -65,19 +64,14 @@ const Navbar = ({onClick}) => {
 
                 <div className={NavbarCSS.navMain}>
                     <ul className={NavbarCSS.navMainUl}>
-                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
+                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li>
                     </ul>
                 </div>
             </div>
             
-            {/* <NavButton
-                menuOpen={state.menuOpen}
-                onClick={handleMenuClick}
-                fade={state.fade}
-                onEnd={onTransitionEnd}
-            /> */}
+          
             
         </div>
     )

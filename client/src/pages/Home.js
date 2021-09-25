@@ -7,9 +7,10 @@ const Home = () => {
     // get function
     const get1 = async () => {
         const response = await axios
-                            .get('/api/weather')
+                            .get('/misc/weather')
                             .then( res => {
                                 console.log(res)
+                                console.log(res.data)
                             })
                             .catch( (err) => console.log("Error:", err ) )
     } 
