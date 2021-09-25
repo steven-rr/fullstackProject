@@ -4,5 +4,21 @@
     padding-top: 50px;
     color: #fff;
     font-size: 50px;
+    margin-top: 70px;
     
+}
+
+.postContainer
+{
+    margin-top: 20px;
+    color: #fff;
+}
+.postTitle
+{
+    font-size: 25px;
+}
+
+.postContent
+{
+    font-size: 15px;
 }
