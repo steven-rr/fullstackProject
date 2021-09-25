@@ -1,7 +1,7 @@
 const express= require('express');
 const router = express.Router();
 const {Users}= require('../models');
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 
 // register a user.
 // should check if username is taken.
