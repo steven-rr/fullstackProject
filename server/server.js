@@ -30,7 +30,11 @@ app.use('/misc', require('./routes/misc'))
 
 // listen.
 // setting up such that db is loaded before server begins to listen.
-db.sequelize.sync().then ( () => {
+db.sequelize
+    .sync() 
+    .then ( () => {
     app.listen(PORT, () => console.log(`listening at ${PORT}`))
-
-});  
+    })
+    .catch( (err) => {
+        console.log(err);
+    });  
