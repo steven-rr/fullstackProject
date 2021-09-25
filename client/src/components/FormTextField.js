@@ -8,7 +8,7 @@ const FormTextField = ({label,name, type, placeholder, handleChange, inputErr })
                 type= {type}
                 name= {name}
                 onChange={handleChange}
-                placeholder="Username..."
+                placeholder={placeholder}
             />
             <div className={FormTextFieldCSS.errMsgClass}> {inputErr} </div>
         </div>
