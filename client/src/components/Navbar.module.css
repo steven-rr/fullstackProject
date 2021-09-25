@@ -1,0 +1,325 @@
+.containerMain
+{
+	position: fixed;
+    /* background-color: rgb(32,32,32); */
+	background-color: rgb(0,0,0);
+	width: 100vw;
+	height: 70px;
+    top: 0px;
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+	overflow-x: hidden;	
+	overflow-y:hidden;
+	border-bottom: 2px solid rgb(32,32,32); 
+	
+
+
+}
+.navLinkItems
+{
+	width: 100%;
+	height: 100%;
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+	overflow-x: hidden;	
+
+}
+.navMain
+{
+	position: absolute;
+	/* right: 20px; */
+	right: 8vw; 
+	height: 70px;
+    color: #fff;
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: 400;
+	/* margin-right: 4vw; */
+    
+}
+
+.navHome
+{	
+	/* position: absolute;
+	top: 19px;
+	left: 50px;
+    width: 100px;
+	height: 70px;
+	padding: 0;
+	margin: 0;
+	color: #fff;
+    font-family: Poppins;
+	font-size: 17px;
+	letter-spacing: 1.5px;
+	text-align: left;
+	cursor: pointer; */
+	position: absolute;
+	top: 24px;
+	left: 8vw;
+	width: 100px;
+	height: 70px;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	cursor: pointer;
+	color: #fff;
+	font-family: Poppins;
+	font-size: 13px;
+}
+.navHomeAnchor
+{
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.navMainUl
+{
+    position: relative;
+	width: 100%;
+	height: 70px;
+	padding: 0;
+	margin: 0;
+	display:flex;
+	flex-direction: row;
+	list-style-type: none;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+
+}
+
+.navMainLi
+{
+	width: 100px;
+	height: 70px;
+	padding-left: 50px;
+	padding-right: 50px;
+	display: flex;
+	align-items:center;
+	margin: 0;
+	padding: 0;
+}
+.navMainAnchor
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	text-transform:uppercase;
+}
+/* old way of doing border */
+
+
+/* .navMainAnchor:hover
+{
+	border-bottom: 1px solid rgb(255,255,255);
+	transition: 1s;
+} */
+
+.underline {
+	display: inline;
+	position: relative;
+	overflow: hidden;
+  }
+.underline:after {
+content: "";
+position: absolute;
+z-index: -1;
+right: 0;
+width: 0;
+bottom: 0px;
+background: rgb(255, 255, 255);
+height: 2px;
+transition-property: width;
+transition-duration: 0.3s;
+transition-timing-function: ease-out;
+}
+.underline:hover:after,
+.underline:focus:after,
+.underline:active:after {
+
+left: 0;
+right: auto;
+width: 100%;
+}
+
+.active
+{
+}
+.active::after
+{
+	content: "";
+	position: absolute;
+	z-index: -1;
+	left: 0;
+	width: 100%;
+	bottom: 0px;
+	background: rgb(255, 255, 255);
+	height: 2px;
+	transition-timing-function: none;
+	transition-duration: 0s;
+
+}
+.resumeButtn
+{
+
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 7px 15px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 4px 2px;
+	cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+.resumeButtn:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
+
+@media screen and (max-width: 1000px)
+{
+	.resumeButtn
+	{
+	background-color: Transparent;
+	border: 0px solid rgb(117, 35, 35);
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	cursor: pointer;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin: 0;
+	}
+		.resumeButtn:hover
+	{
+		background-color: #000;
+		transition: 0.3s;
+		color:rgb(165, 52, 52);
+	}
+
+
+	.navLinkItems
+	{
+		width: 100%;
+		height: 100%;
+		display:flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		z-index: 100;
+		overflow-x: hidden;	
+	}
+	.navHome
+	{
+		/* position: absolute;
+		display:inline; */
+		/* flex-direction: column; */
+		/* left: 50px;
+		top: 23px;
+		width: 100px;
+		height: 70px;
+		padding: 0;
+		margin: 0;
+		color: #fff;
+		font-family: Poppins;
+		text-align: left;
+		font-size: 17px;
+		letter-spacing: 1.5px; */
+		position: absolute;
+		top: 24px;
+		
+		left: 15px;
+		width: 100px;
+		height: 70px;
+		padding: 0;
+		margin: 0;
+		text-align: center;
+		cursor: pointer;
+		color: #fff;
+		font-family: Poppins;
+		font-size: 13px;
+	}
+	
+
+	.containerMain.open
+	{
+		position: fixed;
+		/* background-color: rgb(32,32,32); */
+		background-color: rgb(0,0,0);
+		width: 100vw;
+		height: 310px;
+		display:flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		z-index: 100;
+		overflow-x: hidden;	
+		border-bottom: 2px solid rgb(32,32,32); 
+
+
+	}
+	.transition
+	{
+		transition:all 0.2s ease-out;
+	}
+	.navMain
+	{
+		position:absolute;
+		left: 45px;
+		top: 70px;
+		display:flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100px;
+		height: 220px;
+		color: #fff;
+		font-family: Poppins;
+		font-size: 13px;
+		text-align: center;		
+	}
+	.navMainUl
+	{
+		width: 100%;
+		height: 220px;
+		padding: 0;
+		margin: 0;
+		display:flex;
+		flex-direction: column;
+		list-style-type: none;
+		justify-content: space-between;
+		align-items: center;
+
+	}
+	.navMainLi
+	{
+		width: 100%;
+		height: 70px;
+		padding-left: 0;
+		padding-right: 0;
+		padding-top: 7px;
+		padding-bottom: 7px;
+		display: flex;
+		align-items:center;
+		cursor: pointer;
+		margin: 0;
+		text-align: center;
+	}
+}

@@ -37,10 +37,10 @@ const Posts = () => {
             <button onClick = {createPost}>Create Post</button>
             {postData.map((value, key) =>{
                 return (
-                    <div> 
-                        <div>{value.title} </div>
-                        <div>{value.contentText} </div>
-                        <div>{value.username} </div>
+                    <div className={PostsCSS.postContainer}> 
+                        <div className = {PostsCSS.postTitle}>{value.title} </div>
+                        <div className = {PostsCSS.postContent}>{value.contentText} </div>
+                        <div className = {PostsCSS.postContent}>{value.username} </div>
                     </div>
                     
                 )
