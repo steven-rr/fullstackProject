@@ -7,7 +7,7 @@ const Home = () => {
     // get function
     const get1 = async () => {
         const response = await axios
-                            .get('/misc/weather')
+                            .get('/misc/getPreviousLaunches')
                             .then( res => {
                                 console.log(res)
                                 console.log(res.data)
