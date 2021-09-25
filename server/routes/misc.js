@@ -17,10 +17,19 @@ router.post('/', (request, response) =>
     })
 })
 
-router.get('/weather', async (request, response) => {
-    const lat = 28.4;
-    const lon = -81.4;    
-    const api_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.OPEN_WEATHER_API_KEY}`
+router.get('/getPreviousLaunches', async (request, response) => {
+
+    const api_url = `https://ll.thespacedevs.com/2.2.0/launch/previous`
+    const fetch_response = await fetch(api_url)
+    const json = await fetch_response.json()
+    response.json(json)
+    console.log(json)
+
+})
+
+router.get('/getUpcomingLaunches', async (request, response) => {
+
+    const api_url = `https://ll.thespacedevs.com/2.2.0/launch/upcoming`
     const fetch_response = await fetch(api_url)
     const json = await fetch_response.json()
     response.json(json)
