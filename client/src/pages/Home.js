@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react' 
 import HomeCSS from "./Home.module.css"
 import Button from "../components/Button.js"
 import axios from   "axios" 
@@ -15,24 +15,18 @@ const Home = () => {
                             .catch( (err) => console.log("Error:", err ) )
     } 
 
+    //comment for now, this should be reading from my database, not from external API.
+    // // on render, get posts from backend and display for the user.
+    // useEffect( () => {
+    //     axios.get("/api/launches").then( (response) =>{
+    //         console.log(response.data.results)
+    //     })
+    // }, []);
+
     return (
         <div className={HomeCSS.homeContainer}>
             <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
-            <div className={HomeCSS.buttnContainer}>
-                <Button
-                    name= "GET"
-                    onClick = {get1}
-                />
-                <Button
-                    name= "POST"
-                />
-                <Button
-                    name= "PUT/PATCH"
-                />
-                <Button
-                    name= "DELETE"
-                />
-            </div>
+            
         </div>
     )
 }
