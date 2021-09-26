@@ -5,6 +5,7 @@ const APICountersCheck = require("./APICountersMiddleware/APICountersCheck.js")
 const APICountersIncrement = require("./APICountersMiddleware/APICountersIncrement.js")
 const APICountersThrottle = require("./APICountersMiddleware/APICountersThrottle.js")
 
+// insert launches from external SPACE api.
 const insertNewLaunches = async (launch_ids_new,start_idx) =>
 {
     var counterrrrrr = 0;
@@ -28,7 +29,9 @@ const insertNewLaunches = async (launch_ids_new,start_idx) =>
                             let newLaunch = {
                                 launch_id: data.id, 
                                 title: data.name,
-                                description: data.rocket.configuration.description
+                                description: data.rocket.configuration.description,
+                                imgURL: data.image,
+                                vidURL: data.vidURLs[0].url
                             }
                             await Launches.create(newLaunch);
                             console.log("fetch response for OLDEST MEMBER: "  ,data)
@@ -45,6 +48,7 @@ const insertNewLaunches = async (launch_ids_new,start_idx) =>
     }
 }
 
+// find optimal insertion point to avoid redundant fetching.
 const findIDmatch = async (oldestID) =>
 {
     const insertionPoint = await Launches.findOne({ where: {launch_id: oldestID} })
@@ -55,6 +59,7 @@ const findIDmatch = async (oldestID) =>
                                 .catch( (err) => console.log("ERROR SPACEAPIFETCH: ", err) )
 }
 
+// fetch data from space api and store into SQL database.
 const SpaceAPIFetch = async () =>
 {   
     // make sure i fetch before hitting the limit.

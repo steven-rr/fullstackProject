@@ -4,29 +4,36 @@ import Button from "../components/Button.js"
 import axios from   "axios" 
 const Home = () => {
 
-    // get function
-    const get1 = async () => {
-        const response = await axios
-                            .get('/misc/getPreviousLaunches')
-                            .then( res => {
-                                console.log(res)
-                                console.log(res.data)
-                            })
-                            .catch( (err) => console.log("Error:", err ) )
-    } 
+    // store launch data in these variables.
+    const [launchData, setLaunchData] = useState([])
 
-    //comment for now, this should be reading from my database, not from external API.
-    // // on render, get posts from backend and display for the user.
-    // useEffect( () => {
-    //     axios.get("/api/launches").then( (response) =>{
-    //         console.log(response.data.results)
-    //     })
-    // }, []);
+    // on render, get launch data from backend and display for the user.
+    useEffect( async () => {
+                await axios
+                        .get("/api/launches")
+                        .then( (response) =>{
+                            setLaunchData(response.data);
+                        })
+                        .catch( (err) => {
+                            console.log("ERROR in Home.js: ", err)
+                        })
+    }, []);
+
 
     return (
         <div className={HomeCSS.homeContainer}>
             <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
-            
+            {launchData.map((value, key) =>{
+                return (
+                    <div className={HomeCSS.launchItemContainer} key = {key}> 
+                        <div>{value.title} </div>
+                        <div>{value.description} </div>
+                        <img className={HomeCSS.imgContainer} src={value.imgURL}/>
+                        <div > <a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> </div>
+                    </div>
+                    
+                )
+            })}
         </div>
     )
 }

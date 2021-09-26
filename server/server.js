@@ -7,19 +7,20 @@ const APICountersReset = require('./middleware/APICountersMiddleware/APICounters
 
 require('dotenv').config();
 
-console.log(module)
-
+// --------------------- MIDDLEWARE --------------------
 // every hour, reset API counter to zero.
-cron.schedule('0 * * * *', () =>{
-    console.log('cron reset hit!');
-    APICountersReset();
-})
+cron
+    .schedule('0 * * * *', () =>{
+        console.log('cron reset hit!');
+        APICountersReset();
+    })
 // every 15 minutes, pull from external API and update launches.
-cron.schedule('* * * * *', () =>{
-
-    console.log('cros space api fetch hit!');
-    SpaceAPIFetch();
-})
+cron
+    .schedule('0 */15 * * *', () =>{
+        console.log('cron space api fetch hit!');
+        SpaceAPIFetch();
+    })
+// --------------------- MIDDLEWARE --------------------
 
 // instantiate server 
 const app = express()

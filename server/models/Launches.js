@@ -16,6 +16,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      imgURL:
+      {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      vidURL:
+      {
+        type: DataTypes.TEXT,
+        allowNull: true
+      }
     //   add image path and vidURL later.
     });
   
