@@ -12,8 +12,6 @@ const APICountersReset = async () =>
         {counter: '0'},
         {where: {id: '1'} 
     });
-
-    console.log("resetting API counter...");
 }
 
 module.exports = APICountersReset;
