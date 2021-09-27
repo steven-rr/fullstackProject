@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-    const Launches = sequelize.define("Launches", {
+    const LaunchesUpcoming = sequelize.define("LaunchesUpcoming", {
       launch_id: 
       {
         type: DataTypes.STRING,
@@ -29,6 +29,6 @@ module.exports = (sequelize, DataTypes) => {
     //   add image path and vidURL later.
     });
   
-    return Launches;
+    return LaunchesUpcoming;
   };
   

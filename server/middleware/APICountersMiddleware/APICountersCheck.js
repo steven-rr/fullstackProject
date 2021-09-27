@@ -13,7 +13,6 @@ const APICountersCheck = async () =>
             counter: '0'
         };
         await APICounters.create(newCounter);
-        console.log("creating API counter...");
     }
 
         

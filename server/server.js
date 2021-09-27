@@ -14,14 +14,16 @@ cron
         console.log('cron reset hit!');
         APICountersReset();
     })
-// every 15 minutes, pull from external API and update launches.
-cron
-    .schedule('0 */15 * * *', () =>{
-        console.log('cron space api fetch hit!');
-        SpaceAPIFetch();
-    })
-// --------------------- MIDDLEWARE --------------------
-
+// // every 15 minutes, pull from external API and update launches.
+// cron
+//     // .schedule('*/15 * * * *', () =>{
+//     .schedule('* * * * * ', ()  => {
+//         console.log('cron space api fetch hit!');
+//         SpaceAPIFetch();
+//     })
+// // --------------------- MIDDLEWARE --------------------
+console.log('cron space api fetch hit!');
+SpaceAPIFetch()
 // instantiate server 
 const app = express()
 
