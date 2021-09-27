@@ -25,8 +25,12 @@ module.exports = (sequelize, DataTypes) => {
       {
         type: DataTypes.TEXT,
         allowNull: true
+      },
+      launchDate:
+      {
+        type: DataTypes.DATE,
+        allowNull: true
       }
-    //   add image path and vidURL later.
     });
   
     return LaunchesPrevious;

@@ -8,7 +8,8 @@ const {LaunchesUpcoming}= require('../models');
 // get launch info for display. 
 router.get('/previous', async (request, response) => {
     
-    const launchData = await LaunchesPrevious.findAll()
+    const launchData = await LaunchesPrevious.findAll({
+                                                order: [['id','DESC']]})
     response.json(launchData)
 })
 
