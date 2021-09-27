@@ -1,4 +1,7 @@
-
+.deactivate
+{
+    display:none;
+}
 .homeContainer
 {
     background-color: rgb(29, 29, 29);
