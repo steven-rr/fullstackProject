@@ -37,12 +37,14 @@ const Home = () => {
         <div className={HomeCSS.homeContainer}>
             <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
             <div className={HomeCSS.buttonClass} onClick={toggleFutureFlag}> Button</div>
+            <div className= {HomeCSS.textStyle}> {futureFlag ? "Upcoming": "Previous"}</div>
             <div className={`${futureFlag ? HomeCSS.deactivate: ''}`}> 
                 {launchDataPrevious.map((value, key) =>{
                     return (
                         <div className={HomeCSS.launchItemContainer} key = {key}> 
                             <div>{value.title} </div>
                             <div>{value.description} </div>
+                            <div> {value.launchDate}</div>
                             <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                             <div > <a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> </div>
                         </div>
@@ -56,6 +58,7 @@ const Home = () => {
                         <div className={HomeCSS.launchItemContainer} key = {key}> 
                             <div>{value.title} </div>
                             <div>{value.description} </div>
+                            <div> {value.launchDate}</div>
                             <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                             <div > <a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> </div>
                         </div>

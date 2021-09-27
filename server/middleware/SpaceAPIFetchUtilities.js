@@ -13,19 +13,21 @@ const parseLaunchData = async(data_in) => {
     let description;
     let imgURL;
     let vidURL;
-
+    let launchDate;
     try{ launch_id   =  await data_in.id;                                } catch {launch_id =null}
     try{ title       =  await data_in.name;                              } catch {title =null}
     try{ description =  await data_in.rocket.configuration.description;  } catch {description =null}
     try{ imgURL      =  await data_in.image;                             } catch {imgURL =null}
     try{ vidURL      =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
-    
+    try{ launchDate  =  await new Date(data_in.net);                     } catch {launchDate =null}
+
     let newLaunch = {   
         launch_id: launch_id,
         title: title,
         description: description,
         imgURL: imgURL,
-        vidURL: vidURL
+        vidURL: vidURL,
+        launchDate: launchDate
     };
     return newLaunch;
 }
@@ -47,19 +49,13 @@ const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =
             {
                 api_url = `https://lldev.thespacedevs.com/2.2.0/launch/previous/${data_results[i].id}`
             } 
-            console.log("requesitng this id: ", data_results[i].id)
+            console.log("requesting this id: ", data_results[i].id)
             let fetch_response = await fetch(api_url)
             
             // parse out fetch_response. add data to table. 
             await fetch_response
                         .json()
                         .then( async (data) => {
-                            // let netDate = new Date(data.net)
-                            // console.log("TOOOOOOOOOOO DATEEEEEEEE: " ,netDate)
-                            console.log("data: ", data);
-                            console.log("dataID: ", data.id);
-                            console.log("name: ", data.name);
-
                             let newLaunch = await parseLaunchData(data);
                             await Launches.create(newLaunch);
                         })
