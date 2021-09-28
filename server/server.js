@@ -2,6 +2,7 @@
 const express = require('express');
 const db = require('./models')
 const cron = require('node-cron')
+const path = require('path');
 const SpaceAPIFetch = require('./middleware/SpaceAPIFetch')
 const APICountersReset = require('./middleware/APICountersMiddleware/APICountersReset')
 
@@ -46,7 +47,14 @@ app.use('/api/launches', require('./routes/launches'))
 // set up misc routes.
 app.use('/misc', require('./routes/misc'))
 
+// set up for rendering static assets:
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static('../client/build'));
 
+    app.get('*', (request, response) => {
+        response.sendFile(path.resolve(__dirname,'..','client','build','index.html'));
+    })
+}
 // listen.
 // setting up such that db is loaded before server begins to listen.
 db.sequelize
