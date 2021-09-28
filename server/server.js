@@ -17,7 +17,8 @@ cron
     })
 // every 15 minutes, pull from external API and update launches.
 cron
-    .schedule('*/15 * * * *', () =>{
+    // .schedule('*/15 * * * *', () =>{
+    .schedule('* * * * *', () =>{
         console.log('cron space api fetch hit!');
         SpaceAPIFetch();
     })
@@ -49,7 +50,7 @@ app.use('/misc', require('./routes/misc'))
 
 // set up for rendering static assets:
 if(process.env.NODE_ENV === 'production') {
-    app.use(express.static('../client/build'));
+    app.use(express.static(path.join('..','client','build')));
 
     app.get('*', (request, response) => {
         response.sendFile(path.resolve(__dirname,'..','client','build','index.html'));
@@ -60,9 +61,12 @@ if(process.env.NODE_ENV === 'production') {
 db.sequelize
     .sync() 
     .then ( async () => {
-            await SpaceAPIFetch(); 
+            // await SpaceAPIFetch(); 
             app.listen(PORT, () => console.log(`listening at ${PORT}`))
     })
     .catch( (err) => {
         console.log(err);
     });  
+
+
+
