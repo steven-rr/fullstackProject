@@ -7,21 +7,21 @@ const APICountersReset = require('./middleware/APICountersMiddleware/APICounters
 
 require('dotenv').config();
 
-// --------------------- MIDDLEWARE --------------------
-// every hour, reset API counter to zero.
+// --------------------- FETCH LAUNCH DATA --------------------
+//every hour, reset API counter to zero.
 cron
     .schedule('0 * * * *', () =>{
         console.log('cron reset hit!');
         APICountersReset();
     })
-// // every 15 minutes, pull from external API and update launches.
-// cron
-//     .schedule('*/15 * * * *', () =>{
-//         console.log('cron space api fetch hit!');
-//         SpaceAPIFetch();
-//     })
-// // --------------------- MIDDLEWARE --------------------
-SpaceAPIFetch();
+// every 15 minutes, pull from external API and update launches.
+cron
+    .schedule('*/15 * * * *', () =>{
+        console.log('cron space api fetch hit!');
+        SpaceAPIFetch();
+    })
+// // --------------------- FETCH LAUNCH DATA --------------------
+
 // instantiate server 
 const app = express()
 
@@ -51,8 +51,9 @@ app.use('/misc', require('./routes/misc'))
 // setting up such that db is loaded before server begins to listen.
 db.sequelize
     .sync() 
-    .then ( () => {
-    app.listen(PORT, () => console.log(`listening at ${PORT}`))
+    .then ( async () => {
+            await SpaceAPIFetch(); 
+            app.listen(PORT, () => console.log(`listening at ${PORT}`))
     })
     .catch( (err) => {
         console.log(err);
