@@ -17,8 +17,7 @@ cron
     })
 // every 15 minutes, pull from external API and update launches.
 cron
-    // .schedule('*/15 * * * *', () =>{
-    .schedule('* * * * *', () =>{
+    .schedule('*/15 * * * *', () =>{
         console.log('cron space api fetch hit!');
         SpaceAPIFetch();
     })
