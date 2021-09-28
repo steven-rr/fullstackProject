@@ -2,12 +2,12 @@
   "name": "fullstackproject",
   "version": "1.0.0",
   "description": "This is a web app made by Steven Rivadeneira.",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "client-install": "npm install --prefix ../client",
-    "start": "node server",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix ../client",
+    "client-install": "npm install --prefix client",
+    "start": "node server/server",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
