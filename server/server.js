@@ -1,13 +1,23 @@
 
 const express = require('express');
-const db = require('./models')
-const cron = require('node-cron')
+const db = require('./models');
+const cron = require('node-cron');
+const fetch = require("node-fetch");
 const path = require('path');
 const SpaceAPIFetch = require('./middleware/SpaceAPIFetch')
 const APICountersReset = require('./middleware/APICountersMiddleware/APICountersReset')
-
 require('dotenv').config();
 
+// --------------------- SELF PING SERVER ---------------------
+const myURL = 'https://young-plains-00069.herokuapp.com/misc/out'
+const pingMyURL = async () => {
+    console.log("pinging myself..");
+    const fetch_response = await fetch(myURL);
+    const json_ping = await fetch_response.json();
+    console.log(json_ping)
+} 
+cron.schedule('0,30 1-12 * * *', pingMyURL, { timezone: "America/New_York" })
+// --------------------- SELF PING SERVER ---------------------
 // --------------------- FETCH LAUNCH DATA --------------------
 //every hour, reset API counter to zero .
 cron
