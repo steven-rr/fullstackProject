@@ -49,7 +49,7 @@ app.use('/misc', require('./routes/misc'))
 
 // set up for rendering static assets:
 if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join('..','client','build')));
+    app.use(express.static(path.join(__dirname,'..','client','build')));
 
     app.get('*', (request, response) => {
         response.sendFile(path.resolve(__dirname,'../client','build','index.html'));
