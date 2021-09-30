@@ -29,8 +29,11 @@ const app = express()
 /// run on port specified, else run on 3001.
 const PORT = process.env.PORT || 3001 
 
+// specify host for heroku deployment
+const host = '0.0.0.0'
+
 // loading in static HTML.
-// app.use(express.static('public')) 
+app.use(express.static('public')) 
 
 // allowing express to parse JSON.
 app.use(express.json({limit : '1mb'})) 
@@ -57,7 +60,6 @@ if(process.env.NODE_ENV === 'production') {
 }
 // listen.
 // setting up such that db is loaded before server begins to listen.
-const host = '0.0.0.0'
 db.sequelize
     .sync() 
     .then ( async () => {
