@@ -9,7 +9,7 @@ const APICountersReset = require('./middleware/APICountersMiddleware/APICounters
 require('dotenv').config();
 
 // --------------------- FETCH LAUNCH DATA --------------------
-//every hour, reset API counter to zero.
+//every hour, reset API counter to zero .
 cron
     .schedule('0 * * * *', () =>{
         console.log('cron reset hit!');
