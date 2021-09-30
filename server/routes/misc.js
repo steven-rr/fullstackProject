@@ -45,7 +45,6 @@ router.get('/out', async (request, response) => {
         lat: lat,
         lon: lon 
     })
-    console.log(json)
 
 })
 
