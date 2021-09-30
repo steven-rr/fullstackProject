@@ -57,11 +57,12 @@ if(process.env.NODE_ENV === 'production') {
 }
 // listen.
 // setting up such that db is loaded before server begins to listen.
+const host = '0.0.0.0'
 db.sequelize
     .sync() 
     .then ( async () => {
             // await SpaceAPIFetch(); 
-            app.listen(PORT, () => console.log(`listening at ${PORT}`))
+            app.listen(PORT, host, () => console.log(`listening at ${PORT}`))
     })
     .catch( (err) => {
         console.log(err);
