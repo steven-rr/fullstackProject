@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import HomeCSS from "./Home.module.css"
 import Button from "../components/Button.js"
 import axios from   "axios" 
+
 const Home = () => {
 
     // store launch data in these variables.
     const [launchDataPrevious, setLaunchDataPrevious] = useState([])
     const [launchDataUpcoming, setLaunchDataUpcoming] = useState([])
     const [futureFlag, setFutureFlag]                 = useState([ true])
-    // on render, get launch data from backend and display for the user.
+    //on render, get launch data from backend and display for the user.
     useEffect( async () => {
                 await axios
                         .get("/api/launches/previous")
@@ -51,7 +52,7 @@ const Home = () => {
                         
                     )
                 })}
-            </div>
+            </div> 
             <div className={`${futureFlag ? '': HomeCSS.deactivate}`}> 
                 {launchDataUpcoming.map((value, key) =>{
                     return (
