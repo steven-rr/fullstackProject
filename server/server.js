@@ -16,7 +16,7 @@ const pingMyURL = async () => {
     const json_ping = await fetch_response.json();
     console.log(json_ping)
 } 
-cron.schedule('0,30 1-15 * * *', pingMyURL, { timezone: "America/New_York" })
+cron.schedule('0,28,56 1-15 * * *', pingMyURL, { timezone: "America/New_York" })
 // --------------------- SELF PING SERVER ---------------------
 // --------------------- FETCH LAUNCH DATA --------------------
 //every hour, reset API counter to zero .
