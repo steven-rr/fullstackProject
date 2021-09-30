@@ -30,7 +30,7 @@ const app = express()
 const PORT = process.env.PORT || 3001 
 
 // loading in static HTML.
-app.use(express.static('../client/build')) 
+// app.use(express.static('public')) 
 
 // allowing express to parse JSON.
 app.use(express.json({limit : '1mb'})) 
