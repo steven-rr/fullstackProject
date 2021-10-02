@@ -13,23 +13,25 @@ router.post('/register', async (request, response) => {
     // check whether username or email already exists.
     const userCheck = await Users.findOne({where: { username: username }});
     const emailCheck = await Users.findOne({where: {email: email }});
+    // if user already exists, send errors back.
     if(userCheck && emailCheck)
-    {
+    {   
         response.status(409).json({ userNameErr: "Username already exists. Please choose another.",
                         emailErr: "Email already exists. Please choose another."})
     }
-    if(userCheck)
+    else if (userCheck)
     {
         response.status(409).json({ userNameErr: "Username already exists. Please choose another.",
                         emailErr: ""})
     }
-    if(emailCheck)
+    else if(emailCheck)
     {
         response.status(409).json({ emailErr: "Email already exists. Please choose another.",
                         userNameErr: ""})
     }
-    else
+    else //if user doesn't exist , add user to database!
     {
+        
         bcrypt.hash(password, 10).then( (hash) =>
         {
             const newUser = {
