@@ -15,17 +15,17 @@ router.post('/register', async (request, response) => {
     const emailCheck = await Users.findOne({where: {email: email }});
     if(userCheck && emailCheck)
     {
-        response.json({ userNameErr: "Username already exists. Please choose another.",
+        response.status(409).json({ userNameErr: "Username already exists. Please choose another.",
                         emailErr: "Email already exists. Please choose another."})
     }
     if(userCheck)
     {
-        response.json({ userNameErr: "Username already exists. Please choose another.",
+        response.status(409).json({ userNameErr: "Username already exists. Please choose another.",
                         emailErr: ""})
     }
     if(emailCheck)
     {
-        response.json({ emailErr: "Email already exists. Please choose another.",
+        response.status(409).json({ emailErr: "Email already exists. Please choose another.",
                         userNameErr: ""})
     }
     else

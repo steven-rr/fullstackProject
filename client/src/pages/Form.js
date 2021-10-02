@@ -1,8 +1,9 @@
 import React,  { useState, useEffect } from 'react'
 import FormCSS from "./Form.module.css"
 import TextField from "../components/FormTextField"
+// import {Text, TextInput} from 'react-native'
 import axios from   "axios" 
-
+import FormTextFieldCSS from "../components/FormTextField.module.css"
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
@@ -37,6 +38,7 @@ const Form = () => {
 
     }
     const handleChange = e => {
+        console.log("TRIGGERED!")
         const {name, value} = e.target;
         // set errors when appropriate.
         handleErrors(name, value);
@@ -67,30 +69,30 @@ const Form = () => {
             <div className= {FormCSS.textStyle}>Create an Account, Steven! </div>
             <form className= {FormCSS.formClass}>
                 <div className={FormCSS.inputsClass}>
-                    <TextField
-                        label={"Username"}
-                        name={"username"} 
-                        type={"text"} 
-                        placeholder={"Username.."} 
-                        handleChange={handleChange} 
-                        inputErr={inputErrors.usernameErr}
+                    <label>Username</label>
+                    <input
+                        type= "text"
+                        name= "username"
+                        onBlur={handleChange}
+                        placeholder="Username..."
                     />
-                    <TextField
-                        label={"Password"}
-                        name={"password"} 
-                        type={"password"} 
-                        placeholder={"Password.."} 
-                        handleChange={handleChange} 
-                        inputErr={inputErrors.passwordErr}
+                    <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.usernameErr} </div>
+                    <label>Password</label>
+                    <input
+                        type= "password"
+                        name= "password"
+                        onBlur={handleChange}
+                        placeholder="Password..."
                     />
-                    <TextField
-                        label={"Email"}
-                        name={"email"} 
-                        type={"text"} 
-                        placeholder={"Email.."} 
-                        handleChange={handleChange} 
-                        inputErr={inputErrors.emailErr}
+                    <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.passwordErr} </div>
+                    <label>Email</label>
+                    <input
+                        type= "text"
+                        name= "email"
+                        onBlur={handleChange}
+                        placeholder="Email..."
                     />
+                    <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.emailErr} </div>
                 </div>
                 <div>
                     <button onClick={handleSubmit} disabled={invalidFlags.submitInvalid} type="button" >Create Account</button>
