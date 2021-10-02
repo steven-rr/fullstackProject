@@ -48,21 +48,23 @@ const Form = () => {
     }
     
     const handleSubmit = async (e) => 
-    {
-        const response = await axios
-                                .post('/api/users/register',values)
-                                .then( res => {
-                                    console.log(inputErrors.usernameErr)
-                                    if(res.data.userNameErr || res.data.emailErr)
-                                    {
-                                        inputErrors.usernameErr = res.data.userNameErr;
-                                        inputErrors.emailErr = res.data.emailErr;
-                                    }
-                                    console.log(inputErrors.usernameErr)
-                                    console.log(inputErrors.emailErr)
-                                })
-                                .catch( (err) => console.log("Error:", err ) );
-
+    {   
+        if(!invalidFlags.submitInvalid) {
+            console.log("submitted!")
+            const response = await axios
+                                    .post('/api/users/register',values)
+                                    .then( res => {
+                                        console.log(inputErrors.usernameErr)
+                                        if(res.data.userNameErr || res.data.emailErr)
+                                        {
+                                            inputErrors.usernameErr = res.data.userNameErr;
+                                            inputErrors.emailErr = res.data.emailErr;
+                                        }
+                                        console.log(inputErrors.usernameErr)
+                                        console.log(inputErrors.emailErr)
+                                    })
+                                    .catch( (err) => console.log("Error:", err ) );
+        }
     }
     return (
         <div className={FormCSS.formContainer}>
@@ -95,7 +97,7 @@ const Form = () => {
                     <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.emailErr} </div>
                 </div>
                 <div>
-                    <button onClick={handleSubmit} disabled={invalidFlags.submitInvalid} type="button" >Create Account</button>
+                    <button onClick={handleSubmit} type="button" >Create Account</button>
                 </div>
             </form>
         </div>
