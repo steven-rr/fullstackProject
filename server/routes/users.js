@@ -11,27 +11,26 @@ router.post('/register', async (request, response) => {
     const {username , password, email} = request.body;
     
     // check whether username or email already exists.
-    const userCheck = await Users.findOne({where: { username: username }});
-    const emailCheck = await Users.findOne({where: {email: email }});
+    const usernameErr = await Users.findOne({where: { username: username }});
+    const emailErr = await Users.findOne({where: {email: email }});
     // if user already exists, send errors back.
-    if(userCheck && emailCheck)
+    if(usernameErr && emailErr)
     {   
-        response.status(409).json({ userNameErr: "Username already exists. Please choose another.",
+        response.status(409).json({ usernameErr: "Username already exists. Please choose another.",
                         emailErr: "Email already exists. Please choose another."})
     }
-    else if (userCheck)
+    else if (usernameErr)
     {
-        response.status(409).json({ userNameErr: "Username already exists. Please choose another.",
+        response.status(409).json({ usernameErr: "That username is taken!",
                         emailErr: ""})
     }
-    else if(emailCheck)
+    else if(emailErr)
     {
-        response.status(409).json({ emailErr: "Email already exists. Please choose another.",
+        response.status(409).json({ emailErr: "That email is taken!",
                         userNameErr: ""})
     }
-    else //if user doesn't exist , add user to database!
-    {
-        
+    else //if no error, add user to database!
+    {   
         bcrypt.hash(password, 10).then( (hash) =>
         {
             const newUser = {
@@ -61,5 +60,34 @@ router.post('/login', async (request, response) => {
             response.json({error: "Wrong username and password combination!"})
         }
     })
+})
+
+router.get('/register', async (request, response) => { 
+    console.log(request.username)
+    console.log(request)
+    // parse out info from frontend.
+    const {username , email} = request.body;
+
+    // check whether username or email already exists.
+    const usernameErr = await Users.findOne({where: { username: username }});
+    const emailErr = await Users.findOne({where: {email: email }});
+
+    // return whether username or email exists.
+    // if user already exists, send errors back.
+    if(usernameErr && emailErr)
+    {   
+        response.json({ usernameErr: "Username already exists. Please choose another.",
+                        emailErr: "Email already exists. Please choose another."})
+    }
+    else if (usernameErr)
+    {
+        response.json({ usernameErr: "That username is taken!",
+                        emailErr: ""})
+    }
+    else if(emailErr)
+    {
+        response.json({ emailErr: "That email is taken!",
+                        userNameErr: ""})
+    }
 })
 module.exports = router;
