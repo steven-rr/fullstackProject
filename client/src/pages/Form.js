@@ -17,8 +17,8 @@ const Form = () => {
         setRerender(!rerender)
     }, [values.usernameErr])
     // handles input errors.
-    const handleErrors = (name, value) => {
-        // handle errors:
+    const handleErrors = async (name, value) => {
+        // handle client-side errors:
         if(name === "username")
         {
             inputErrors.usernameErr = 
@@ -35,6 +35,13 @@ const Form = () => {
             inputErrors.emailErr= (emailRegex.test(value)) ? "":"invalid email";
             invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
         }
+        // check whether username exists in database, if so show error.
+        const response = await axios
+                                    .get('/api/users/register', { params: values })
+                                    .then( res => {
+                                        console.log(res.data.usernameErr)
+                                    })
+                                    .catch(err => console.log(err))
 
     }
     const handleChange = e => {
@@ -54,16 +61,12 @@ const Form = () => {
             const response = await axios
                                     .post('/api/users/register',values)
                                     .then( res => {
-                                        console.log(inputErrors.usernameErr)
-                                        if(res.data.userNameErr || res.data.emailErr)
-                                        {
-                                            inputErrors.usernameErr = res.data.userNameErr;
-                                            inputErrors.emailErr = res.data.emailErr;
-                                        }
-                                        console.log(inputErrors.usernameErr)
-                                        console.log(inputErrors.emailErr)
+                                        console.log("registered.")
+                                        //return JWT here.
                                     })
-                                    .catch( (err) => console.log("Error:", err ) );
+                                    .catch( (err) => {
+                                        inputErrors.userNameErr = err.response.data.usernameErr;
+                                        inputErrors.emailErr = err.response.data.emailErr;});
         }
     }
     return (
