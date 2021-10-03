@@ -87,9 +87,7 @@ const Form = () => {
                                     .then( res => {
                                         console.log("registered.")
                                     })
-                                    .catch( (err) => {
-                                        inputErrors.userNameErr = err.response.data.usernameErr;
-                                        inputErrors.emailErr = err.response.data.emailErr;});
+                                    .catch( err =>  console.log(err) );
         }
     }
     return (
