@@ -39,11 +39,18 @@ const Login = () => {
 
     // implements handling of blurs.
     const handleBlur = e => {
+        console.log("BLURRRRRR:");
+        console.log("E_TARGET_USERNAME_VAL: ",e.target.username)
+        console.log("E_TARGET_USERNAME_VAL: ",e.target.password)
+
+        console.log("E_TARGETTTTTTTTTT: ",e.target);
         const {name, value} = e.target;
         setValues({...values, [name]:value})
-
+        
         // set errors when appropriate.
         handleBlurErrors(name, value);
+        console.log("END BLURRRRRR:");
+
 
     }
     // handling on change.
@@ -74,7 +81,13 @@ const Login = () => {
     const handleSubmit = async (e) => 
     {
         // in case user hits submit without blurring, handle blur async with submits.
-        await handleBlur(e);
+        // await handleBlur(e);
+        console.log("E_TARGET_USERNAME_VAL: ",values.username)
+        console.log("E_TARGET_USERNAME_VAL: ",values.password)
+
+        await handleBlurErrors("username", values.username);
+        await handleBlurErrors("password", values.password);
+
         // handle submit errors
         await handleSubmitErrors();
         // if no errors, allow the attempt to log in.
@@ -97,7 +110,12 @@ const Login = () => {
 
 
     }
-    
+    const handleUsername = (e)=>{
+        setValues({username: e.target.value})
+    }
+    const handlePassword = (e)=>{
+        setValues({password: e.target.value})
+    }
     return (
         <div className={LoginCSS.loginContainer}>
             <div className={LoginCSS.textStyle}> Login, Steven! </div>
@@ -108,7 +126,9 @@ const Login = () => {
                         type= "text"
                         name= "username"
                         onBlur={handleBlur}
+                        onChange={handleUsername}
                         placeholder="Username..."
+                        value= {values.username}
                     />
                     <div className={LoginCSS.errMsgClass}> {inputErrors.usernameErr} </div>
 
@@ -117,7 +137,9 @@ const Login = () => {
                         type= "password"
                         name= "password"
                         onBlur={handleBlur}
+                        onChange={handlePassword}
                         placeholder="Password..."
+                        value= {values.password}
                     />
                     <div className={LoginCSS.errMsgClass}> {inputErrors.passwordErr} </div>
                 </div>
