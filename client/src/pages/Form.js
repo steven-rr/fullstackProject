@@ -9,21 +9,19 @@ const emailRegex = RegExp(
   );
 
 const Form = () => {
-    const [index, setIndex]=  useState(0);
-    const [rerender, setRerender] = useState(false)
-
+    const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [values, setValues] = useState({username: '', password: '', email: '' })
     const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
    
     // rerender when blur is triggered.
-    const handleBlur = e =>
+    const rerender = e =>
     {
         setIndex(currentIndex=> currentIndex+1);
     }
 
 
-    // handles input errors.
+    // implements client-side and server-side error handling.
     const handleErrors = async (name, value) => {
         // handle client-side errors:
         if(name === "username")
@@ -64,7 +62,9 @@ const Form = () => {
         invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
         invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
         invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
-        handleBlur();
+
+        // rerender the errors.
+        rerender();
     }
     const handleChange = async (e) => {
         const {name, value} = await e.target;
@@ -73,6 +73,7 @@ const Form = () => {
 
         // set errors when appropriate.
         handleErrors(name, value);
+        
         // if any errors are activated, don't allow user to submit.
         invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
     }
