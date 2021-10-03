@@ -66,7 +66,8 @@ const Form = () => {
         // rerender the errors.
         rerender();
     }
-    const handleChange = async (e) => {
+    const handleBlur = async (e) => {
+
         const {name, value} = await e.target;
         // update value to what it is.
         setValues({...values, [name]:value})
@@ -80,6 +81,10 @@ const Form = () => {
     
     const handleSubmit = async (e) => 
     {   
+        // in case user hits submit without blurring, handle blur async with submits.
+        await handleBlur(e);
+
+        // if no errors, allow the user to register.
         if(!invalidFlags.submitInvalid) {
             console.log("submitted!")
             const response = await axios
@@ -99,7 +104,7 @@ const Form = () => {
                     <input
                         type= "text"
                         name= "username"
-                        onBlur={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Username..."
                     />
                     <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.usernameErr} </div>
@@ -107,7 +112,7 @@ const Form = () => {
                     <input
                         type= "password"
                         name= "password"
-                        onBlur={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Password..."
                     />
                     <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.passwordErr} </div>
@@ -115,13 +120,13 @@ const Form = () => {
                     <input
                         type= "text"
                         name= "email"
-                        onBlur={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Email..."
                     />
                     <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.emailErr} </div>
                 </div>
                 <div>
-                    <button onClick={handleSubmit} type="button" >Create Account</button>
+                    <button className={FormCSS.buttonClass} onClick={handleSubmit} type="button" >Create Account</button>
                 </div>
             </form>
         </div>

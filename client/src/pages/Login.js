@@ -6,6 +6,8 @@ const Login = () => {
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [values, setValues] = useState({username: '', password: ''})
     const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: ''})
+    // const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: ''})
+
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
 
     // rerender when blur is triggered.
@@ -36,7 +38,7 @@ const Login = () => {
     }
 
     // implements handling of blurs.
-    const handleChange = e => {
+    const handleBlur = e => {
         const {name, value} = e.target;
         setValues({...values, [name]:value})
 
@@ -44,6 +46,8 @@ const Login = () => {
         handleBlurErrors(name, value);
 
     }
+    // handling on change.
+
     // implements submit errors:
     const handleSubmitErrors = async () => {
 
@@ -69,7 +73,11 @@ const Login = () => {
 
     const handleSubmit = async (e) => 
     {
+        // in case user hits submit without blurring, handle blur async with submits.
+        await handleBlur(e);
+        // handle submit errors
         await handleSubmitErrors();
+        // if no errors, allow the attempt to log in.
         if(!invalidFlags.submitInvalid){
             const response = await axios
                                 .post('/api/users/login',values)
@@ -99,7 +107,7 @@ const Login = () => {
                     <input
                         type= "text"
                         name= "username"
-                        onBlur={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Username..."
                     />
                     <div className={LoginCSS.errMsgClass}> {inputErrors.usernameErr} </div>
@@ -108,13 +116,13 @@ const Login = () => {
                     <input
                         type= "password"
                         name= "password"
-                        onBlur={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Password..."
                     />
                     <div className={LoginCSS.errMsgClass}> {inputErrors.passwordErr} </div>
                 </div>
                 <div>
-                    <button onClick={handleSubmit} type = "button">Login</button>
+                    <button className={LoginCSS.buttonClass }onClick={handleSubmit} type = "button">Login</button>
                 </div>
             </form>
         </div>
