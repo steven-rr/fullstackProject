@@ -30,30 +30,40 @@ const Form = () => {
         {
             inputErrors.usernameErr = 
                             (value.length < 3)  ? "minimum of 3 characters required": "";
-            invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
         }
         else if(name === "password")
         {
             inputErrors.passwordErr= (value.length < 6 ) ? "minimum of 6 characters required": "";
-            invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
         }
         else if(name === "email")
         {
             inputErrors.emailErr= (emailRegex.test(value)) ? "":"invalid email";
-            invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
         }
-        console.log(inputErrors);
 
-        // handle server-side validation.
-        const response = await axios
-                                    .get('/api/users/register', { params: {...values, [name]:value} })
-                                    .then( response => {
-                                        console.log(response.msg)
+        // handle server-side validation. only if value is nonempty.
+        if(value)
+        {    
+            const valuesIn = {};
+            valuesIn[name] = value;
+            const response = await axios
+                                    .get('/api/users/register', { params: valuesIn })
+                                    .then( res => {
+                                        console.log(res.data.msg)
                                     })
                                     .catch( (err) => {
-                                        console.log("inside catch: " , err.response.data)
-                                        inputErrors.usernameErr = err.response.data.usernameErr
-                                        inputErrors.emailErr = err.response.data.emailErr})
+                                        if(err.response.data.usernameErr)
+                                         {   
+                                            inputErrors.usernameErr = err.response.data.usernameErr
+                                        }
+                                        if(err.response.data.emailErr)
+                                        {
+                                            inputErrors.emailErr = err.response.data.emailErr
+                                        }})
+        }
+        // determine if there are errors in any channels.
+        invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
+        invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
+        invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
         handleBlur();
     }
     const handleChange = async (e) => {
@@ -75,7 +85,6 @@ const Form = () => {
                                     .post('/api/users/register',values)
                                     .then( res => {
                                         console.log("registered.")
-                                        //return JWT here.
                                     })
                                     .catch( (err) => {
                                         inputErrors.userNameErr = err.response.data.usernameErr;

@@ -63,40 +63,40 @@ router.post('/login', async (request, response) => {
 })
 
 router.get('/register', async (request, response) => { 
-    console.log("HIT GET REGISTER: ", request.query )
     // parse out info from frontend.
-    const {username , email} = await request.query;
-    await console.log("HIT GET REGISTER, username: ", username);
-    await console.log("HIT GET REGISTER, email: "   , email);
+    const values = await request.query;
+    // err container, to be filled as errors pop up.
+    let err = {};
+    for(let key in values) {
+        // individual json element defined by key and value pair. example: {username: "steven"}
+        let toFind = {};
+        toFind[key]= values[key]
 
-    // check whether username or email already exists.
-    const usernameErr = await Users.findOne({where: { username: username }});
-    const emailErr = await Users.findOne({where: {email: email }});
-
-    await console.log("HIT GET REGISTER, usernameErr: ", usernameErr);
-    await console.log("HIT GET REGISTER, emailErr: ", emailErr);
-
-    
-    // return whether username or email exists.
-    // if user already exists, send errors back.
-    if(usernameErr && emailErr)
-    {   
-        response.status(409).json({ usernameErr: "That username is taken!",
-                        emailErr: "That email is taken!"})
+        // find whether value exists in database. 
+        let valueExists = await Users.findOne({where: toFind})
+        
+        // if value exists, append to error list.
+        if(valueExists)
+        {   
+            // string defining error msg
+            let errmsg = "That " + key + " is taken!"
+            // define key for the error. based off the key name. example: if key = "username", errKey = "usernameErr"
+            let errKey = key + "Err"; 
+            // append error to error list.
+            err[errKey] = errmsg;
+        }   
     }
-    else if (usernameErr)
+
+    // if there are any errors, throw the error back. else, throw success back!
+    if(Object.keys(err).length > 0)
     {
-        response.status(409).json({ usernameErr: "That username is taken!",
-                        emailErr: ""})
-    }
-    else if(emailErr)
-    {
-        response.status(409).json({ usernameErr: "",
-                        emailErr: "That email is taken!"})
+        response.status(409).json(err);
     }
     else
     {
-        response.json({msg: "no errors"})
+        response.json({msg: "success!"});
     }
+
+  
 })
 module.exports = router;
