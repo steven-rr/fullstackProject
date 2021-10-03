@@ -36,3 +36,29 @@
 	color: red;
 	
 }
+
+.buttonClass
+{
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 18px 40px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+    position: fixed;
+    top: 320px;
+    left: 350px;
+	font-size: 15px;
+	font-family: Poppins;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+}
+.buttonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
+
