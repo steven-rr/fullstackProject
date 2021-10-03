@@ -4,7 +4,7 @@ import Form from "./pages/Form"
 import Login from "./pages/Login"
 import Posts from "./pages/Posts"
 import Navbar from "./components/Navbar"
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 
 function App() {

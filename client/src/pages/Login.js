@@ -36,14 +36,14 @@ const Login = () => {
                     <input
                         type= "text"
                         name= "username"
-                        onChange={handleChange}
+                        onBlur={handleChange}
                         placeholder="Username..."
                     />
                     <label>Password</label>
                     <input
                         type= "password"
                         name= "password"
-                        onChange={handleChange}
+                        onBlur={handleChange}
                         placeholder="Password..."
                     />
                     <div className={LoginCSS.errMsgClass}> {inputErrors.loginErr} </div>
