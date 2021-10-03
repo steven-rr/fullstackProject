@@ -9,15 +9,19 @@ const emailRegex = RegExp(
   );
 
 const Form = () => {
+    const [index, setIndex]=  useState(0);
     const [rerender, setRerender] = useState(false)
+
     const [values, setValues] = useState({username: '', password: '', email: '' })
     const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
-    
-    // rerender when username error appears.
-    useEffect( () => {
-        setRerender(!rerender)
-    }, [values.usernameErr])
+   
+    // rerender when blur is triggered.
+    const handleBlur = e =>
+    {
+        setIndex(currentIndex=> currentIndex+1);
+    }
+
 
     // handles input errors.
     const handleErrors = async (name, value) => {
@@ -38,29 +42,24 @@ const Form = () => {
             inputErrors.emailErr= (emailRegex.test(value)) ? "":"invalid email";
             invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
         }
-        // check whether username exists in database, if so show error.
+        console.log(inputErrors);
+
+        // handle server-side validation.
         const response = await axios
                                     .get('/api/users/register', { params: {...values, [name]:value} })
-                                    .then( res => {
-                                        inputErrors.usernameErr = res.data.usernameErr;
-                                        inputErrors.emailErr = res.data.emailErr;
-                                        console.log(inputErrors.usernameErr)
-                                        console.log(inputErrors.emailErr)
-
+                                    .then( response => {
+                                        console.log(response.msg)
                                     })
-                                    .catch(err => console.log(err))
-
+                                    .catch( (err) => {
+                                        console.log("inside catch: " , err.response.data)
+                                        inputErrors.usernameErr = err.response.data.usernameErr
+                                        inputErrors.emailErr = err.response.data.emailErr})
+        handleBlur();
     }
     const handleChange = async (e) => {
-        // await console.log("TRIGGERED!")
         const {name, value} = await e.target;
-        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! name: ", name)
-        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! value: ", value)
         // update value to what it is.
-        await setValues({...values, [name]:value})
-
-        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! username: ", values.username)
-        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! email: ", values.email)
+        setValues({...values, [name]:value})
 
         // set errors when appropriate.
         handleErrors(name, value);
