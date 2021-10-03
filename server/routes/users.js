@@ -3,7 +3,7 @@ const router = express.Router();
 const {Users}= require('../models');
 const bcrypt = require("bcryptjs")
 
-// register a user.
+// register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
     // parse out info from frontend.
     const {username , password, email} = request.body;
