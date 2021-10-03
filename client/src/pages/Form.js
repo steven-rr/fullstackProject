@@ -13,9 +13,12 @@ const Form = () => {
     const [values, setValues] = useState({username: '', password: '', email: '' })
     const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
+    
+    // rerender when username error appears.
     useEffect( () => {
         setRerender(!rerender)
     }, [values.usernameErr])
+
     // handles input errors.
     const handleErrors = async (name, value) => {
         // handle client-side errors:
@@ -37,21 +40,32 @@ const Form = () => {
         }
         // check whether username exists in database, if so show error.
         const response = await axios
-                                    .get('/api/users/register', { params: values })
+                                    .get('/api/users/register', { params: {...values, [name]:value} })
                                     .then( res => {
-                                        console.log(res.data.usernameErr)
+                                        inputErrors.usernameErr = res.data.usernameErr;
+                                        inputErrors.emailErr = res.data.emailErr;
+                                        console.log(inputErrors.usernameErr)
+                                        console.log(inputErrors.emailErr)
+
                                     })
                                     .catch(err => console.log(err))
 
     }
-    const handleChange = e => {
-        console.log("TRIGGERED!")
-        const {name, value} = e.target;
+    const handleChange = async (e) => {
+        // await console.log("TRIGGERED!")
+        const {name, value} = await e.target;
+        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! name: ", name)
+        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! value: ", value)
+        // update value to what it is.
+        await setValues({...values, [name]:value})
+
+        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! username: ", values.username)
+        // await console.log("TRIGGERED!!!!!!!!!!!!!!!!!!!! email: ", values.email)
+
         // set errors when appropriate.
         handleErrors(name, value);
         // if any errors are activated, don't allow user to submit.
         invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
-        setValues({...values, [name]:value})
     }
     
     const handleSubmit = async (e) => 

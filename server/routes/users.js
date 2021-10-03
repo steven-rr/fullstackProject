@@ -63,10 +63,11 @@ router.post('/login', async (request, response) => {
 })
 
 router.get('/register', async (request, response) => { 
-    console.log(request.username)
-    console.log(request)
+    console.log("HIT GET REGISTER: ", request.query )
     // parse out info from frontend.
-    const {username , email} = request.body;
+    const {username , email} = await request.query;
+    await console.log("HIT GET REGISTER, username: ", username);
+    await console.log("HIT GET REGISTER, email: "   , email);
 
     // check whether username or email already exists.
     const usernameErr = await Users.findOne({where: { username: username }});
@@ -76,8 +77,8 @@ router.get('/register', async (request, response) => {
     // if user already exists, send errors back.
     if(usernameErr && emailErr)
     {   
-        response.json({ usernameErr: "Username already exists. Please choose another.",
-                        emailErr: "Email already exists. Please choose another."})
+        response.json({ usernameErr: "That username is taken!",
+                        emailErr: "That email is taken!"})
     }
     else if (usernameErr)
     {
@@ -86,8 +87,8 @@ router.get('/register', async (request, response) => {
     }
     else if(emailErr)
     {
-        response.json({ emailErr: "That email is taken!",
-                        userNameErr: ""})
+        response.json({ usernameErr: "",
+                        emailErr: "That email is taken!"})
     }
 })
 module.exports = router;
