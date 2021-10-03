@@ -61,22 +61,31 @@ router.get('/register', async (request, response) => {
   
 })
 
+// 
 router.post('/login', async (request, response) => {
     const {username , password} = request.body;
     const user = await Users.findOne({ where: {username: username} })
     if(!user)
     {
         console.log("no such user found..")
-        response.json({ error: "User Doesn't exist!"})
+        response.status(404).json({ error: "User Doesn't exist!"})
     }
-    bcrypt.compare(password, user.password).then( async (match) => {
-        console.log("match: " ,match)
-
-        if(!match) 
-        {
-            response.json({error: "Wrong username and password combination!"})
-        }
-    })
+    else
+    {
+        bcrypt.compare(password, user.password).then( async (match) => {
+            console.log("match: " ,match)
+    
+            if(!match) 
+            {
+                response.status(401).json({error: "Wrong username and password combination!"})
+            }
+            else
+            {
+                response.json({msg: "success!"})
+            }
+        })
+    }
+    
 })
 
 
