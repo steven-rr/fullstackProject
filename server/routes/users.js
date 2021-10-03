@@ -73,22 +73,30 @@ router.get('/register', async (request, response) => {
     const usernameErr = await Users.findOne({where: { username: username }});
     const emailErr = await Users.findOne({where: {email: email }});
 
+    await console.log("HIT GET REGISTER, usernameErr: ", usernameErr);
+    await console.log("HIT GET REGISTER, emailErr: ", emailErr);
+
+    
     // return whether username or email exists.
     // if user already exists, send errors back.
     if(usernameErr && emailErr)
     {   
-        response.json({ usernameErr: "That username is taken!",
+        response.status(409).json({ usernameErr: "That username is taken!",
                         emailErr: "That email is taken!"})
     }
     else if (usernameErr)
     {
-        response.json({ usernameErr: "That username is taken!",
+        response.status(409).json({ usernameErr: "That username is taken!",
                         emailErr: ""})
     }
     else if(emailErr)
     {
-        response.json({ usernameErr: "",
+        response.status(409).json({ usernameErr: "",
                         emailErr: "That email is taken!"})
+    }
+    else
+    {
+        response.json({msg: "no errors"})
     }
 })
 module.exports = router;
