@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react' 
 import PostsCSS from "./Posts.module.css"
 import axios from   "axios" 
+import { Link} from 'react-router-dom'
 
 const Posts = () => {
     const [postData, setPostData] = useState([])
@@ -32,19 +33,20 @@ const Posts = () => {
                                 .catch( (err) => console.log("Error:", err ) )
     }
     return (
-        <div>
+        <div className={PostsCSS.postsPageContainer}>
             <div className= {PostsCSS.textStyle}>Steven, check out these posts. </div>
             <button onClick = {createPost}>Create Post</button>
-            {postData.map((value, key) =>{
-                return (
-                    <div className={PostsCSS.postContainer} key = {key}> 
-                        <div className = {PostsCSS.postTitle}>{value.title} </div>
-                        <div className = {PostsCSS.postContent}>{value.contentText} </div>
-                        <div className = {PostsCSS.postContent}>{value.username} </div>
-                    </div>
-                    
-                )
-            })}
+            <div className={PostsCSS.postsBodyContainer}>
+                {postData.map((value, key) =>{
+                    return (
+                        <Link className={PostsCSS.postContainer} key = {key} to={`/blog/${value.id}`}> 
+                            <div className = {PostsCSS.postTitle}>{value.title} </div>
+                            <div className = {PostsCSS.postContent}>{value.contentText} </div>
+                            <div className = {PostsCSS.postContent}>{value.username} </div>
+                        </Link>
+                    )
+                })}
+            </div>
         </div>
     )
 }
