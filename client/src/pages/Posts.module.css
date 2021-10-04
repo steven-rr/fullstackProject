@@ -21,14 +21,25 @@
 
 .postContainer
 {
+    position: relative;
     display:block;
     margin-top: 20px;
-    color: #fff;
     border: 1px solid #000;
     width: 70%;
     height: 150px;
     cursor: pointer;
     text-decoration: none;
+    color: #fff;
+
+
+}
+.postLinkClass
+{
+    text-decoration: none;
+    display:block;
+    color: #fff;
+    width: 100%;
+    height: 100%;
 
 }
 .postTitle
@@ -39,4 +50,15 @@
 .postContent
 {
     font-size: 15px;
+}
+
+.buttonClass
+{
+    z-index: 9001;
+}
+.buttonListClass
+{
+    position: absolute;
+    bottom: 1px;
+    left: 100px;
 }

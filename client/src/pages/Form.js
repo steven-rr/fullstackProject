@@ -160,7 +160,7 @@ const Form = () => {
                     <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.emailErr} </div>
                 </div>
                 <div>
-                    <button className={FormCSS.buttonClass} onClick={handleSubmit} type="button" >Create Account</button>
+                    <button className={FormCSS.buttonClass} onClick={() => handleSubmit()} type="button" >Create Account</button>
                 </div>
             </form>
         </div>
