@@ -1,0 +1,56 @@
+
+.createPostPageContainer
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+}
+.createPostHeaderContainer
+{
+
+}
+
+.createPostBodyContainer
+{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+}
+.headerStyle
+{
+    display: block;
+    padding-top: 50px;
+    color: #fff;
+    font-size: 50px;
+}
+.titleField
+{
+    display: block;
+    width: 100%;
+    padding: .5rem .8rem .5rem .8rem;
+    margin: .9vw 0;
+    border:0;
+    border-radius: 5px;
+    font-size: 20px;
+    box-sizing: border-box;
+
+} 
+.bodyField
+{
+    
+    box-sizing: border-box;
+    border: none;
+    appearance:none;
+    outline: none;
+    width: 400px;
+    height: 200px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+} 
+
+

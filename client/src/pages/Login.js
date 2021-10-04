@@ -83,6 +83,9 @@ const Login = () => {
                                 .post('/api/users/login',values)
                                 .then( res => {
                                     console.log(res.data.msg)
+                                    setValues( currentVals => {
+                                        return {...currentVals, username: "", password: ""}})
+
                                 })
                                 .catch( (err) => {
                                     if(err.response.data.error)
