@@ -24,6 +24,7 @@ router.post('/register', async (request, response) => {
 })
 // server-side validation.
 router.get('/register', async (request, response) => { 
+    console.log("called");
     // parse out info from frontend.
     const values = await request.query;
     // err container, to be filled as errors pop up.
@@ -55,7 +56,7 @@ router.get('/register', async (request, response) => {
     }
     else
     {
-        response.json({msg: "success!"});
+        response.json({msg: "no backend register errors!"});
     }
 
   
@@ -81,7 +82,7 @@ router.post('/login', async (request, response) => {
             }
             else
             {
-                response.json({msg: "success!"})
+                response.json({msg: "logged in!"})
             }
         })
     }
