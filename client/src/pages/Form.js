@@ -11,7 +11,9 @@ const emailRegex = RegExp(
 const Form = () => {
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [values, setValues] = useState({username: '', password: '', email: '' })
-    const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
+    // const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
+    const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
+    const [displayErrors, setDisplayErrors] = useState({ usernameErr: '', passwordErr: '', emailErr:''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
    
     // rerender when blur is triggered.
@@ -20,22 +22,32 @@ const Form = () => {
         setIndex(currentIndex=> currentIndex+1);
     }
 
+    // display errors to user on blur events.
+    const handleBlur = async (e) => {
+        // only set these displayerrors on blur!
+        displayErrors.usernameErr = internalErrors.usernameErr;
+        displayErrors.passwordErr = internalErrors.passwordErr;
+        displayErrors.emailErr = internalErrors.emailErr;
+    
+        // rerender the errors.
+        rerender();
+    }
 
     // implements client-side and server-side error handling.
-    const handleErrors = async (name, value) => {
+    const handleOnChangeErrors = async (name, value) => {
         // handle client-side errors:
         if(name === "username")
         {
-            inputErrors.usernameErr = 
+            internalErrors.usernameErr = 
                             (value.length < 3)  ? "minimum of 3 characters required": "";
         }
         else if(name === "password")
         {
-            inputErrors.passwordErr= (value.length < 6 ) ? "minimum of 6 characters required": "";
+            internalErrors.passwordErr= (value.length < 6 ) ? "minimum of 6 characters required": "";
         }
         else if(name === "email")
         {
-            inputErrors.emailErr= (emailRegex.test(value)) ? "":"invalid email";
+            internalErrors.emailErr= (emailRegex.test(value)) ? "":"invalid email";
         }
 
         // handle server-side validation. only if value is nonempty.
@@ -51,33 +63,24 @@ const Form = () => {
                                     .catch( (err) => {
                                         if(err.response.data.usernameErr)
                                          {   
-                                            inputErrors.usernameErr = err.response.data.usernameErr
+                                            internalErrors.usernameErr = err.response.data.usernameErr
                                         }
                                         if(err.response.data.emailErr)
                                         {
-                                            inputErrors.emailErr = err.response.data.emailErr
+                                            internalErrors.emailErr = err.response.data.emailErr
                                         }})
         }
         // determine if there are errors in any channels.
-        invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
-        invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
-        invalidFlags.submitEmailInvalid = (inputErrors.emailErr === "") ? false: true;
+        invalidFlags.submitUsernameInvalid = (internalErrors.usernameErr === "") ? false: true;
+        invalidFlags.submitPWInvalid = (internalErrors.passwordErr === "") ? false: true;
+        invalidFlags.submitEmailInvalid = (internalErrors.emailErr === "") ? false: true;
 
-        // rerender the errors.
-        rerender();
+         // if any errors are activated, don't allow user to submit.
+         invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
+
+
     }
-    const handleBlur = async (e) => {
-
-        const {name, value} = await e.target;
-        // update value to what it is.
-        setValues({...values, [name]:value})
-
-        // set errors when appropriate.
-        handleErrors(name, value);
-        
-        // if any errors are activated, don't allow user to submit.
-        invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
-    }
+    
     
     const handleSubmit = async (e) => 
     {   
@@ -95,6 +98,34 @@ const Form = () => {
                                     .catch( err =>  console.log(err) );
         }
     }
+
+    const handleUsername = async (e)=>{
+        // update username state whenever user changes values of textfield.
+        setValues( currentVals => {
+           return {...currentVals, username: e.target.value}})
+
+        // keep track internally of all errors. only display errors on blur.
+        handleOnChangeErrors("username", e.target.value);
+    }
+
+    const handlePassword = async (e)=>{
+        // update password state whenever user changes values of textfield.
+        setValues( currentVals => {
+            return {...currentVals, password: e.target.value}})
+
+        // keep track internally of all errors. only display errors on blur.
+        handleOnChangeErrors("password", e.target.value);
+    }
+
+    const handleEmail = async (e)=>{
+        // update email state whenever user changes values of textfield.
+        setValues( currentVals => {
+            return {...currentVals, email: e.target.value}})
+
+        // keep track internally of all errors. only display errors on blur.
+        handleOnChangeErrors("email", e.target.value);
+    }
+
     return (
         <div className={FormCSS.formContainer}>
             <div className= {FormCSS.textStyle}>Create an Account, Steven! </div>
@@ -105,25 +136,28 @@ const Form = () => {
                         type= "text"
                         name= "username"
                         onBlur={handleBlur}
+                        onChange={handleUsername}
                         placeholder="Username..."
                     />
-                    <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.usernameErr} </div>
+                    <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.usernameErr} </div>
                     <label>Password</label>
                     <input
                         type= "password"
                         name= "password"
                         onBlur={handleBlur}
+                        onChange={handlePassword}
                         placeholder="Password..."
                     />
-                    <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.passwordErr} </div>
+                    <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                     <label>Email</label>
                     <input
                         type= "text"
                         name= "email"
                         onBlur={handleBlur}
+                        onChange={handleEmail}
                         placeholder="Email..."
                     />
-                    <div className={FormTextFieldCSS.errMsgClass}> {inputErrors.emailErr} </div>
+                    <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.emailErr} </div>
                 </div>
                 <div>
                     <button className={FormCSS.buttonClass} onClick={handleSubmit} type="button" >Create Account</button>

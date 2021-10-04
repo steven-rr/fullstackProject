@@ -7,8 +7,6 @@ const Login = () => {
     const [values, setValues] = useState({username: '', password: ''})
     const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ usernameErr: '', passwordErr: ''})
-    // const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: ''})
-
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
 
     // rerender when blur is triggered.
@@ -73,6 +71,9 @@ const Login = () => {
 
     const handleSubmit = async (e) => 
     {
+        // in case user hits submit without blurring, handle blur async with submits.
+        await handleBlur();
+
         // handle submit errors. fields must be nonempty for submit.
         await handleSubmitErrors();
 
@@ -101,7 +102,6 @@ const Login = () => {
 
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("username", e.target.value);
-
     }
 
     const handlePassword = async (e)=>{
@@ -111,7 +111,6 @@ const Login = () => {
 
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("password", e.target.value);
-
     }
     return (
         <div className={LoginCSS.loginContainer}>
