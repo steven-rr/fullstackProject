@@ -54,6 +54,9 @@ app.use('/api/users', require('./routes/users'))
 // set up posts routes.
 app.use('/api/posts', require('./routes/posts'))
 
+// set up comments routes.
+app.use('/api/comments', require('./routes/comments'))
+
 // set up launch routes.
 app.use('/api/launches', require('./routes/launches'))
 
