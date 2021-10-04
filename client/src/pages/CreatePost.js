@@ -3,28 +3,23 @@ import CreatePostCSS from "./CreatePost.module.css"
 import axios from   "axios" 
 
 
-
-
-
-
 const CreatePost = () => {
-
     // create post
     const [newPost, setNewPost] = useState({title: "", contentText: "", username: "admin"})
 
     // create post on click with create post button.
     const createPost = async () => {
         console.log("attempting to submit!!!!!", newPost)
-        // post the new comment on the server.
+        // post the new post on the server.
         await axios
             .post('/api/posts',newPost)
-            .then( res => {
-                const newCommentCreated=  res.data; //get json response and append to state.
+            .then(  (res) => {
+                const newPostCreated=  res.data; //get json response and append to state.
                 //after adding a comment, clear the post.
                 console.log(" looks like i did something right with posts....")
-                setNewPost( currentPost => {
-                    return {...currentPost, title: "", contentText: ""}})
-
+                // set new state to empty.
+                setNewPost( prevPost => {
+                    return {...prevPost, title: "", contentText: "" , username: "admin"}})
             })
             .catch( (err) => {
                     console.log("error: ", err);
@@ -54,6 +49,7 @@ const CreatePost = () => {
                     wrap="soft"
                     placeholder="Title..."
                     onChange={postTitleOnChange}
+                    value={newPost.title}
                 />
                 
                 <textarea  
@@ -64,6 +60,7 @@ const CreatePost = () => {
                     wrap="soft" 
                     placeholder="Enter your thoughts here..." 
                     onChange={postContentOnChange}
+                    value={newPost.contentText}
                 />
                 <button className={CreatePostCSS.buttonClass} onClick={createPost}> POST </button>
             </div>

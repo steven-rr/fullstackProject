@@ -16,8 +16,8 @@ router.post("/", async(request, response) => {
         contentText: contentText,
         username: username
     };
-    await Posts.create(newPost);
-    response.json(newPost)
+    const newPostCreated= await Posts.create(newPost);
+    response.json(newPostCreated)
 })
 
 // get individual post data in database and send to frontend.
