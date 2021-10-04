@@ -32,9 +32,12 @@ const Post = () => {
     else
     {
         return (
-            <div className={PostCSS.postContainer}> 
-                <div className={PostCSS.textStyle}> {`Welcome to post ${id}`} </div>
-                <div className={PostCSS.textStyle}> {individualPostData.title}</div>
+            <div className={PostCSS.postPageContainer}> 
+                <div className={PostCSS.postBodyContainer}>
+                    <div className={PostCSS.titleStyle}> {`Welcome to post ${id}`} </div>
+                    <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
+                    <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
+                </div>
             </div>
         )
     }
