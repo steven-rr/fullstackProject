@@ -1,12 +1,15 @@
 import React , { useState } from 'react'
 import CreatePostCSS from "./CreatePost.module.css"
 import axios from   "axios" 
+import { useHistory} from 'react-router-dom'
 
 
 const CreatePost = () => {
+    // use history.
+    const history = useHistory();
+
     // create post
     const [newPost, setNewPost] = useState({title: "", contentText: "", username: "admin"})
-
     // create post on click with create post button.
     const createPost = async () => {
         console.log("attempting to submit!!!!!", newPost)
@@ -20,6 +23,8 @@ const CreatePost = () => {
                 // set new state to empty.
                 setNewPost( prevPost => {
                     return {...prevPost, title: "", contentText: "" , username: "admin"}})
+                history.push("/blog");
+
             })
             .catch( (err) => {
                     console.log("error: ", err);

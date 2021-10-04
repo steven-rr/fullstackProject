@@ -143,7 +143,7 @@ const Login = () => {
                     <div className={LoginCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                 </div>
                 <div>
-                    <button className={LoginCSS.buttonClass} onClick={handleSubmit} type = "button">Login</button>
+                    <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Login</button>
                 </div>
             </form>
         </div>
