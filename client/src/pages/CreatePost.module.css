@@ -27,13 +27,18 @@
 .titleField
 {
     display: block;
-    width: 100%;
-    padding: .5rem .8rem .5rem .8rem;
+    width: 600px;
     margin: .9vw 0;
+    padding-left: 10px;
+    padding-right: 10px;
     border:0;
-    border-radius: 5px;
     font-size: 20px;
     box-sizing: border-box;
+    border: none;
+    appearance:none;
+    outline: none;
+    font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
 
 } 
 .bodyField
@@ -43,7 +48,7 @@
     border: none;
     appearance:none;
     outline: none;
-    width: 400px;
+    width: 600px;
     height: 200px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -54,3 +59,25 @@
 } 
 
 
+.buttonClass
+{
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 18px 40px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 15px;
+	font-family: Poppins;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+}
+
+.buttonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
