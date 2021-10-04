@@ -1,17 +1,35 @@
+.postsPageContainer
+{
+    margin-top: 70px;
+}
+
 .textStyle
 {   
     display: block;
     padding-top: 50px;
     color: #fff;
     font-size: 50px;
-    margin-top: 70px;
     
+}
+
+.postsBodyContainer
+{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .postContainer
 {
+    display:block;
     margin-top: 20px;
     color: #fff;
+    border: 1px solid #000;
+    width: 70%;
+    height: 150px;
+    cursor: pointer;
+    text-decoration: none;
+
 }
 .postTitle
 {
