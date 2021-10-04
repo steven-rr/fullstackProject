@@ -13,25 +13,6 @@ const Posts = () => {
         })
     }, []);
 
-    // send a new post from frontend to backend. TODO: dont hardcode a fakepost.
-    // const createPost = async (e) => {
-    //     const fakePost = {
-    //         title: "Evergrand about to go bankrupt!",
-    //         contentText: "Apparently Evergrand is about to go bankrupt, which is not really the best news. It might affect the US economy. We have gathered this intel from Meet Patel during the dayjob.",
-    //         username: "stevenrr"
-    //     };
-    //     // const fakePost = {
-    //     //     title: "WoW may come back",
-    //     //     contentText: "WoW actually may come back to a store near you. Experience the latest version of the classic MMORPG. It was obviously better than Runescape, let's be frank!",
-    //     //     username: "adcompanyX"
-    //     // };
-    //     const response = await axios
-    //                             .post('/api/posts',fakePost)
-    //                             .then( res => {
-    //                                 console.log(res)
-    //                             })
-    //                             .catch( (err) => console.log("Error:", err ) )
-    // }
     return (
         <div className={PostsCSS.postsPageContainer}>
             <div className= {PostsCSS.textStyle}>Steven, check out these posts. </div>
