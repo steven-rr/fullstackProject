@@ -1,0 +1,13 @@
+.postContainer
+{    
+    display: block;
+    margin-top: 70px;
+}
+
+.textStyle
+{
+    display: block;
+    padding-top: 50px;
+    color: #fff;
+    font-size: 50px;
+}
