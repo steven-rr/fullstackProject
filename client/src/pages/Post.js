@@ -50,7 +50,7 @@ const Post = () => {
             .then( res => {
                 const newCommentCreated=  res.data; //get json response and append to state.
                 setComments([...comments, newCommentCreated])
-                setNewComment("")
+                setNewComment("") //after adding a comment, clear the comment.
             })
             .catch( (err) => {
                     console.log("error: ", err);
