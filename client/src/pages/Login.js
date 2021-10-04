@@ -5,7 +5,8 @@ import LoginCSS from "./Login.module.css"
 const Login = () => {
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [values, setValues] = useState({username: '', password: ''})
-    const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: ''})
+    const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: ''})
+    const [displayErrors, setDisplayErrors] = useState({ usernameErr: '', passwordErr: ''})
     // const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: ''})
 
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
@@ -16,61 +17,53 @@ const Login = () => {
         setIndex(currentIndex=> currentIndex+1);
     }
 
-    // implements client-side handling for blur.
-    const handleBlurErrors = async (name, value) => {
-        console.log("hit!")
-        // handle client-side errors:
+    // display errors to user on blur events.
+    const handleBlur = async () => {
+        // only set these displayerrors on blur!
+        displayErrors.usernameErr = internalErrors.usernameErr;
+        displayErrors.emailErr = internalErrors.emailErr;
+    
+        // rerender the errors.
+        rerender();
+    }
+
+    // implements client-side form validation onChange. internal errors are not displayed to user until blur. 
+    const handleOnChangeErrors = async (name, value) => {
+        // handle client-side form validation:
         if(name === "username")
         {
-            inputErrors.usernameErr = 
+            internalErrors.usernameErr = 
                             (value.length < 3)  ? "minimum of 3 characters required": "";
         }
         if( name === "password")
         {   
             if(value.length >0)
             {
-                inputErrors.passwordErr= "";
+                internalErrors.passwordErr= "";
             }
         }
-    
-        // rerender the errors.
-        rerender();
     }
 
-    // implements handling of blurs.
-    const handleBlur = e => {
-        console.log("BLURRRRRR:");
-        console.log("E_TARGET_USERNAME_VAL: ",e.target.username)
-        console.log("E_TARGET_USERNAME_VAL: ",e.target.password)
-
-        console.log("E_TARGETTTTTTTTTT: ",e.target);
-        const {name, value} = e.target;
-        setValues({...values, [name]:value})
-        
-        // set errors when appropriate.
-        handleBlurErrors(name, value);
-        console.log("END BLURRRRRR:");
-
-
-    }
-    // handling on change.
-
-    // implements submit errors:
+    // on submit, check fields are nonempty. display any error present.
     const handleSubmitErrors = async () => {
 
         // check if username and password are filled out.
         if(values.username === "")
         {
-            inputErrors.usernameErr = "please enter a username."
+            internalErrors.usernameErr = "please enter a username."
         }
         if(values.password === "")
         {
-            inputErrors.passwordErr = "please enter a password."
+            internalErrors.passwordErr = "please enter a password."
         }
 
+        // display errors 
+        displayErrors.usernameErr = internalErrors.usernameErr;
+        displayErrors.emailErr = internalErrors.emailErr;
+
         // determine if there are errors in any channels.
-        invalidFlags.submitUsernameInvalid = (inputErrors.usernameErr === "") ? false: true;
-        invalidFlags.submitPWInvalid = (inputErrors.passwordErr === "") ? false: true;
+        invalidFlags.submitUsernameInvalid = (internalErrors.usernameErr === "") ? false: true;
+        invalidFlags.submitPWInvalid = (internalErrors.passwordErr === "") ? false: true;
         invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
         
         // rerender any errors.
@@ -80,16 +73,9 @@ const Login = () => {
 
     const handleSubmit = async (e) => 
     {
-        // in case user hits submit without blurring, handle blur async with submits.
-        // await handleBlur(e);
-        console.log("E_TARGET_USERNAME_VAL: ",values.username)
-        console.log("E_TARGET_USERNAME_VAL: ",values.password)
-
-        await handleBlurErrors("username", values.username);
-        await handleBlurErrors("password", values.password);
-
-        // handle submit errors
+        // handle submit errors. fields must be nonempty for submit.
         await handleSubmitErrors();
+
         // if no errors, allow the attempt to log in.
         if(!invalidFlags.submitInvalid){
             const response = await axios
@@ -106,15 +92,26 @@ const Login = () => {
         else{
             console.log("not submitting!");
         }
-        
+    }
 
+    const handleUsername = async (e)=>{
+        // update username state whenever user changes values of textfield.
+        setValues( currentVals => {
+           return {...currentVals, username: e.target.value}})
+
+        // keep track internally of all errors. only display errors on blur.
+        handleOnChangeErrors("username", e.target.value);
 
     }
-    const handleUsername = (e)=>{
-        setValues({username: e.target.value})
-    }
-    const handlePassword = (e)=>{
-        setValues({password: e.target.value})
+
+    const handlePassword = async (e)=>{
+        // update password state whenever user changes values of textfield.
+        setValues( currentVals => {
+            return {...currentVals, password: e.target.value}})
+
+        // keep track internally of all errors. only display errors on blur.
+        handleOnChangeErrors("password", e.target.value);
+
     }
     return (
         <div className={LoginCSS.loginContainer}>
@@ -130,7 +127,7 @@ const Login = () => {
                         placeholder="Username..."
                         value= {values.username}
                     />
-                    <div className={LoginCSS.errMsgClass}> {inputErrors.usernameErr} </div>
+                    <div className={LoginCSS.errMsgClass}> {displayErrors.usernameErr} </div>
 
                     <label>Password</label>
                     <input
@@ -141,10 +138,10 @@ const Login = () => {
                         placeholder="Password..."
                         value= {values.password}
                     />
-                    <div className={LoginCSS.errMsgClass}> {inputErrors.passwordErr} </div>
+                    <div className={LoginCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                 </div>
                 <div>
-                    <button className={LoginCSS.buttonClass }onClick={handleSubmit} type = "button">Login</button>
+                    <button className={LoginCSS.buttonClass} onClick={handleSubmit} type = "button">Login</button>
                 </div>
             </form>
         </div>
