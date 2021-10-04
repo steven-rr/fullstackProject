@@ -19,6 +19,25 @@ router.post("/", async(request, response) => {
     await Posts.create(newPost);
     response.json(newPost)
 })
+
+// get individual post data in database and send to frontend.
+router.get('/:id', async (request, response) => {
+    const id = request.params.id;
+    const individualPostData = await Posts.findByPk(id)
+
+    // if post data not found, return 404. else, return post data.
+    if(!individualPostData)
+    {
+        response.status(404).json({msg: "post not found!!!"})
+
+    }
+    else
+    {
+        response.json(individualPostData)
+
+    }
+})
+
 module.exports = router;
 
 
