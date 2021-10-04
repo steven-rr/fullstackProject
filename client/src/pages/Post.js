@@ -48,9 +48,9 @@ const Post = () => {
         await axios
             .post('/api/comments',newCommentToPost)
             .then( res => {
-                const newCommentCreated=  res.data;
+                const newCommentCreated=  res.data; //get json response and append to state.
                 setComments([...comments, newCommentCreated])
-                
+                setNewComment("")
             })
             .catch( (err) => {
                     console.log("error: ", err);
