@@ -48,10 +48,8 @@ const Post = () => {
         await axios
             .post('/api/comments',newCommentToPost)
             .then( res => {
-                console.log("all comments: ",comments);
                 const newCommentCreated=  res.data;
-                console.log("newcommentcreated", newCommentCreated);
-                setComments(...comments, ...newCommentCreated)
+                setComments([...comments, newCommentCreated])
                 
             })
             .catch( (err) => {
