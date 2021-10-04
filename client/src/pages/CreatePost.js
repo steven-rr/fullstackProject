@@ -1,27 +1,71 @@
-import React from 'react'
+import React , { useState } from 'react'
 import CreatePostCSS from "./CreatePost.module.css"
+import axios from   "axios" 
+
+
+
+
+
 
 const CreatePost = () => {
+
+    // create post
+    const [newPost, setNewPost] = useState({title: "", contentText: "", username: "admin"})
+
+    // create post on click with create post button.
+    const createPost = async () => {
+        console.log("attempting to submit!!!!!", newPost)
+        // post the new comment on the server.
+        await axios
+            .post('/api/posts',newPost)
+            .then( res => {
+                const newCommentCreated=  res.data; //get json response and append to state.
+                //after adding a comment, clear the post.
+                console.log(" looks like i did something right with posts....")
+                setNewPost( currentPost => {
+                    return {...currentPost, title: "", contentText: ""}})
+
+            })
+            .catch( (err) => {
+                    console.log("error: ", err);
+                });
+    }
+    // handle onChange
+    const postTitleOnChange= (e) => {
+        setNewPost( currentPost => {
+            return {...currentPost, title: e.target.value}})
+    }
+    // handle onChange
+    const postContentOnChange= (e) => {
+        setNewPost( currentPost => {
+            return {...currentPost, contentText: e.target.value}})
+    }
     return (
         <div className={CreatePostCSS.createPostPageContainer}>
             <div className={CreatePostCSS.createPostHeaderContainer}> 
                 <div className={CreatePostCSS.headerStyle}> Create a Post </div>
             </div>
             <div className={CreatePostCSS.createPostBodyContainer}>
-                <input 
+                <textarea 
                     className={CreatePostCSS.titleField}
-                    type= "text"
-                    name= "title"
+                    name="title" 
+                    rows="1" 
+                    cols="1" 
+                    wrap="soft"
                     placeholder="Title..."
+                    onChange={postTitleOnChange}
                 />
-                {/* <input 
-                    className={CreatePostCSS.bodyField}
-                    type= "text"
-                    name= "title"
-                    placeholder="Text..."
-                /> */}
-                <textarea  className={CreatePostCSS.bodyField} name="text" rows="14" cols="10" wrap="soft" placeholder="Enter your thoughts here..."> </textarea>
-
+                
+                <textarea  
+                    className={CreatePostCSS.bodyField} 
+                    name="body" 
+                    rows="14" 
+                    cols="10" 
+                    wrap="soft" 
+                    placeholder="Enter your thoughts here..." 
+                    onChange={postContentOnChange}
+                />
+                <button className={CreatePostCSS.buttonClass} onClick={createPost}> POST </button>
             </div>
         </div>
     )
