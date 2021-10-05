@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react' 
 import PostsCSS from "./Posts.module.css"
 import axios from   "axios" 
-import { Link} from 'react-router-dom'
+import { Link, useHistory} from 'react-router-dom'
 
 const Posts = () => {
+    // instantiate history.
+    const history = useHistory();
+    
+    // use state.
     const [postData, setPostData] = useState([])
 
     // on render, get posts from backend and display for the user.
@@ -18,12 +22,19 @@ const Posts = () => {
     }
     const handleOnClickDelete = (id) => {
         console.log("button clicked!");
-
+        // send delete request to backend.
         axios
             .delete(`/api/posts/${id}`)
             .then( () => {
-                alert('delete success');
+                // rerender page by resetting post data. 
+                axios.get("/api/posts").then( (response) =>{
+                    setPostData(response.data);
+                })
             })
+
+            
+                
+            
     }
     return (
         <div className={PostsCSS.postsPageContainer}>
@@ -40,7 +51,7 @@ const Posts = () => {
                                 
                             </Link>
                             <div className={PostsCSS.buttonListClass}> 
-                                <button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickComments}> comments </button>
+                                <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments </Link>
                                 <button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button>
                             </div>
 
