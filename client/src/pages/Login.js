@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import axios from   "axios" 
 import LoginCSS from "./Login.module.css"
+import {useHistory} from "react-router-dom"
 
 const Login = () => {
+    // instantiate history.
+    const history = useHistory();
+
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [values, setValues] = useState({username: '', password: ''})
     const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: ''})
@@ -85,7 +89,7 @@ const Login = () => {
                                     console.log(res.data.msg)
                                     setValues( currentVals => {
                                         return {...currentVals, username: "", password: ""}})
-
+                                    history.push("/")
                                 })
                                 .catch( (err) => {
                                     if(err.response.data.error)
