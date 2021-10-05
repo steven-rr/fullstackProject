@@ -113,6 +113,7 @@ const Post = () => {
                         return (
                                 <div className = {PostCSS.commentBodyContainer} key = {key}>
                                     <div className ={PostCSS.commentText}> {value.contentText} </div>
+                                    <div> posted by {value.username}</div>
                                     <button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)}> delete comment</button>
                                 </div>
                         )

@@ -1,4 +1,3 @@
-const { response } = require("express");
 const {sign, verify} = require("jsonwebtoken");
 require('dotenv').config();
  
@@ -11,7 +10,9 @@ const createTokens= (user)=> {
 }
 
 const validateToken = (request, response, next) => {
+    console.log("validate token hit!");
     const accessToken = request.cookies["access-token"];
+    console.log(accessToken);
     // if no valid access token in cookies, return auth error.
     if(!accessToken)
     {
@@ -22,11 +23,11 @@ const validateToken = (request, response, next) => {
     try 
     {
         const validToken = verify(accessToken , process.env.JSON_WEB_TOKEN_SECRET_KEY)
-        request.user = validToken.user;
-
+        request.user = validToken;
         if(validToken)
         {
             request.authenticated = true;
+            console.log("validate token success.")
             return next();
         }
         
