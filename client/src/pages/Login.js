@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from   "axios" 
 import LoginCSS from "./Login.module.css"
 import {useHistory} from "react-router-dom"
+import {AuthContext} from "../App"
 
 const Login = () => {
+    // grabbing setAuthState.
+    const {setAuthState} = useContext(AuthContext)
+
     // instantiate history.
     const history = useHistory();
 
@@ -89,6 +93,7 @@ const Login = () => {
                                     console.log(res.data.msg)
                                     setValues( currentVals => {
                                         return {...currentVals, username: "", password: ""}})
+                                    setAuthState(true); // set auth state is true when logging in.
                                     history.push("/")
                                 })
                                 .catch( (err) => {

@@ -4,6 +4,8 @@ const {Users}= require('../models');
 const bcrypt = require("bcryptjs")
 const {createTokens}=require("../JWT.js")
 const cookieParser = require("cookie-parser");
+const {validateToken}=require("../JWT.js")
+
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
     // parse out info from frontend.
@@ -94,6 +96,9 @@ router.post('/login', async (request, response) => {
     }
     
 })
+// check backend to make sure user is authenticated. 
+router.get('/validate',validateToken, async (request, response) => { 
+    response.json({msg: "user is still authenticated."})
 
-
+})
 module.exports = router;

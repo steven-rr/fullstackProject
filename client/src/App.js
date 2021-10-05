@@ -7,8 +7,11 @@ import Post from "./pages/Post"
 import CreatePost from "./pages/CreatePost"
 import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
-import React, {useState} from 'react'
+import React, {useState, useEffect, createContext} from 'react'
+import axios from   "axios" 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+
+export const AuthContext = createContext()
 
 function App() {
   // reset any relevant state when clicking a link in nav bar.
@@ -18,21 +21,40 @@ function App() {
     setValue(currentValue=> currentValue+1);
   }
 
+  // keep track of auth state in the app.
+  const [authState, setAuthState] = useState(false);
+
+  // check if the token is valid, if so, true. else. false.
+  useEffect( async () => {
+      await axios
+              .get("/api/users/validate")
+              .then( (response) =>{
+                  console.log("user is logged in.  authenticated");
+              })
+              .catch( (err) => {
+                console.log("user is not authenticated.")
+              })
+      setAuthState(false);
+  }, [])
   return (
-    <Router>
-      <div className="App">
-        <Navbar onClick ={submitHandler}></Navbar>
-        <Switch>
-          <Route path="/" exact component = {Home} />
-          <Route path="/form" exact component = {Form} />
-          <Route path="/blog" exact component = {Posts} />
-          <Route path="/blog/:id" component = {Post} />
-          <Route path="/createpost" component = {CreatePost} />
-          <Route path="/login" exact component = {Login} />
-          <Route component={Page404} />
-        </Switch>
-      </div>
-    </Router>
+    <div>
+      <AuthContext.Provider value={{authState, setAuthState}}>
+        <Router>
+          <div className="App">
+            <Navbar onClick ={submitHandler}></Navbar>
+            <Switch>
+              <Route path="/" exact component = {Home} />
+              <Route path="/form" exact component = {Form} />
+              <Route path="/blog" exact component = {Posts} />
+              <Route path="/blog/:id" component = {Post} />
+              <Route path="/createpost" component = {CreatePost} />
+              <Route path="/login" exact component = {Login} />
+              <Route component={Page404} />
+            </Switch>
+          </div>
+        </Router>
+      </AuthContext.Provider>
+    </div>
   );
 }
 
