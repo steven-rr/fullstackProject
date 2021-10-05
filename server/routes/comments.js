@@ -30,4 +30,17 @@ router.post("/", async(request, response) => {
     response.json(newCommentCreated)
 })
 
+// router.delete("/:id", async(request,response) => {
+//     const postId =request.params.id;
+//     const postDeleted = await Posts.destroy ({ where: {id: postId} })
+//     if(!postDeleted)
+//     {
+//         response.status(404).json({msg: "post not found!!!"})
+//     }
+//     else
+//     {
+//         response.json({msg: "success!"});
+//     }
+// })
+
 module.exports = router;
