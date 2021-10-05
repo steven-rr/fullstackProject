@@ -57,7 +57,29 @@ const Post = () => {
                 });
     }
 
+    const deleteComment = (commentId) => {
+        console.log('clicked delete comment')
 
+         // send delete request to backend.
+         axios
+            .delete(`/api/comments/${commentId}`)
+            .then( () => {
+                // rerender page by resetting commentData data. 
+                axios.get(`/api/comments/${id}`)
+                    .then( (response) =>{
+                        console.log("comments: ", response.data);
+                        setComments(response.data);
+                    })
+                    .catch( err => {
+                        console.log("comments dont exist!")
+                    })
+             
+            })
+            .catch ( () => {
+                console.log("delete failed!");
+            })
+
+    } 
     // if not a valid ID, render 404. else, render the post! 
     if(!validFlag)
     {
@@ -73,14 +95,17 @@ const Post = () => {
                     <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
                 </div>
                 <div className={PostCSS.createCommentContainer}>
-                    <input
-                        type = "text"
-                        placeholder= "comment"
-                        autoComplete= "off"
-                        onChange ={commentOnChange}
-                        value = {newComment}
+                    <textarea
+                        className={PostCSS.createCommentField}
+                        name="body" 
+                        rows="14" 
+                        cols="10" 
+                        wrap="soft" 
+                        placeholder="Enter your thoughts here..." 
+                        onChange={commentOnChange}
+                        value={newComment}
                     /> 
-                    <button onClick ={createComment}> create comment!</button>
+                    <button className={PostCSS.buttonClass} onClick ={createComment}> CREATE COMMENT!</button>
                 </div>
                 
                 <div className={PostCSS.commentsBodyContainer}>
@@ -88,6 +113,7 @@ const Post = () => {
                         return (
                                 <div className = {PostCSS.commentBodyContainer} key = {key}>
                                     <div className ={PostCSS.commentText}> {value.contentText} </div>
+                                    <button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)}> delete comment</button>
                                 </div>
                         )
                     })}

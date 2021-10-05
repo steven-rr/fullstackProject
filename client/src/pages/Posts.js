@@ -31,6 +31,9 @@ const Posts = () => {
                     setPostData(response.data);
                 })
             })
+            .catch ( () => {
+                console.log("delete failed!");
+            })
 
             
                 
