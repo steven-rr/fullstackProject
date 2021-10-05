@@ -2,7 +2,8 @@ const express= require('express');
 const router = express.Router();
 const {Users}= require('../models');
 const bcrypt = require("bcryptjs")
-
+const {createTokens}=require("../JWT.js")
+const cookieParser = require("cookie-parser");
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
     // parse out info from frontend.
@@ -62,7 +63,7 @@ router.get('/register', async (request, response) => {
   
 })
 
-// 
+// if user exists and password is correct, log in and return json web token.
 router.post('/login', async (request, response) => {
     const {username , password} = request.body;
     const user = await Users.findOne({ where: {username: username} })
@@ -75,13 +76,18 @@ router.post('/login', async (request, response) => {
     {
         bcrypt.compare(password, user.password).then( async (match) => {
             console.log("match: " ,match)
-    
+            // if password is correct, return the accessToken and store in cookie.
             if(!match) 
             {
                 response.status(401).json({error: "Wrong username and password combination!"})
             }
             else
             {
+                
+
+                const accessToken = createTokens(user.dataValues);
+                const expirationDate = 60*60*24*90*1000;
+                response.cookie("access-token", accessToken, {maxAge: expirationDate }) // storing cookie.
                 response.json({msg: "logged in!"})
             }
         })

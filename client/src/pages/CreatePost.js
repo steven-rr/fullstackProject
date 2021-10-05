@@ -5,7 +5,7 @@ import { useHistory} from 'react-router-dom'
 
 
 const CreatePost = () => {
-    // use history.
+    // instantiate history.
     const history = useHistory();
 
     // create post
