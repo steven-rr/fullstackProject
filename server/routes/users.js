@@ -90,7 +90,7 @@ router.post('/login', async (request, response) => {
                 const accessToken = createTokens(user.dataValues);
                 const expirationDate = 60*60*24*90*1000;
                 response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
-                response.json({msg: "logged in!"})
+                response.json({username: user.username, id: user.id})
             }
         })
     }
@@ -98,7 +98,25 @@ router.post('/login', async (request, response) => {
 })
 // check backend to make sure user is authenticated. 
 router.get('/validate',validateToken, async (request, response) => { 
-    response.json({msg: "user is still authenticated."})
+    response.json(request.user)
+
+})
+//  delete cookie to eliminate priveleages and logout. 
+router.get('/logout',validateToken, async (request, response) => { 
+    console.log("logout hit.")
+
+    try
+    {
+        response.clearCookie("access-token");   
+        console.log("succesfully deleted cookie.")
+        response.json(response.user)
+
+    }
+    catch
+    {
+        console.log("error in logout")
+        response.status(404).json({err: "something went wrong."})
+    }
 
 })
 module.exports = router;

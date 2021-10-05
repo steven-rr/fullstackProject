@@ -6,7 +6,7 @@ import {AuthContext} from "../App"
 
 const Login = () => {
     // grabbing setAuthState.
-    const {setAuthState} = useContext(AuthContext)
+    const {authState, setAuthState} = useContext(AuthContext)
 
     // instantiate history.
     const history = useHistory();
@@ -90,10 +90,12 @@ const Login = () => {
             const response = await axios
                                 .post('/api/users/login',values)
                                 .then( res => {
-                                    console.log(res.data.msg)
                                     setValues( currentVals => {
                                         return {...currentVals, username: "", password: ""}})
-                                    setAuthState(true); // set auth state is true when logging in.
+                                    
+                                    setAuthState( currentAuthState =>{ 
+                                        return {...currentAuthState, username: res.data.username, userid: res.data.id, authStatus: true}
+                                        }); // set auth state is true when logging in.
                                     history.push("/")
                                 })
                                 .catch( (err) => {

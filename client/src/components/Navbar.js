@@ -1,8 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import NavbarCSS from './Navbar.module.css'
-import { NavLink} from 'react-router-dom'
+import { NavLink, useHistory} from 'react-router-dom'
+import {AuthContext} from "../App"
+import axios from 'axios'
 
 const Navbar = ({onClick}) => {
+    // grabbing setAuthState.
+    const {authState, setAuthState} = useContext(AuthContext)
+    
+    // instantiate history.
+    const history = useHistory();
+
      // set menu bar state.
      const[state, setState] = useState({menuOpen: false, fade: false});
 
@@ -54,7 +62,21 @@ const Navbar = ({onClick}) => {
             };
     }, [state.menuOpen] )
   
-        
+    // for logging out.
+    const logout = async () => {
+        console.log("hit logout")
+        const response = await axios
+            .get('/api/users/logout')
+            .then( res => {
+                setAuthState( currentAuthState =>{ 
+                    return {...currentAuthState, username: "", userid: "", authStatus: false}
+                  });
+                history.push("/")
+            })
+            .catch( (err) => {
+                console.log("logout failed..")
+            });
+    }
     return (
         <div className={ `${NavbarCSS.containerMain}` }> 
             <div className={NavbarCSS.navLinkItems}>
@@ -65,8 +87,14 @@ const Navbar = ({onClick}) => {
                 <div className={NavbarCSS.navMain}>
                     <ul className={NavbarCSS.navMainUl}>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
-                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
-                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li>
+                        {!authState.authStatus ? 
+                            (<><li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
+                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li> </>) 
+                            : 
+                            (<><li className={NavbarCSS.navMainLi}> {authState.username} </li>
+                            <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button">   LOGOUT </button> </li></>)}
+
+                        
                     </ul>
                 </div>
             </div>
