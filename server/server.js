@@ -4,6 +4,7 @@ const db = require('./models');
 const cron = require('node-cron');
 const fetch = require("node-fetch");
 const path = require('path');
+const cookieParser =require('cookie-parser')
 const SpaceAPIFetch = require('./middleware/SpaceAPIFetch')
 const APICountersReset = require('./middleware/APICountersMiddleware/APICountersReset')
 require('dotenv').config();
@@ -47,6 +48,9 @@ app.use(express.static('public'))
 
 // allowing express to parse JSON.
 app.use(express.json({limit : '1mb'})) 
+
+// allow cookies.
+app.use(cookieParser());
 
 // set up user routes.
 app.use('/api/users', require('./routes/users'))
