@@ -87,7 +87,7 @@ router.post('/login', async (request, response) => {
 
                 const accessToken = createTokens(user.dataValues);
                 const expirationDate = 60*60*24*90*1000;
-                response.cookie("access-token", accessToken, {maxAge: expirationDate }) // storing cookie.
+                response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
                 response.json({msg: "logged in!"})
             }
         })

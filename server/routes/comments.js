@@ -1,6 +1,7 @@
 const express= require('express');
 const router = express.Router();
 const {Comments}= require('../models');
+const {validateToken}=require("../JWT.js")
 
 
 // get comments of an individual post in database and send to frontend.
@@ -23,8 +24,10 @@ router.get('/:postId', async (request, response) => {
 
 
 // append a newcomment from front end to backend sql server.
-router.post("/", async(request, response) => {
-    const newComment  = request.body;
+router.post("/",validateToken, async(request, response) => {
+
+    const newComment  = request.body; // set contentText.
+    newComment.username = request.user.username; //set username from validateToken();
 
     const newCommentCreated = await Comments.create(newComment);
     response.json(newCommentCreated)
