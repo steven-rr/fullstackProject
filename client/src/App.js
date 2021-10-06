@@ -22,7 +22,7 @@ function App() {
   }
 
   // keep track of auth state in the app.
-  const [authState, setAuthState] = useState({username: "", userId: "", authStatus: false });
+  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false });
 
   // check if the token is valid, if so, true. else. false.
   useEffect( async () => {
@@ -31,17 +31,17 @@ function App() {
               .then( (response) =>{
                   console.log("user is logged in.  authenticated");
                   setAuthState( currentAuthState =>{ 
-                    return {...currentAuthState, username: response.data.username, userId: response.data.id, authStatus: true}
+                    return {...currentAuthState, username: response.data.username, UserId: response.data.id, authStatus: true}
                   });
                   console.log(response);
               })
               .catch( (err) => {
                 console.log("user is not authenticated.")
                 setAuthState( currentAuthState =>{ 
-                  return {...currentAuthState, username: "", userid: "", authStatus: false}
+                  return {...currentAuthState, username: "", UserId: "", authStatus: false}
                 });
               })
-      console.log("AUTHSTATE:" ,authState.authStatus);
+      console.log("AUTHSTATE:" ,authState);
   }, [])
   return (
     <div>

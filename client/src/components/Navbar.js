@@ -69,8 +69,9 @@ const Navbar = ({onClick}) => {
             .get('/api/users/logout')
             .then( res => {
                 setAuthState( currentAuthState =>{ 
-                    return {...currentAuthState, username: "", userid: "", authStatus: false}
+                    return {...currentAuthState, username: "", UserId: "", authStatus: false}
                   });
+                console.log("updated auth state: " , authState)
                 history.push("/")
             })
             .catch( (err) => {
