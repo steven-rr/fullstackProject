@@ -9,7 +9,7 @@ const Post = () => {
     const [individualPostData, setIndividualPostData] = useState({title: '', contentText: '', username: ''})
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
-    const [validFlag, setValidFlag] = useState(false)
+    const [validFlag, setValidFlag] = useState(true)
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
     // use params allows me to fetch params 

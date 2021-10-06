@@ -119,4 +119,23 @@ router.get('/logout',validateToken, async (request, response) => {
     }
 
 })
+
+router.get("/publicProfile/:UserId" , async (request, response) => {
+    // get user ID param from request.
+    const UserId = request.params.UserId;
+    // find corresponding user with the userID.
+    const publicProfile = await Users.findByPk(UserId, {
+        attributes: {exclude: ["password", "email"]}
+    });
+    // if it exists, return some basic info. else, throw error.
+    if(publicProfile)
+    {
+        response.json(publicProfile);
+    }
+    else
+    {
+        response.status(404).json({err: "you messed something up."})
+    }
+
+})
 module.exports = router;
