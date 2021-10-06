@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from   "axios" 
 import LoginCSS from "./Login.module.css"
-import {useHistory} from "react-router-dom"
+import {useHistory, Link} from "react-router-dom"
 import {AuthContext} from "../App"
 
 const Login = () => {
@@ -159,8 +159,9 @@ const Login = () => {
                     />
                     <div className={LoginCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                 </div>
-                <div>
+                <div classsName={LoginCSS.buttonContainer}>
                     <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Login</button>
+                    <div> no account?  <Link to ="/form"> sign up</Link></div>
                 </div>
             </form>
         </div>
