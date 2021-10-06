@@ -86,20 +86,16 @@ const Login = () => {
         await handleSubmitErrors();
 
         // if no errors, allow the attempt to log in.
-        console.log("no errors.");
         if(!invalidFlags.submitInvalid){
             const response = await axios
                                 .post('/api/users/login',values)
                                 .then( res => {
-                                    console.log("trying to go thru here 1");
                                     setValues( currentVals => {
                                         return {...currentVals, username: "", password: ""}})
-                                    console.log("trying to go thru here 2");
 
                                     setAuthState( currentAuthState =>{ 
                                         return {...currentAuthState, username: res.data.username, UserId: res.data.id, authStatus: true}
                                         }); // set auth state is true when logging in.
-                                    console.log("trying to go thru here 3");
 
                                     history.push("/")
                                     console.log("updated auth state: " , authState)
