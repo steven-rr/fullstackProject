@@ -28,25 +28,39 @@ router.post("/",validateToken, async(request, response) => {
 
     const newComment  = request.body; // set contentText.
     newComment.username = request.user.username; //set username from validateToken();
-
+    newComment.UserId = request.user.id; // set userId from validateToken();
     const newCommentCreated = await Comments.create(newComment);
     response.json(newCommentCreated)
 })
 
-router.delete("/:commentId", async(request,response) => {
+// delete a comment.
+router.delete("/:commentId", validateToken, async(request,response) => {
     const commentId =request.params.commentId;
-    console.log("DELETEING THE FOLLOWING COMMENT: ", commentId)
-    const commentDeleted = await Comments.destroy ({ where: {id: commentId} })
-    if(!commentDeleted)
-    {   
-        console.log("uh oh, didn't find the comment.")
-        response.status(404).json({msg: "comment not found!!!"})
+    // find comment:
+    const individualCommentData = await Comments.findByPk(commentId)
+
+    // if user ID is the same as userID for comment, proceed. else, return forbidden.
+    if(request.user.id === individualCommentData.UserId)
+    {
+        console.log("DELETEING THE FOLLOWING COMMENT: ", commentId)
+        const commentDeleted = await Comments.destroy ({ where: {id: commentId} })
+        if(!commentDeleted)
+        {   
+            console.log("uh oh, didn't find the comment.")
+            response.status(404).json({msg: "comment not found!!!"})
+        }
+        else
+        {
+            console.log("deleted succesfully.")
+            response.json({msg: "success!"});
+        }
     }
     else
     {
-        console.log("deleted succesfully.")
-        response.json({msg: "success!"});
+        console.log("forbidden! you are not the author of this comment.")
+        response.status(404).json({msg: "forbidden! you are not the author of this comment."})
     }
+    
 })
 
 module.exports = router;

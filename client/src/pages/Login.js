@@ -94,9 +94,11 @@ const Login = () => {
                                         return {...currentVals, username: "", password: ""}})
                                     
                                     setAuthState( currentAuthState =>{ 
-                                        return {...currentAuthState, username: res.data.username, userid: res.data.id, authStatus: true}
+                                        return {...currentAuthState, username: res.data.username, UserId: res.data.id, authStatus: true}
                                         }); // set auth state is true when logging in.
                                     history.push("/")
+                                    console.log("updated auth state: " , authState)
+
                                 })
                                 .catch( (err) => {
                                     if(err.response.data.error)

@@ -1,16 +1,17 @@
-import {React,useEffect, useState} from 'react'
+import {React,useEffect, useState, useContext} from 'react'
 import {useParams} from "react-router-dom"
 import PostCSS from "./Post.module.css"
 import axios from   "axios" 
 import Page404 from "./Page404"
-
+import {AuthContext} from "../App"
 
 const Post = () => {
     const [individualPostData, setIndividualPostData] = useState({title: '', contentText: '', username: ''})
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
     const [validFlag, setValidFlag] = useState(false)
-
+    const {authState, setAuthState} = useContext(AuthContext)
+    const [idxx, setIdx] = useState(0)
     // use params allows me to fetch params 
     let {id } = useParams();
 
@@ -114,7 +115,7 @@ const Post = () => {
                                 <div className = {PostCSS.commentBodyContainer} key = {key}>
                                     <div className ={PostCSS.commentText}> {value.contentText} </div>
                                     <div> posted by {value.username}</div>
-                                    <button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)}> delete comment</button>
+                                    {(authState.UserId === value.UserId) ? (<><button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)} > delete comment</button></>) : ""}
                                 </div>
                         )
                     })}
