@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import NavbarCSS from './Navbar.module.css'
-import { NavLink, useHistory} from 'react-router-dom'
+import { NavLink, Link, useHistory} from 'react-router-dom'
 import {AuthContext} from "../App"
 import axios from 'axios'
 
@@ -92,7 +92,7 @@ const Navbar = ({onClick}) => {
                             (<><li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
                             <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li> </>) 
                             : 
-                            (<><li className={NavbarCSS.navMainLi}> {authState.username} </li>
+                            (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>
                             <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button">   LOGOUT </button> </li></>)}
 
                         
