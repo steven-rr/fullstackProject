@@ -94,6 +94,7 @@ const Post = () => {
                     <div className={PostCSS.titleStyle}> {`Welcome to post ${id}`} </div>
                     <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
                     <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
+                    <div className={PostCSS.contentStyle}> posted by {individualPostData.username}</div>
                 </div>
                 <div className={PostCSS.createCommentContainer}>
                     <textarea
