@@ -4,6 +4,26 @@ const router = express.Router();
 const {Posts}= require('../models');
 const {validateToken}=require("../JWT.js")
 
+// get all post data for a specific user. send to frontend.
+router.get('/byUserId/:UserId', async (request, response) => {
+    const UserId = request.params.UserId;
+    const postData = await Posts.findAll({
+        where: {UserId: UserId}
+    })
+
+    // if post data not found, return 404. else, return post data.
+    if(!postData)
+    {
+        response.status(404).json({msg: "no posts found!!!"})
+
+    }
+    else
+    {
+        response.json(postData)
+
+    }
+})
+
 // get all posts in database and send to frontend.
 router.get('/', async (request, response) => {
     const postData = await Posts.findAll()
@@ -71,9 +91,9 @@ router.delete("/:id", validateToken, async(request,response) => {
         console.log("forbidden! you are not the author of this comment.")
         response.status(404).json({msg: "forbidden! you are not the author of this comment."})
     }
-
-    
 })
+
+
 module.exports = router;
 
 

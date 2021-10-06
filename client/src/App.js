@@ -4,6 +4,7 @@ import Form from "./pages/Form"
 import Login from "./pages/Login"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
+import UserPublicProfile from "./pages/UserPublicProfile"
 import CreatePost from "./pages/CreatePost"
 import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
@@ -54,6 +55,7 @@ function App() {
               <Route path="/form" exact component = {Form} />
               <Route path="/blog" exact component = {Posts} />
               <Route path="/blog/:id" component = {Post} />
+              <Route path="/user/:UserId" component = {UserPublicProfile} />
               <Route path="/createpost" component = {CreatePost} />
               <Route path="/login" exact component = {Login} />
               <Route component={Page404} />
