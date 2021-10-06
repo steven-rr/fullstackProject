@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react' 
+import React, { useState, useEffect, useContext } from 'react' 
 import PostsCSS from "./Posts.module.css"
 import axios from   "axios" 
 import { Link, useHistory} from 'react-router-dom'
+import {AuthContext} from "../App"
 
 const Posts = () => {
+    // grabbing setAuthState.
+    const {authState, setAuthState} = useContext(AuthContext)
+
     // instantiate history.
     const history = useHistory();
     
@@ -42,7 +46,8 @@ const Posts = () => {
     return (
         <div className={PostsCSS.postsPageContainer}>
             <div className= {PostsCSS.textStyle}>Steven, check out these posts. </div>
-            <Link to="/createpost">Create Post</Link>
+            {authState.authStatus ? (<><Link to="/createpost">Create Post</Link> </>) : ""}
+            
             <div className={PostsCSS.postsBodyContainer}>
                 {postData.map((value, key) =>{
                     return (
@@ -55,7 +60,9 @@ const Posts = () => {
                             </Link>
                             <div className={PostsCSS.buttonListClass}> 
                                 <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments </Link>
-                                <button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button>
+                                {(authState.UserId === value.UserId) ? (<button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button>): ""}
+
+                                
                             </div>
 
                         </div>
