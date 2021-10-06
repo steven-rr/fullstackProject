@@ -15,12 +15,10 @@ router.get('/byUserId/:UserId', async (request, response) => {
     if(!postData)
     {
         response.status(404).json({msg: "no posts found!!!"})
-
     }
     else
     {
         response.json(postData)
-
     }
 })
 
