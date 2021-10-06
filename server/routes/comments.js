@@ -3,6 +3,23 @@ const router = express.Router();
 const {Comments}= require('../models');
 const {validateToken}=require("../JWT.js")
 
+// get all comment data for a specific user. send to frontend.
+router.get('/byUserId/:UserId', async (request, response) => {
+    const UserId = request.params.UserId;
+    const commentData = await Comments.findAll({
+        where: {UserId: UserId}
+    })
+
+    // if comment data not found, return 404. else, return post data.
+    if(!commentData)
+    {
+        response.status(404).json({msg: "no posts found!!!"})
+    }
+    else
+    {
+        response.json(commentData)
+    }
+})
 
 // get comments of an individual post in database and send to frontend.
 router.get('/:postId', async (request, response) => {

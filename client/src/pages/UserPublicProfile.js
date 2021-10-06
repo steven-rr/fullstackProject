@@ -46,6 +46,10 @@ const UserPublicProfile = () => {
     return (
         <div className={UserPublicProfileCSS.profilePageContainer}>
             <div className={UserPublicProfileCSS.textStyle}> {userPublicInfo.username} </div>
+            <div>
+                <Link className= {UserPublicProfileCSS.buttonClass} to = {`/user/${UserId}`} >posts</Link>
+                <Link className= {UserPublicProfileCSS.buttonClass} to = {`/user/${UserId}/comments`}>comments</Link>
+            </div>
             <div className={UserPublicProfileCSS.postsBodyContainer}>
                 {postData.map((value, key) =>{
                     return (
@@ -55,11 +59,6 @@ const UserPublicProfile = () => {
                                 <div className = {UserPublicProfileCSS.postContent}>{value.contentText} </div>
                                 <div className = {UserPublicProfileCSS.postContent}>{value.username} </div>
                             </Link>
-                            {/* <div className={UserPublicProfileCSS.buttonListClass}> 
-                                <Link to = {`/blog/${value.id}`} className= {UserPublicProfileCSS.buttonClass} > comments </Link>
-                                {(authState.UserId === value.UserId) ? (<button className= {UserPublicProfileCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button>): ""}
-                            </div> */}
-
                         </div>
                     )
                 })}
