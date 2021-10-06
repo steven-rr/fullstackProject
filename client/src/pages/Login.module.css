@@ -37,6 +37,15 @@
 	
 }
 
+.buttonContainer
+{
+    position: fixed;
+	display: flex;
+    flex-direction: row;
+    top: 320px;
+    left: 350px;
+
+}
 .buttonClass
 {
 	background-color: Transparent;
@@ -45,10 +54,10 @@
 	padding: 18px 40px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
-    position: fixed;
-    top: 320px;
-    left: 350px;
+	/* display: inline-block; */
+    /* position: fixed; */
+    /* top: 320px; */
+    /* left: 350px; */
 	font-size: 15px;
 	font-family: Poppins;
 	letter-spacing: .10rem;
