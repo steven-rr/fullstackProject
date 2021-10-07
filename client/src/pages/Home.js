@@ -47,7 +47,9 @@ const Home = () => {
                             <div>{value.description} </div>
                             <div> {value.launchDate}</div>
                             <img className={HomeCSS.imgContainer} src={value.imgURL}/>
-                            <div > <a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> </div>
+                            <div > 
+                                {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
+                            </div>
                         </div>
                         
                     )
@@ -61,7 +63,9 @@ const Home = () => {
                             <div>{value.description} </div>
                             <div> {value.launchDate}</div>
                             <img className={HomeCSS.imgContainer} src={value.imgURL}/>
-                            <div > <a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> </div>
+                            <div > 
+                                {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
+                            </div>
                         </div>
                         
                     )
