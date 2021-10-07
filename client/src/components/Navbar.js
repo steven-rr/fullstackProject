@@ -89,8 +89,8 @@ const Navbar = ({onClick}) => {
                     <ul className={NavbarCSS.navMainUl}>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
                         {!authState.authStatus ? 
-                            (<><li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li>
-                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li> </>) 
+                            (<><li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li>
+                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li> </>) 
                             : 
                             (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>
                             <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button">   LOGOUT </button> </li></>)}

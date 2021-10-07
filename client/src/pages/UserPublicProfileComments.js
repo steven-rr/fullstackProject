@@ -47,6 +47,7 @@ const UserPublicProfileComments = () => {
             <div>
                 <Link className= {UserPublicProfileCommentsCSS.buttonClass}  to = {`/user/${UserId}`} >posts</Link>
                 <Link className= {UserPublicProfileCommentsCSS.buttonClass}  to = {`/user/${UserId}/comments`}>comments</Link>
+                <Link className= {UserPublicProfileCommentsCSS.buttonClass} to = {`/user/${UserId}/comments`}>user settings</Link>
             </div>
             <div className={UserPublicProfileCommentsCSS.commentsBodyContainer}>
                 {comments.map((value, key) =>{

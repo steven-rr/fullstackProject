@@ -48,6 +48,13 @@ const Login = () => {
                 internalErrors.passwordErr= "";
             }
         }
+        if( name === "username")
+        {   
+            if(value.length >0)
+            {
+                internalErrors.usernameErr= "";
+            }
+        }
     }
 
     // on submit, check fields are nonempty. display any error present.
@@ -65,7 +72,7 @@ const Login = () => {
 
         // display errors 
         displayErrors.usernameErr = internalErrors.usernameErr;
-        displayErrors.emailErr = internalErrors.emailErr;
+        displayErrors.passwordErr = internalErrors.passwordErr;
 
         // determine if there are errors in any channels.
         invalidFlags.submitUsernameInvalid = (internalErrors.usernameErr === "") ? false: true;
@@ -105,10 +112,21 @@ const Login = () => {
                                     console.log("failed login.");
                                     console.log("error: ", err);
 
-                                    if(err.response.data.error)
+                                    
+                                    if(err.response.data.usernameErr)
                                     {   
-                                        console.log("error: ", err.response.data.error);
-                                    }});
+                                        internalErrors.usernameErr = err.response.data.usernameErr
+                                    }
+                                    if(err.response.data.passwordErr)
+                                    {
+                                        internalErrors.passwordErr = err.response.data.passwordErr
+                                    }
+                               
+                                    displayErrors.usernameErr = internalErrors.usernameErr;
+                                    displayErrors.passwordErr  = internalErrors.passwordErr;
+                                    rerender();
+
+                                });
         }
         else{
             console.log("not submitting !");
@@ -119,7 +137,7 @@ const Login = () => {
         // update username state whenever user changes values of textfield.
         setValues( currentVals => {
            return {...currentVals, username: e.target.value}})
-
+            
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("username", e.target.value);
     }
@@ -159,7 +177,7 @@ const Login = () => {
                     />
                     <div className={LoginCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                 </div>
-                <div classsName={LoginCSS.buttonContainer}>
+                <div className={LoginCSS.buttonContainer}>
                     <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Login</button>
                     <div> no account?  <Link to ="/form"> sign up</Link></div>
                 </div>

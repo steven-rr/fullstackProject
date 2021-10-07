@@ -6,6 +6,7 @@ import Posts from "./pages/Posts"
 import Post from "./pages/Post"
 import UserPublicProfile from "./pages/UserPublicProfile"
 import UserPublicProfileComments from "./pages/UserPublicProfileComments"
+import UserSettingsPrivate from "./pages/UserSettingsPrivate"
 import CreatePost from "./pages/CreatePost"
 import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
@@ -58,6 +59,7 @@ function App() {
               <Route path="/blog/:id" component = {Post} />
               <Route path="/user/:UserId" exact component = {UserPublicProfile} />
               <Route path="/user/:UserId/comments" exact component = {UserPublicProfileComments} />
+              <Route path="/user/:UserId/settings" exact component = {UserSettingsPrivate} />
               <Route path="/createpost" component = {CreatePost} />
               <Route path="/login" exact component = {Login} />
               <Route component={Page404} />
