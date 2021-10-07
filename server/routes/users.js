@@ -82,7 +82,7 @@ router.post('/login', async (request, response) => {
     if(!user)
     {
         console.log("no such user found..")
-        response.status(404).json({ error: "User Doesn't exist!"})
+        response.status(404).json({ usernameErr: "User Doesn't exist!"})
     }
     else
     {
@@ -91,7 +91,7 @@ router.post('/login', async (request, response) => {
             // if password is correct, return the accessToken and store in cookie.
             if(!match) 
             {
-                response.status(401).json({error: "Wrong username and password combination!"})
+                response.status(401).json({passwordErr: "Wrong username and password combination!"})
             }
             else
             {
@@ -147,5 +147,124 @@ router.get("/publicProfile/:UserId" , async (request, response) => {
         response.status(404).json({err: "you messed something up."})
     }
 
+})
+
+// update password
+router.put("/private/changepassword", validateToken, async (request, response) => {
+    // get old and new password from body.
+    const {oldPassword, newPassword} = request.body;
+    
+    // get user information using validateToken username.
+    console.log("user ID:", request.user)
+    const user =await Users.findOne({where: {id: request.user.id}})
+
+    // err container, to be filled as errors pop up.
+    let err = {};
+
+    // if value is empty, say its empty.
+    if(oldPassword === "")
+    {
+        // string defining error msg
+        let errmsg = "Please enter old password!" 
+        // append error to error list.
+        err["oldPasswordErr"] = errmsg;
+    }
+    if(newPassword === "" )
+    {
+        // string defining error msg
+        let errmsg = "Please enter new password!" 
+        // append error to error list.
+        err["newPasswordErr"] = errmsg;
+    }
+    
+
+    // compare oldPassword entered with user password on backend.
+    bcrypt.compare(oldPassword,user.password ).then( async(match) => {
+        // if password incorrect, return errors.
+        if(!match)
+        {
+            err["oldPasswordErr"] = "Password is incorrect!" 
+            response.status(409).json(err);
+        }
+        // if password fields empty, return errors
+        else if(Object.keys(err).length > 0)
+        {
+            response.status(409).json(err);
+        }
+        // if no failures, update newpassword!
+        else
+        {
+            bcrypt.hash(newPassword, 10).then( async (hash)=> {
+                await Users.update({password: hash} , {where: {id: request.user.id}})
+            })
+            response.json({msg: "no backend change password errors!"});
+        }
+    })
+})
+
+// update email
+router.put("/private/changeemail", validateToken, async (request, response) => {
+    // get old and new email from body.
+    const {oldPassword, newEmail} = request.body;
+    
+    // get user information using validateToken username.
+    console.log("user ID:", request.user)
+    const user =await Users.findOne({where: {id: request.user.id}})
+
+    // err container, to be filled as errors pop up.
+    let err = {};
+
+    // if value is empty, say its empty.
+    if(oldPassword === "")
+    {
+        // string defining error msg
+        let errmsg = "Please enter old password!" 
+        // append error to error list.
+        err["oldPasswordErr"] = errmsg;
+    }
+    if(newEmail === "" )
+    {
+        // string defining error msg
+        let errmsg = "Please enter new email!" 
+        // append error to error list.
+        err["newEmailErr"] = errmsg;
+    }
+    
+
+    // compare oldPassword entered with user password on backend.
+    bcrypt.compare(oldPassword,user.password ).then( async(match) => {
+        // if password incorrect, return errors.
+        if(!match)
+        {
+            err["oldPasswordErr"] = "Password is incorrect!" 
+            response.status(409).json(err);
+        }
+        // if fields empty, return errors
+        else if(Object.keys(err).length > 0)
+        {
+            response.status(409).json(err);
+        }
+        // if no failures, update new email!
+        else
+        {
+            await Users.update({email: newEmail} , {where: {id: request.user.id}})
+            response.json({msg: "no backend change email errors!"});
+        }
+    })
+})
+// update password
+router.get("/private/getEmail", validateToken, async (request, response) => {
+    const user =await Users.findOne({where: {id: request.user.id}})
+    console.log(user.dataValues.email)
+    if(!user)
+    {
+        console.log("could not find")
+        response.json({msg: "could not find user."})
+    }
+    else
+    {
+        console.log("found")
+        response.json({email: user.dataValues.email});
+    }
 })
 module.exports = router;

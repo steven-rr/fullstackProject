@@ -1,11 +1,15 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useContext }from 'react'
 import {useParams, Link} from "react-router-dom"
 import UserPublicProfileCSS from "./UserPublicProfile.module.css"
 import axios from   "axios" 
+import {AuthContext} from "../App"
 
 const UserPublicProfile = () => {
     // use params allows me to fetch params 
     let {UserId } = useParams();
+    // auth state.
+    const {authState, setAuthState} = useContext(AuthContext)
+
     // user public info
     const [userPublicInfo, setUserPublicInfo] = useState({username: ''})
 
@@ -49,6 +53,8 @@ const UserPublicProfile = () => {
             <div>
                 <Link className= {UserPublicProfileCSS.buttonClass} to = {`/user/${UserId}`} >posts</Link>
                 <Link className= {UserPublicProfileCSS.buttonClass} to = {`/user/${UserId}/comments`}>comments</Link>
+                {(authState.UserId == UserId) ? (<><Link className= {UserPublicProfileCSS.buttonClass} to = {`/user/${UserId}/settings`}>user settings</Link></>) : ""}
+
             </div>
             <div className={UserPublicProfileCSS.postsBodyContainer}>
                 {postData.map((value, key) =>{
