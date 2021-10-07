@@ -1,14 +1,24 @@
-import React,  { useState, useEffect } from 'react'
+import React,  { useState, useEffect,useContext } from 'react'
 import FormCSS from "./Form.module.css"
 import TextField from "../components/FormTextField"
 // import {Text, TextInput} from 'react-native'
 import axios from   "axios" 
+import {handleSubmit} from "./Login"
 import FormTextFieldCSS from "../components/FormTextField.module.css"
+import {useHistory} from "react-router-dom"
+import {AuthContext} from "../App"
+
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
 
 const Form = () => {
+    // grabbing setAuthState.
+    const {authState, setAuthState} = useContext(AuthContext)
+    
+    // instantiate history.
+    const history = useHistory();
+
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [values, setValues] = useState({username: '', password: '', email: '' })
     // const [inputErrors, setInputErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
@@ -85,9 +95,37 @@ const Form = () => {
 
     }
     
-    
+    // attempt to login.
+    const logIn = async () => {
+        const valuesLogIn = {username: values.username, password: values.password};
+        const response = await axios
+                            .post('/api/users/login',valuesLogIn)
+                            .then( res => {
+                                setValues( currentVals => {
+                                    return {...currentVals, username: "", password: "", email: ""}})
+
+                                setAuthState( currentAuthState =>{ 
+                                    return {...currentAuthState, username: res.data.username, UserId: res.data.id, authStatus: true}
+                                    }); // set auth state is true when logging in.
+
+                                history.push("/")
+                                console.log("updated auth state: " , authState)
+
+                            })
+                            .catch( (err) => {
+                                console.log("failed login.");
+                                console.log("error: ", err);
+
+                                if(err.response.data.error)
+                                {   
+                                    console.log("error: ", err.response.data.error);
+                                }});
+
+    }
+
     const handleSubmit = async (e) => 
     {   
+        // run validation upon submission.
         const response = await axios
                             .get('/api/users/register', { params: values })
                             .then( res => {
@@ -117,6 +155,7 @@ const Form = () => {
                                     .post('/api/users/register',values)
                                     .then( res => {
                                         console.log("registered.")
+                                        logIn();
                                     })
                                     .catch( err =>  console.log(err) );
         }
