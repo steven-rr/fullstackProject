@@ -65,6 +65,10 @@ const Form = () => {
                                          {   
                                             internalErrors.usernameErr = err.response.data.usernameErr
                                         }
+                                        if(err.response.data.passwordErr)
+                                        {
+                                            internalErrors.passwordErr = err.response.data.passwordErr
+                                        }
                                         if(err.response.data.emailErr)
                                         {
                                             internalErrors.emailErr = err.response.data.emailErr
@@ -84,6 +88,25 @@ const Form = () => {
     
     const handleSubmit = async (e) => 
     {   
+        const response = await axios
+                            .get('/api/users/register', { params: values })
+                            .then( res => {
+                                console.log(res.data.msg)
+                            })
+                            .catch( (err) => {
+                                if(err.response.data.usernameErr)
+                                    {   
+                                    internalErrors.usernameErr = err.response.data.usernameErr
+                                }
+                                if(err.response.data.passwordErr)
+                                {
+                                    internalErrors.passwordErr = err.response.data.passwordErr
+                                }
+                                if(err.response.data.emailErr)
+                                {
+                                    internalErrors.emailErr = err.response.data.emailErr
+                                }})
+
         // in case user hits submit without blurring, handle blur async with submits.
         await handleBlur(e);
 
