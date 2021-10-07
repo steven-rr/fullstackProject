@@ -30,6 +30,7 @@ router.get('/register', async (request, response) => {
     console.log("called");
     // parse out info from frontend.
     const values = await request.query;
+    console.log("query: ", values)
     // err container, to be filled as errors pop up.
     let err = {};
     for(let key in values) {
@@ -49,7 +50,18 @@ router.get('/register', async (request, response) => {
             let errKey = key + "Err"; 
             // append error to error list.
             err[errKey] = errmsg;
-        }   
+        } 
+
+        // if value is empty, say its empty.
+        if(values[key] === "")
+        {
+            // string defining error msg
+            let errmsg = "Please enter a " + key + "!" 
+            // define key for the error. based off the key name. example: if key = "username", errKey = "usernameErr"
+            let errKey = key + "Err"; 
+            // append error to error list.
+            err[errKey] = errmsg;
+        }
     }
 
     // if there are any errors, throw the error back. else, throw success back!
@@ -61,8 +73,6 @@ router.get('/register', async (request, response) => {
     {
         response.json({msg: "no backend register errors!"});
     }
-
-  
 })
 
 // if user exists and password is correct, log in and return json web token.
