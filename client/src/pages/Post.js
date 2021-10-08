@@ -20,6 +20,9 @@ const Post = () => {
 
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {
+        // scroll to top on render.
+        window.scrollTo(0, 0)
+
         // gets the post information from the server.
         axios.get(`/api/posts/${id}`)
             .then( (response) =>{
