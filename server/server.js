@@ -80,7 +80,7 @@ if(process.env.NODE_ENV === 'production') {
 db.sequelize
     .sync() 
     .then ( async () => {
-            // await SpaceAPIFetch(); 
+            await SpaceAPIFetch(); 
             app.listen(PORT, host, () => console.log(`listening at ${PORT}`))
     })
     .catch( (err) => {

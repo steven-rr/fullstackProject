@@ -38,10 +38,6 @@ const Posts = () => {
             .catch ( () => {
                 console.log("delete failed!");
             })
-
-            
-                
-            
     }
     return (
         <div className={PostsCSS.postsPageContainer}>

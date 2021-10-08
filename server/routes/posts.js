@@ -3,7 +3,9 @@ const express= require('express');
 const router = express.Router();
 const {Posts}= require('../models');
 const {validateToken}=require("../JWT.js")
-
+const {LaunchesUpcoming}= require('../models');
+const {Op} = require("sequelize")
+const sequelize= require("sequelize")
 // get all post data for a specific user. send to frontend.
 router.get('/byUserId/:UserId', async (request, response) => {
     const UserId = request.params.UserId;
@@ -24,7 +26,28 @@ router.get('/byUserId/:UserId', async (request, response) => {
 
 // get all posts in database and send to frontend.
 router.get('/', async (request, response) => {
-    const postData = await Posts.findAll()
+    
+
+    // sort data.
+    // find next up launch ID.
+    const nextUpLaunch =await  LaunchesUpcoming.findOne({ order: [['createdAt','ASC']]})
+
+    //future code here to correlate posts by likes... 
+
+    // inflate priority for data in recent week. 
+    var datetime = new Date();
+    datetime.setDate(datetime.getDate() - 7);
+    console.log(datetime);
+    await Posts.update({inflatedPriority: sequelize.col('id')} , {where: {id: {[Op.gt]: 0} }})
+    await Posts.increment(['inflatedPriority'] , {by: 1000, where: {createdAt: {[Op.gt]: datetime}} })
+
+
+    // inflate priority by launchID.
+    await Posts.update({inflatedPriority: 999999}, {where: {launchId: nextUpLaunch.dataValues.launch_id}})
+
+    // sort by priority.
+    const postData = await Posts.findAll({
+        order: [['inflatedPriority','DESC']]})
     response.json(postData)
 })
 

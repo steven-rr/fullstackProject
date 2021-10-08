@@ -1,11 +1,16 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect,useContext }from 'react'
 import {useParams, Link} from "react-router-dom"
 import UserPublicProfileCommentsCSS from "./UserPublicProfileComments.module.css"
 import axios from   "axios" 
+import {AuthContext} from "../App"
 
 const UserPublicProfileComments = () => {
     // use params allows me to fetch params 
     let {UserId } = useParams();
+    
+    // auth state.
+    const {authState, setAuthState} = useContext(AuthContext)
+
     // user public info
     const [userPublicInfo, setUserPublicInfo] = useState({username: ''})
 
@@ -47,7 +52,7 @@ const UserPublicProfileComments = () => {
             <div>
                 <Link className= {UserPublicProfileCommentsCSS.buttonClass}  to = {`/user/${UserId}`} >posts</Link>
                 <Link className= {UserPublicProfileCommentsCSS.buttonClass}  to = {`/user/${UserId}/comments`}>comments</Link>
-                <Link className= {UserPublicProfileCommentsCSS.buttonClass} to = {`/user/${UserId}/comments`}>user settings</Link>
+                {(authState.UserId == UserId) ? (<><Link className= {UserPublicProfileCommentsCSS.buttonClass} to = {`/user/${UserId}/settings`}>user settings</Link></>) : ""}
             </div>
             <div className={UserPublicProfileCommentsCSS.commentsBodyContainer}>
                 {comments.map((value, key) =>{

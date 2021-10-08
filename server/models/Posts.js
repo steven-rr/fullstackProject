@@ -2,11 +2,11 @@
 module.exports = (sequelize, DataTypes) => {
     const Posts = sequelize.define("Posts", {
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       contentText: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       username: {
@@ -14,8 +14,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       launchId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true
+      },
+      priority: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+      },
+      inflatedPriority: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
       }
     });
     

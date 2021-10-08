@@ -1,5 +1,6 @@
 const {Op} = require("sequelize")
 const {APICounters}= require('../models');
+const {Posts}= require('../models');
 const fetch = require("node-fetch")
 const APICountersCheck = require("./APICountersMiddleware/APICountersCheck.js")
 const APICountersIncrement = require("./APICountersMiddleware/APICountersIncrement.js")
@@ -31,6 +32,32 @@ const parseLaunchData = async(data_in) => {
     };
     return newLaunch;
 }
+// create new post if it doesn't exist yet.
+const createNewPost = async( newLaunch) => {
+    const foundPost = await Posts.findOne({
+        where: {launchId: newLaunch.launch_id}
+    })
+    console.log("... CREATE.... NEW........POST.....:", newLaunch)
+    console.log( " " );
+    // if no post is found, create a new post for the launch!
+    if(!foundPost) 
+    {
+        const newPost = {
+            title: "Discussion thread -- " + newLaunch.title,
+            contentText: newLaunch.description + " -- To Launch: " + newLaunch.launchDate,
+            username: "mod",
+            launchId: newLaunch.launch_id
+        };
+        const newPostCreated= await Posts.create(newPost);
+        console.log("... NEW.... POST........CREATED.....:", newPostCreated)
+
+        newLaunch.postId = newPostCreated.id;
+        console.log("... NEW.... LAUNCH........MODIFIED.....:", newLaunch)
+
+    }
+    return newLaunch
+
+}
 
 // insert launches from external SPACE api.
 const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =>{
@@ -56,15 +83,15 @@ const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =
             await fetch_response
                         .json()
                         .then( async (data) => {
+                            console.log("INSERTTTTT... NEW.... LAUNCHES........")
                             let newLaunch = await parseLaunchData(data);
+                            newLaunch = await createNewPost(newLaunch);
                             await Launches.create(newLaunch);
                         })
 
             // increment API counter.
             await APICountersIncrement();
-
         }
-        
     }
 }
 
