@@ -57,10 +57,10 @@ const UserPublicProfileComments = () => {
             <div className={UserPublicProfileCommentsCSS.commentsBodyContainer}>
                 {comments.map((value, key) =>{
                     return (
-                            <div className = {UserPublicProfileCommentsCSS.commentBodyContainer} key = {key}>
-                                <div className ={UserPublicProfileCommentsCSS.commentText}> {value.contentText} </div>
-                                <div> posted by {value.username}</div>
-                            </div>
+                        <Link className = {UserPublicProfileCommentsCSS.commentBodyContainer} to={`/blog/${value.PostId}`} key = {key}>
+                            <div className ={UserPublicProfileCommentsCSS.commentText}> {value.contentText} </div>
+                            <div> posted by {value.username}</div>
+                        </Link>
                     )
                 })}
             </div>
