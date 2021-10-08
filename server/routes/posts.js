@@ -67,7 +67,8 @@ router.delete("/:id", validateToken, async(request,response) => {
 
     // find post:
     const individualPostData = await Posts.findByPk(postId)
-    
+    console.log(request.user.id);
+    console.log(individualPostData);
     // if user ID is the same as userID for post, proceed. else, return forbidden.
     if(request.user.id === individualPostData.UserId)
     {

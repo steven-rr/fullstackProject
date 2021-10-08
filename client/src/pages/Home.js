@@ -66,8 +66,7 @@ const Home = () => {
                             <div > 
                                 {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
                             </div>
-                        </div>
-                        
+                        </div>   
                     )
                 })}
             </div>

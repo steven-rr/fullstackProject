@@ -1,5 +1,5 @@
 import {React,useEffect, useState, useContext} from 'react'
-import {useParams} from "react-router-dom"
+import {useParams, useHistory} from "react-router-dom"
 import PostCSS from "./Post.module.css"
 import axios from   "axios" 
 import Page404 from "./Page404"
@@ -14,6 +14,9 @@ const Post = () => {
     const [idxx, setIdx] = useState(0)
     // use params allows me to fetch params 
     let {id } = useParams();
+
+    // instantiate history.
+    const history = useHistory();
 
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {
@@ -81,6 +84,21 @@ const Post = () => {
             })
 
     } 
+    const deletePost = () => {
+        console.log("button clicked!");
+        // send delete request to backend.
+        axios
+            .delete(`/api/posts/${id}`)
+            .then( () => {
+                // redirect to posts after deleting the post.
+                history.push("/blog")
+                
+            })
+            .catch ( () => {
+                console.log("delete failed!");
+            })
+    }
+
     // if not a valid ID, render 404. else, render the post! 
     if(!validFlag)
     {
@@ -95,6 +113,7 @@ const Post = () => {
                     <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
                     <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
                     <div className={PostCSS.contentStyle}> posted by {individualPostData.username}</div>
+                    {(authState.UserId === individualPostData.UserId) ?   (<div><button className= {PostCSS.buttonClass} onClick={deletePost}> delete me</button><button className= {PostCSS.buttonClass}>  editpost</button></div>) : ""}
                 </div>
                 <div className={PostCSS.createCommentContainer}>
                     <textarea

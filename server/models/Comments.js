@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
        UserId: {
          type: DataTypes.INTEGER,
          allowNull: true
+       },
+       parentId: {
+         type: DataTypes.INTEGER,
+         allowNull: true
        }
     });
   

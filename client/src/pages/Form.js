@@ -190,7 +190,7 @@ const Form = () => {
 
     return (
         <div className={FormCSS.formContainer}>
-            <div className= {FormCSS.textStyle}>Create an Account, Steven! </div>
+            <div className= {FormCSS.textStyle}>Create an Account to post! </div>
             <form className= {FormCSS.formClass}>
                 <div className={FormCSS.inputsClass}>
                     <label>Username</label>
