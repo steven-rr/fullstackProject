@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      launchId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      }
     });
     
     const options = {onDelete: "cascade"}

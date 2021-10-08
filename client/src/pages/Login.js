@@ -152,7 +152,7 @@ const Login = () => {
     }
     return (
         <div className={LoginCSS.loginContainer}>
-            <div className={LoginCSS.textStyle}> Login, Steven! </div>
+            <div className={LoginCSS.textStyle}> Login to post! </div>
             <form className= {LoginCSS.formClass}>
                 <div className={LoginCSS.inputsClass}>
                     <label>Username</label>
