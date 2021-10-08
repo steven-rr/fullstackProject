@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import HomeCSS from "./Home.module.css"
 import Button from "../components/Button.js"
 import axios from   "axios" 
+import {Link} from "react-router-dom"
 
 const Home = () => {
 
@@ -37,7 +38,7 @@ const Home = () => {
     return (
         <div className={HomeCSS.homeContainer}>
             <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
-            <div className={HomeCSS.buttonClass} onClick={toggleFutureFlag}> Button</div>
+            <div className={HomeCSS.buttonClass} onClick={toggleFutureFlag}> {futureFlag ? "See Previous Launches": "See Upcoming Launches"}</div>
             <div className= {HomeCSS.textStyle}> {futureFlag ? "Upcoming": "Previous"}</div>
             <div className={`${futureFlag ? HomeCSS.deactivate: ''}`}> 
                 {launchDataPrevious.map((value, key) =>{
@@ -49,6 +50,7 @@ const Home = () => {
                             <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                             <div > 
                                 {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
+                                <Link to={`/blog/${value.postId}`} className={HomeCSS.buttonClass}>See Discussion</Link>
                             </div>
                         </div>
                         
@@ -65,7 +67,8 @@ const Home = () => {
                             <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                             <div > 
                                 {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
-                            </div>
+                                <Link to={`/blog/${value.postId}`}className={HomeCSS.buttonClass}>See Discussion</Link>
+                           </div>
                         </div>   
                     )
                 })}

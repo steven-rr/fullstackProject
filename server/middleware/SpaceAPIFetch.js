@@ -79,8 +79,8 @@ const SpaceAPIFetchHandler = async (fetchFuture) =>{
 
 const SpaceAPIFetch = async () =>{  
     let fetchFuture = false;
-    SpaceAPIFetchHandler(fetchFuture);
+    await SpaceAPIFetchHandler(fetchFuture);
     fetchFuture = true;
-    SpaceAPIFetchHandler(fetchFuture);
+    await SpaceAPIFetchHandler(fetchFuture);
 } 
 module.exports = SpaceAPIFetch;
