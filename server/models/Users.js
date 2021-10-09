@@ -14,14 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       }
     });
-    const options = {onDelete: "cascade"}
 
-    // each user has associated posts
-    Users.associate = (models)=>{
-      Users.hasMany(models.Posts, options)
-
-    }
-    
     return Users;
   };
   
