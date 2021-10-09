@@ -17,6 +17,8 @@ const Posts = () => {
     // on render, get posts from backend and display for the user.
     useEffect( () => {
         axios.get("/api/posts").then( (response) =>{
+            console.log("GETTING POSTS!!!!: " ,response.data);
+
             setPostData(response.data);
         })
     }, []);
@@ -39,6 +41,39 @@ const Posts = () => {
                 console.log("delete failed!");
             })
     }
+    // like a post .
+    const handleLike = (PostId) => {
+        console.log("like clicked!" ) 
+        axios  
+            .post(`/api/likes/`, {PostId: PostId})
+            .then( (response)=> {
+                setPostData(postData.map( (post) => {
+                    // look for post to modify like array.
+                    if(post.id === PostId) 
+                    {   
+                        // if liked, increment like array size by 1. else , decrement it by 1.
+                        if(response.data.liked)
+                        {
+                            return { ...post, Likes: [...post.Likes , 0 ]}
+                        }
+                        else
+                        {
+                            const currentPostLikes = post.Likes;
+                            currentPostLikes.pop();
+                            return{...post, Likes: currentPostLikes}
+                        }
+                        
+                    }
+                    else
+                    {
+                        return post;
+                    }
+                }))
+                console.log(response.data)})
+            .catch( (err) => {
+                console.log(err);
+            })
+    }
     return (
         <div className={PostsCSS.postsPageContainer}>
             <div className= {PostsCSS.textStyle}>Steven, check out these posts. </div>
@@ -55,7 +90,10 @@ const Posts = () => {
                             </Link>
                             <div className={PostsCSS.buttonListClass}> 
                                 <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments </Link>
-                                {(authState.UserId === value.UserId) ?   (<div><button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button><button> editpost</button></div>) : ""}
+                                {(authState.UserId === value.UserId) ?   (<><button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button></>) : ""}
+                                {(authState.UserId === value.UserId) ?   (<button> editpost</button>) : ""}
+                                {(authState.authStatus) ?   (<button onClick={() => handleLike(value.id) }> like</button>) : ""}
+                                <div> likes: {value.Likes.length}</div>
                             </div>
 
                         </div>

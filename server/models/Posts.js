@@ -26,14 +26,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0
-      }
+      },
+      UserId: {
+         type: DataTypes.INTEGER,
+         allowNull: true
+       }
     });
     
-    const options = {onDelete: "cascade"}
-    Posts.associate = (models)=>{
-      Posts.hasMany(models.Comments, options)
-
-    }
     return Posts;
   };
   

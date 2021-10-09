@@ -30,6 +30,13 @@ Object.keys(db).forEach(modelName => {
     db[modelName].associate(db);
   }
 });
+const options = {onDelete: "cascade"}
+
+db["Users"].hasMany(db["Posts"], options)
+db["Users"].hasMany(db["Likes"], options)
+db["Users"].hasMany(db["Comments"], options)
+db["Posts"].hasMany(db["Comments"], options)
+db["Posts"].hasMany(db["Likes"], options)
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

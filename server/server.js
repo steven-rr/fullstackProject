@@ -64,6 +64,8 @@ app.use('/api/comments', require('./routes/comments'))
 // set up launch routes.
 app.use('/api/launches', require('./routes/launches'))
 
+// set up like routes.
+app.use('/api/likes/', require('./routes/likes'))
 // set up misc routes.
 app.use('/misc', require('./routes/misc'))
 

@@ -1,7 +1,7 @@
 const { response } = require('express');
 const express= require('express');
 const router = express.Router();
-const {Posts}= require('../models');
+const {Posts, Likes}= require('../models');
 const {validateToken}=require("../JWT.js")
 const {LaunchesUpcoming}= require('../models');
 const {Op} = require("sequelize")
@@ -47,7 +47,8 @@ router.get('/', async (request, response) => {
 
     // sort by priority.
     const postData = await Posts.findAll({
-        order: [['inflatedPriority','DESC']]})
+                        include: [Likes] , 
+                        order: [['inflatedPriority','DESC']]})
     response.json(postData)
 })
 
