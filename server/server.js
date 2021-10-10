@@ -6,6 +6,8 @@ const fetch = require("node-fetch");
 const path = require('path');
 const cookieParser =require('cookie-parser')
 const SpaceAPIFetch = require('./middleware/SpaceAPIFetch')
+const noCache = require('./middleware/NoCache')
+
 const APICountersReset = require('./middleware/APICountersMiddleware/APICountersReset')
 require('dotenv').config();
 
@@ -43,6 +45,14 @@ const PORT = process.env.PORT || 3001
 // specify host for heroku deployment
 const host = '0.0.0.0'
 
+//turn off cache.
+app.use(function (req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next()
+});
+
 // loading in static HTML.
 app.use(express.static('public')) 
 
@@ -73,7 +83,7 @@ app.use('/misc', require('./routes/misc'))
 if(process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname,'..','client','build')));
 
-    app.get('*', (request, response) => {
+    app.get('*',noCache, (request, response) => {
         response.sendFile(path.resolve(__dirname,'../client','build','index.html'));
     })
 }
