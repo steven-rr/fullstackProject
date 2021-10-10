@@ -361,5 +361,16 @@ router.post("/resetpassword", async (request, response) => {
         })
     }
 })
-
+router.get("/resetpassword/", async (request, response) => {
+    const token = await request.query[0];
+    const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
+    if(!user)
+    {
+        response.status(404).json("token has expired")
+    }
+    else
+    {
+        response.json("link is valid.");
+    }
+})
 module.exports = router;
