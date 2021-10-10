@@ -105,7 +105,7 @@ const ForgotUsername = () => {
                     <div className={ForgotUsernameCSS.errMsgClass}> {displayErrors.emailErr} </div>
                 </div>
                 <div>
-                    <button className={ForgotUsernameCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Reset Password Link</button>
+                    <button className={ForgotUsernameCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Username </button>
                 </div>
             </form>
         </div>
