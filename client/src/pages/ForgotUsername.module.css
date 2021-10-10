@@ -1,18 +1,28 @@
 
-.loginContainer
-{
-    background-color: rgb(29, 29, 29);
-    height: 100%;
-    margin-top: 70px;
+.pageContainer
+{    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+    
 }
+.createPostHeaderContainer
+{
 
-.textStyle
-{   
+}
+.createPostBodyContainer
+{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+}
+.headerStyle
+{
     display: block;
     padding-top: 50px;
     color: #fff;
     font-size: 50px;
-    
 }
 
 .formClass
@@ -21,7 +31,6 @@
     flex-direction: column;
     align-items: center;
 }
-
 .inputsClass
 {
     width: 10px;
@@ -30,21 +39,10 @@
     align-items: center;
     justify-content: center;
 }
-
 .errMsgClass
 {
 	color: red;
 	
-}
-
-.buttonContainer
-{
-    position: fixed;
-	display: flex;
-    flex-direction: column;
-    top: 320px;
-    left: 350px;
-
 }
 .buttonClass
 {
@@ -71,15 +69,3 @@
 	transition: all 0.1s ease-out;
 }
 
-.forgotUserinfoClass
-{
-    display: flex;
-    flex-direction: row;
-}
-
-
-.middleTxt
-{
-    margin-left: 4px;
-    margin-right: 4px;
-}

@@ -373,4 +373,46 @@ router.get("/resetpassword/", async (request, response) => {
         response.json("link is valid.");
     }
 })
+
+// forgot username:
+router.post("/forgotusername", async (request, response) => {
+    console.log("in forgot my username..");
+    crypto.randomBytes(32, async (err, buffer)=> {
+        if(err){
+            console.log(err)
+        }
+        else{
+            // get the user
+            const user = await Users.findOne({where: {email : request.body.email}})
+            /// if user doesn't exist, return error. otherwise, send out the email.
+            if(!user) 
+            {   
+                console.log("user doesn't exist..");
+                return response.status(404).json({error: "User doesn't exist."})
+            }
+            else
+            {
+                const username = user.username;
+                const emailToSend= {
+                    from: '"Space Launches" <spacelaunches@outlook.com>',
+                    to: `${request.body.email}`,
+                    subject: "SPACE LAUNCHES -- USERNAME INFO",
+                    text: `
+                    <p>Hey, it seems you forgot your username. : </p>
+                    <h5> Don't worry, according to our records your username is:
+                    <h2> ${username} </h2>
+                    ` ,
+                    html: `
+                    <p>Hey, it seems you forgot your username. : </p>
+                    <h5> Don't worry, according to our records your username is:
+                    <h2> ${username} </h2>
+                    ` 
+                }
+                await transporter.sendMail(emailToSend)
+                response.json("success!");
+            }
+        }
+    })
+})
+
 module.exports = router;

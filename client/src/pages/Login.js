@@ -179,7 +179,11 @@ const Login = () => {
                 </div>
                 <div className={LoginCSS.buttonContainer}>
                     <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Login</button>
-                    <Link to ="/reset"> forgot password?</Link>
+                    <div className= {LoginCSS.forgotUserinfoClass}> 
+                        <Link to ="/reset"> forgot password?</Link>
+                        <div className={LoginCSS.middleTxt}> or</div>
+                        <Link to ="/resetUsername"> username?</Link>
+                    </div>
                     <div> no account?  <Link to ="/form"> sign up</Link></div>
                 </div>
             </form>

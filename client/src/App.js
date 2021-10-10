@@ -3,6 +3,8 @@ import Home from "./pages/Home"
 import Form from "./pages/Form"
 import Login from "./pages/Login"
 import ForgotPassword from "./pages/ForgotPassword"
+import ForgotUsername from "./pages/ForgotUsername"
+
 import NewPassword from "./pages/NewPassword"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
@@ -64,6 +66,7 @@ function App() {
               <Route path="/user/:UserId/settings" exact component = {UserSettingsPrivate} />
               <Route path="/createpost" component = {CreatePost} />
               <Route path="/reset" exact component={ForgotPassword}/>
+              <Route path="/resetUsername" exact component={ForgotUsername}/>
               <Route path="/reset/:token" component={NewPassword}/>
               <Route path="/login" exact component = {Login} />
               <Route component={Page404} />
