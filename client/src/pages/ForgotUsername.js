@@ -90,7 +90,7 @@ const ForgotUsername = () => {
     return (
         <div className={ForgotUsernameCSS.pageContainer}>
             <div className={ForgotUsernameCSS.createPostHeaderContainer}> 
-                <div className={ForgotUsernameCSS.headerStyle}> Reset your Username </div>
+                <div className={ForgotUsernameCSS.headerStyle}> Recover your Username </div>
             </div>
             <form className= {ForgotUsernameCSS.formClass}>
                 <div className={ForgotUsernameCSS.inputsClass}>
