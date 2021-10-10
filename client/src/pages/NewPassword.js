@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useParams, useHistory} from "react-router-dom"
 import ForgotPasswordCSS from "./ForgotPassword.module.css"
 import axios from "axios"
@@ -10,6 +10,17 @@ const NewPassword = () => {
     const [internalErrors, setInternalErrors] = useState({ passwordErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ passwordErr:''})
     const [invalidFlags, setInvalidFlags] = useState({submitPasswordInvalid: true, submitInvalid: true})
+    const [sessionActive, setSessionActive] = useState(false);
+    // useeffect determines whter session is expired.
+    useEffect( () => {
+        axios.get("/api/users/resetpassword" , {params: token})
+            .then( (response) =>{
+                setSessionActive(true)
+            })
+            .catch( 
+                setSessionActive(false)
+            )
+    } , [])
 
     // rerender when blur is triggered.
     const rerender = e =>
@@ -91,29 +102,42 @@ const NewPassword = () => {
         };
 
     }
-    return (
-        <div className={ForgotPasswordCSS.pageContainer}>
-            <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
-                <div className={ForgotPasswordCSS.headerStyle}> Change your Password </div>
+    if(sessionActive)
+    {
+        return (
+            <div className={ForgotPasswordCSS.pageContainer}>
+                <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
+                    <div className={ForgotPasswordCSS.headerStyle}> Change your Password </div>
+                </div>
+                <form className= {ForgotPasswordCSS.formClass}>
+                    <div className={ForgotPasswordCSS.inputsClass}>
+                        <label>Password</label>
+                        <input
+                            type= "password"
+                            name= "password"
+                            onBlur={handleBlur}
+                            onChange={handlePassword}
+                            placeholder="Password..."
+                        />
+                        <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.passwordErr} </div>
+                    </div>
+                    <div>
+                        <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Change Password</button>
+                    </div>
+                </form>
             </div>
-            <form className= {ForgotPasswordCSS.formClass}>
-                <div className={ForgotPasswordCSS.inputsClass}>
-                    <label>Password</label>
-                    <input
-                        type= "password"
-                        name= "password"
-                        onBlur={handleBlur}
-                        onChange={handlePassword}
-                        placeholder="Password..."
-                    />
-                    <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.passwordErr} </div>
+        )
+    }
+    else
+    {
+        return (
+            <div className={ForgotPasswordCSS.pageContainer}>
+                <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
+                    <div className={ForgotPasswordCSS.headerStyle}> Link has expired! </div>
                 </div>
-                <div>
-                    <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Change Password</button>
-                </div>
-            </form>
-        </div>
-    )
+            </div>
+        )
+    }
 }
 
 export default NewPassword
