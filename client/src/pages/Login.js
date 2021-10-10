@@ -179,6 +179,7 @@ const Login = () => {
                 </div>
                 <div className={LoginCSS.buttonContainer}>
                     <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Login</button>
+                    <Link to ="/reset"> forgot password?</Link>
                     <div> no account?  <Link to ="/form"> sign up</Link></div>
                 </div>
             </form>
