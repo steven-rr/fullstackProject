@@ -2,7 +2,8 @@ import './App.css';
 import Home from "./pages/Home"
 import Form from "./pages/Form"
 import Login from "./pages/Login"
-import ResetPassword from "./pages/ResetPassword"
+import ForgotPassword from "./pages/ForgotPassword"
+import NewPassword from "./pages/NewPassword"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
 import UserPublicProfile from "./pages/UserPublicProfile"
@@ -62,7 +63,8 @@ function App() {
               <Route path="/user/:UserId/comments" exact component = {UserPublicProfileComments} />
               <Route path="/user/:UserId/settings" exact component = {UserSettingsPrivate} />
               <Route path="/createpost" component = {CreatePost} />
-              <Route path="/reset" component={ResetPassword}/>
+              <Route path="/reset" exact component={ForgotPassword}/>
+              <Route path="/reset/:token" component={NewPassword}/>
               <Route path="/login" exact component = {Login} />
               <Route component={Page404} />
             </Switch>

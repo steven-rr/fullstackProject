@@ -8,8 +8,8 @@ const cookieParser = require("cookie-parser");
 const nodemailer =require("nodemailer");
 const {validateToken}=require("../JWT.js");
 const { request, response } = require('express');
+const {Op} = require("sequelize")
 require('dotenv').config();
-const dotenvExpand = require('dotenv-expand')
 
 const options = {
     host: process.env.EMAIL_HOST,
@@ -308,22 +308,20 @@ router.post("/forgotpassword", async (request, response) => {
             {
                 const token = buffer.toString("hex")
                 const expireToken = Date.now() + 3600000;
-                user.resetToken =token;
-                user.expireToken = expireToken; 
-                await Users.update({resetToken: token}, {where: {email:  request.body.email}})
-                const redirectLink =  process.env.DOMAIN                                             + `/reset/${token}` ;
+                await Users.update({resetToken: token, expireToken: expireToken}, {where: {email:  request.body.email}})
+                const redirectLink =  process.env.DOMAIN   + `/reset/${token}` ;
                 console.log("redirect to:",redirectLink)
                 const emailToSend= {
                     from: '"Space Launches" <spacelaunches@outlook.com>',
-                    to: "steven.r.riva@gmail.com",
+                    to: `${request.body.email}`,
                     subject: "SPACE LAUNCHES -- PASSWORD RESET LINK",
                     text: `
-                    <p>hey, it seems you forgot your password. dont't worry, check out this link: </p>
+                    <p>hey, it seems you forgot your password. don't worry, check out this link: </p>
                     <h5> click on this link to reset your password:
                     <a href=${redirectLink}> ${redirectLink} </a> 
                     ` ,
                     html: `
-                    <p>hey, it seems you forgot your password. dont't worry, we have created a link that will be active for 1 hour to reset your password. </p>
+                    <p>hey, it seems you forgot your password. the following link will only be active for 1 hour to reset your password. </p>
                     <h5> click on this link to reset your password:
                     <a href=${redirectLink}> ${redirectLink} </a> 
                     ` 
@@ -339,4 +337,29 @@ router.post("/forgotpassword", async (request, response) => {
         }
     })
 })
+// reset password:
+router.post("/resetpassword", async (request, response) => {
+
+    // get token (from params) and newpassword from front end.
+    const newPassword = request.body.password;
+    const token= request.body.token;
+
+    // find the user that correspodns to the resetToken, as long as expire Token is greater than. 
+    // if not found ,return error. if found,  allow a password update, and expire the link.
+    const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
+    if(!user)
+    {   
+        response.status(404).json("token has expired")
+    }
+    else
+    {
+        bcrypt.hash(newPassword, 10).then( async (hash) =>
+        {
+            await Users.update({password: hash}, {where: {resetToken: token}});
+            await Users.update({expireToken: null} , {where: {resetToken: token}})
+            response.json("success!")
+        })
+    }
+})
+
 module.exports = router;
