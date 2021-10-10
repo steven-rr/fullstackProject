@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
-import ResetPasswordCSS from "./ResetPassword.module.css"
+import ForgotPasswordCSS from "./ForgotPassword.module.css"
 import axios from "axios"
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
 
 
-const ResetPassword = () => {
+const ForgotPassword = () => {
     const [values, setValues] = useState({email: ''})
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
@@ -88,12 +88,12 @@ const ResetPassword = () => {
 
     }
     return (
-        <div className={ResetPasswordCSS.pageContainer}>
-            <div className={ResetPasswordCSS.createPostHeaderContainer}> 
-                <div className={ResetPasswordCSS.headerStyle}> Reset your Password </div>
+        <div className={ForgotPasswordCSS.pageContainer}>
+            <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
+                <div className={ForgotPasswordCSS.headerStyle}> Reset your Password </div>
             </div>
-            <form className= {ResetPasswordCSS.formClass}>
-                <div className={ResetPasswordCSS.inputsClass}>
+            <form className= {ForgotPasswordCSS.formClass}>
+                <div className={ForgotPasswordCSS.inputsClass}>
                     <label>Email</label>
                     <input
                         type= "text"
@@ -102,14 +102,14 @@ const ResetPassword = () => {
                         onChange={handleEmail}
                         placeholder="Email..."
                     />
-                    <div className={ResetPasswordCSS.errMsgClass}> {displayErrors.emailErr} </div>
+                    <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.emailErr} </div>
                 </div>
                 <div>
-                    <button className={ResetPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Reset Password Link</button>
+                    <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Reset Password Link</button>
                 </div>
             </form>
         </div>
     )
 }
 
-export default ResetPassword
+export default ForgotPassword
