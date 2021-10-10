@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      expireToken: {
+        type: DataTypes.DATE,
+        allowNull: true
       }
     });
 

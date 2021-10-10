@@ -2,9 +2,30 @@ const express= require('express');
 const router = express.Router();
 const {Users}= require('../models');
 const bcrypt = require("bcryptjs")
+const crypto =require('crypto')
 const {createTokens}=require("../JWT.js")
 const cookieParser = require("cookie-parser");
-const {validateToken}=require("../JWT.js")
+const nodemailer =require("nodemailer");
+const {validateToken}=require("../JWT.js");
+const { request, response } = require('express');
+require('dotenv').config();
+const dotenvExpand = require('dotenv-expand')
+
+const options = {
+    host: process.env.EMAIL_HOST,
+    secureConnection: false,
+    port:  process.env.EMAIL_PORT,
+    tls: {
+        ciphers:  process.env.EMAIL_CIPHERS
+    },
+    auth: {
+        user:  process.env.EMAIL_USERNAME,
+        pass:  process.env.EMAIL_PASSWORD
+    },
+    from: process.env.EMAIL_USERNAME
+
+}
+const transporter = nodemailer.createTransport(options);
 
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
@@ -266,5 +287,56 @@ router.get("/private/getEmail", validateToken, async (request, response) => {
         console.log("found")
         response.json({email: user.dataValues.email});
     }
+})
+
+// forgot password:
+router.post("/forgotpassword", async (request, response) => {
+    console.log("in forgot my password..");
+    crypto.randomBytes(32, async (err, buffer)=> {
+        if(err){
+            console.log(err)
+        }
+        else{
+            // create random user
+            const user = await Users.findOne({where: {email : request.body.email}})
+            if(!user) 
+            {   
+                console.log("user doesn't exist..");
+                return response.status(404).json({error: "User doesn't exist."})
+            }
+            else
+            {
+                const token = buffer.toString("hex")
+                const expireToken = Date.now() + 3600000;
+                user.resetToken =token;
+                user.expireToken = expireToken; 
+                await Users.update({resetToken: token}, {where: {email:  request.body.email}})
+                const redirectLink =  process.env.DOMAIN                                             + `/reset/${token}` ;
+                console.log("redirect to:",redirectLink)
+                const emailToSend= {
+                    from: '"Space Launches" <spacelaunches@outlook.com>',
+                    to: "steven.r.riva@gmail.com",
+                    subject: "SPACE LAUNCHES -- PASSWORD RESET LINK",
+                    text: `
+                    <p>hey, it seems you forgot your password. dont't worry, check out this link: </p>
+                    <h5> click on this link to reset your password:
+                    <a href=${redirectLink}> ${redirectLink} </a> 
+                    ` ,
+                    html: `
+                    <p>hey, it seems you forgot your password. dont't worry, we have created a link that will be active for 1 hour to reset your password. </p>
+                    <h5> click on this link to reset your password:
+                    <a href=${redirectLink}> ${redirectLink} </a> 
+                    ` 
+                    // Let's verify your single sender so you can start sending email.
+                    // < email here> 
+                    // Your link is active for 48 hours. After that, you will need to resend the verification email.
+
+
+                }
+                await transporter.sendMail(emailToSend)
+                response.json("success!");
+            }
+        }
+    })
 })
 module.exports = router;
