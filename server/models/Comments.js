@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
        parentId: {
          type: DataTypes.INTEGER,
          allowNull: true
+       },
+       level: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          defaultValue: 0
        }
     });
   

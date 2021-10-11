@@ -8,6 +8,7 @@ import ForgotUsername from "./pages/ForgotUsername"
 import NewPassword from "./pages/NewPassword"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
+import PostWithReplyThread from "./pages/PostWithReplyThread"
 import UserPublicProfile from "./pages/UserPublicProfile"
 import UserPublicProfileComments from "./pages/UserPublicProfileComments"
 import UserSettingsPrivate from "./pages/UserSettingsPrivate"
@@ -60,7 +61,8 @@ function App() {
               <Route path="/" exact component = {Home} />
               <Route path="/form" exact component = {Form} />
               <Route path="/blog" exact component = {Posts} />
-              <Route path="/blog/:id" component = {Post} />
+              <Route path="/blog/:id" exact component = {Post} />
+              <Route path="/blog/:id/:CommentId/:startPoint" exact component = {PostWithReplyThread} />
               <Route path="/user/:UserId" exact component = {UserPublicProfile} />
               <Route path="/user/:UserId/comments" exact component = {UserPublicProfileComments} />
               <Route path="/user/:UserId/settings" exact component = {UserSettingsPrivate} />
