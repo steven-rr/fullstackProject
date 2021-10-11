@@ -7,7 +7,7 @@ import Comment from "../components/Comment.js"
 import {AuthContext} from "../App"
 
 const Post = () => {
-    const [individualPostData, setIndividualPostData] = useState({title: '', contentText: '', username: ''})
+    const [ individualPostData, setIndividualPostData] = useState({title: '', contentText: '', username: ''})
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
     const [validFlag, setValidFlag] = useState(true)
