@@ -44,8 +44,10 @@ router.get('/:postId', async (request, response) => {
 router.post("/",validateToken, async(request, response) => {
 
     const newComment  = request.body; // set contentText.
+    newComment.PostId = parseInt(newComment.PostId);
     newComment.username = request.user.username; //set username from validateToken();
     newComment.UserId = request.user.id; // set userId from validateToken();
+    newComment.parentId = null;
     const newCommentCreated = await Comments.create(newComment);
     response.json(newCommentCreated)
 })
@@ -79,5 +81,17 @@ router.delete("/:commentId", validateToken, async(request,response) => {
     }
     
 })
+
+// append a newreply from front end to backend sql server.
+router.post("/reply",validateToken, async(request, response) => {
+
+    const newReply  = request.body; // set contentText.
+    console.log("newreply: ", newReply);
+    newReply.username = request.user.username; //set username from validateToken();
+    newReply.UserId = request.user.id; // set userId from validateToken();
+    const newReplyCreated = await Comments.create(newReply);
+    response.json(newReplyCreated)
+})
+
 
 module.exports = router;

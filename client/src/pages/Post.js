@@ -13,6 +13,13 @@ const Post = () => {
     const [validFlag, setValidFlag] = useState(true)
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
+
+    // rerender when blur is triggered.
+    const rerender = e =>
+    {
+        setIdx(currentIndex=> currentIndex+1);
+    }
+
     // use params allows me to fetch params 
     let {id } = useParams();
 
@@ -44,6 +51,9 @@ const Post = () => {
                 console.log("comments dont exist!")
             })
     }, []);
+    useEffect( () => {
+        console.log("use effect comments:, ", comments);
+    }, comments[comments.length])
 
     // handle onChange
     const commentOnChange= (e) => {
@@ -55,10 +65,16 @@ const Post = () => {
         // post the new comment on the server.
         await axios
             .post('/api/comments',newCommentToPost)
-            .then( res => {
+            .then(  (res) => {
                 const newCommentCreated=  res.data; //get json response and append to state.
                 setComments([...comments, newCommentCreated])
+                
                 setNewComment("") //after adding a comment, clear the comment.
+                rerender();
+                console.log("SUCCESFULLY ENTERED COMMENT!!!");
+                console.log(newCommentCreated);
+                
+
             })
             .catch( (err) => {
                     console.log("error: ", err);
@@ -135,15 +151,15 @@ const Post = () => {
 
                 {/* display comments */}
                 <div className={PostCSS.commentsBodyContainer}>
-                    {comments.map((value, key) =>{
-                        console.log("value, key: ",value, key)
+                    {comments.map((value) =>{
                         if(value.parentId === null)
                         {
                             return (
                                 <Comment
-                                    key= {key}
+                                    key= {value.id}
                                     comment= {value}
                                     comments = {comments} 
+                                    setComments={setComments}
                                     MIN_LEVEL= {0}
                                     postID ={id}
                                 />
@@ -152,6 +168,7 @@ const Post = () => {
                         
                     })}
                 </div>
+                
             </div>
         )
     }
