@@ -143,7 +143,9 @@ const PostWithReplyThread = () => {
                                     key= {key}
                                     comment= {value}
                                     comments = {comments} 
+                                    setComments={setComments}
                                     MIN_LEVEL = {parseInt(startPoint)}
+                                    postID ={id}
                                 />
                             )
                         }

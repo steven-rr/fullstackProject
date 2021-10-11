@@ -47,3 +47,13 @@
 {
     display: block;
 }
+
+
+.linkClass
+{
+    display: none;
+}
+.enableLink
+{
+    display:block;
+}

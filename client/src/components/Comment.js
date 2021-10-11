@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react'
 import CommentCSS from "./Comment.module.css"
 import {  Link} from 'react-router-dom'
 import axios from   "axios" 
-
+import ChildComment from "./ChildComment"
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 10;
 
@@ -19,19 +19,20 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
     // console.log("MIN_LEVEL: ", MIN_LEVEL) 
     const MAX_LEVEL = MIN_LEVEL + REPLY_THREAD_WIDTH
     // console.log("MAX_LEVEL: ", MAX_LEVEL);
-    const rerender= (e) => {
-        setIdx(currentIdx => currentIdx + 1);
-    }
+    
     const handleReply = (e) => {
         setReplyFlag(!replyFlag);
     }
+    
     // handle onChange
     const commentOnChange= (e) => {
         setNewReply(e.target.value)
     }
+    
     // handle submit reply
     const handleSubmitReply = async () => {
-        const newReplyToPost = {contentText: newReply, PostId: postID, parentId: comment.id}
+        // increment level plus 1. 
+        const newReplyToPost = {contentText: newReply, PostId: postID, parentId: comment.id, level: comment.level +1}
         // post the new reply on the server.
         await axios
             .post('/api/comments/reply',newReplyToPost)
@@ -45,6 +46,7 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                     console.log("error: ", err);
                 });
     }
+    
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild.parentId === comment.id)
@@ -58,23 +60,28 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                 {
                     if(comments[i].parentId == commentChild.id)
                     {
-                        return(
-                            <div  className = {CommentCSS.commentBodyContainer} >
-                                <div className ={CommentCSS.commentText}> {commentChild.contentText} </div>
-                                <div> posted by {commentChild.username}</div>
-                                <Link key={key} to={`/blog/${postID}/${commentChild.id}/${MAX_LEVEL}`}> continue this thread...</Link>            
-                            </div>
+                        return (
+                            <ChildComment 
+                                comment= {commentChild}
+                                setComments={setComments}
+                                comments = {comments} 
+                                postID ={postID}
+                                MAX_LEVEL ={MAX_LEVEL}
+                                includeLink={true}
+                            />
                         )
                     }
                 }
-                // else, children have no more children. no need to continue the thread.
-                return(
-                    <div  className = {CommentCSS.commentBodyContainer} >
-                        <div className ={CommentCSS.commentText}> {commentChild.contentText} </div>
-                        <div> posted by {commentChild.username}</div>
-                    </div>
-                )
-                    
+                // else, children have no more children. no need to continue the thread with a link.
+                return (
+                    <ChildComment 
+                        comment= {commentChild}
+                        setComments={setComments}
+                        comments = {comments} 
+                        postID ={postID}
+                        MAX_LEVEL ={MAX_LEVEL}
+                    />
+                )     
             }
             else // continue recursion if not at max level.
             {
