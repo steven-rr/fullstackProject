@@ -6,7 +6,8 @@ import Page404 from "./Page404"
 import Comment from "../components/Comment.js"
 import {AuthContext} from "../App"
 
-const Post = () => {
+
+const PostWithReplyThread = () => {
     const [individualPostData, setIndividualPostData] = useState({title: '', contentText: '', username: ''})
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
@@ -14,7 +15,7 @@ const Post = () => {
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
     // use params allows me to fetch params 
-    let {id } = useParams();
+    let {id,CommentId, startPoint } = useParams();
 
     // instantiate history.
     const history = useHistory();
@@ -133,19 +134,19 @@ const Post = () => {
                     <button className={PostCSS.buttonClass} onClick ={createComment}> CREATE COMMENT!</button>
                 </div>
 
-                {/* display comments */}
+                {/* display parent comments and children. */}
                 <div className={PostCSS.commentsBodyContainer}>
                     {comments.map((value, key) =>{
-                        console.log("value, key: ",value, key)
-                        if(value.parentId === null)
+                        console.log("id, commentId:, startPoint ",id, CommentId, startPoint)
+                        // console.log("comments", comments);
+                        if(value.id == CommentId)
                         {
                             return (
                                 <Comment
                                     key= {key}
                                     comment= {value}
                                     comments = {comments} 
-                                    MIN_LEVEL= {0}
-                                    postID ={id}
+                                    MIN_LEVEL = {parseInt(startPoint)}
                                 />
                             )
                         }
@@ -155,7 +156,6 @@ const Post = () => {
             </div>
         )
     }
-    
 }
 
-export default Post
+export default PostWithReplyThread
