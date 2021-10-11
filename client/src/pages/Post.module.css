@@ -107,3 +107,8 @@
 	background-color: rgb(117,35,35);
 	transition: all 0.1s ease-out;
 }
+
+.empty
+{
+    display: none;
+}
