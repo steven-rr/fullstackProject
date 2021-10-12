@@ -461,16 +461,22 @@ router.post('/googleoauth', async (request, response) => {
             else{
                 //succesfully create random password here:
                 const randomPassword = buffer.toString("hex")
-                // hash the password, then register user.
-                bcrypt.hash(randomPassword, 10).then( (hash) =>
+                // hash the password, then register user and sign in.
+                bcrypt.hash(randomPassword, 10).then( async (hash) =>
                 {
-                    const newUser = {
+                    // create user in database.
+                    let newUser = {
                         username: newUsername,
                         password: hash,
                         email: email
                     };
-                    Users.create(newUser);
-                    response.json(newUser)
+                    newUser = await Users.create(newUser);
+                    //signin.
+                    console.log("new user:", newUser)
+                    const accessToken = createTokens(newUser.dataValues);
+                    const expirationDate = 60*60*24*90*1000;
+                    response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+                    response.json({username: newUser.username, id: newUser.id})
                 })
             }   
 
