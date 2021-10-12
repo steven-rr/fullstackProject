@@ -3,6 +3,8 @@ import axios from   "axios"
 import LoginCSS from "./Login.module.css"
 import {useHistory, Link} from "react-router-dom"
 import {AuthContext} from "../App"
+import {GoogleLogin} from "react-google-login"
+require('dotenv').config()
 
 const Login = () => {
     // grabbing setAuthState.
@@ -150,6 +152,32 @@ const Login = () => {
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("password", e.target.value);
     }
+    // google oath:
+    const handleGoogleLoginFailure = () => {
+        console.log("google sign in was unsuccesful!");
+    }
+    const handleGoogleLoginSuccess = async (googleData) => {
+        console.log("google sign in was success.")
+        console.log("googleData: " ,googleData)
+        console.log("googleData token: " ,googleData.tokenId)
+        const googleToken = googleData.tokenId;
+        const response = await axios
+                            .post('/api/users/googleoauth',{googleToken})
+                            .then( res => {
+                            
+                                console.log("success all the way.", res.data)
+                                setAuthState( currentAuthState =>{ 
+                                    return {...currentAuthState, username: res.data.username, UserId: res.data.id, authStatus: true}
+                                    }); // set auth state is true when logging in.
+
+                                history.push("/")
+                                console.log("updated auth state: " , authState)
+                            })
+                            .catch( (err) => {
+                                    
+                                console.log(" failured..." , err);
+                            });
+    }
     return (
         <div className={LoginCSS.loginContainer}>
             <div className={LoginCSS.textStyle}> Login to post! </div>
@@ -185,6 +213,14 @@ const Login = () => {
                         <Link to ="/resetUsername"> username?</Link>
                     </div>
                     <div> no account?  <Link to ="/form"> sign up</Link></div>
+                    {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
+                    <GoogleLogin 
+                        clientId={process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID}
+                        buttonText="Log in with Google"
+                        onSuccess={handleGoogleLoginSuccess}
+                        onFailure={handleGoogleLoginFailure}
+                        cookiePolicy={'single_host_origin'}
+                    />
                 </div>
             </form>
         </div>
