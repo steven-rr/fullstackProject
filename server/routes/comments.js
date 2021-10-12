@@ -1,7 +1,7 @@
 const express= require('express');
 const router = express.Router();
 const {Comments}= require('../models');
-const {validateToken}=require("../JWT.js")
+const {validateToken}=require("../middleware/JWT.js")
 
 // get all comment data for a specific user. send to frontend.
 router.get('/byUserId/:UserId', async (request, response) => {

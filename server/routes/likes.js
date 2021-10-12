@@ -1,7 +1,7 @@
 const express= require('express');
 const router = express.Router();
 const fetch = require("node-fetch");
-const { validateToken } = require('../JWT.js');
+const { validateToken } = require('../middleware/JWT.js');
 const {Likes} = require('../models');
 
 

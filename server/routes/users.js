@@ -1,14 +1,12 @@
 const express= require('express');
 const router = express.Router();
-const {Users}= require('../models');
-const bcrypt = require("bcryptjs")
 const crypto =require('crypto')
-const {createTokens}=require("../JWT.js")
+const bcrypt = require("bcryptjs")
 const cookieParser = require("cookie-parser");
 const nodemailer =require("nodemailer");
-const {validateToken}=require("../JWT.js");
-const { request, response } = require('express');
+const {Users}= require('../models');
 const {Op} = require("sequelize")
+const {createTokens, validateToken}=require("../middleware/JWT.js")
 require('dotenv').config();
 
 const options = {

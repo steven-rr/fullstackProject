@@ -2,9 +2,9 @@ const {Op} = require("sequelize")
 const {APICounters}= require('../models');
 const {Posts}= require('../models');
 const fetch = require("node-fetch")
-const APICountersCheck = require("./APICountersMiddleware/APICountersCheck.js")
-const APICountersIncrement = require("./APICountersMiddleware/APICountersIncrement.js")
-const APICountersThrottle = require("./APICountersMiddleware/APICountersThrottle.js")
+const APICountersCheck = require("./SpaceAPICountersHelpers/APICountersCheck.js")
+const APICountersIncrement = require("./SpaceAPICountersHelpers/APICountersIncrement.js")
+const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js")
 
 
 // parse out launch data.
