@@ -1,13 +1,16 @@
 const express= require('express');
 const router = express.Router();
+require('dotenv').config();
 const crypto =require('crypto')
 const bcrypt = require("bcryptjs")
 const cookieParser = require("cookie-parser");
 const nodemailer =require("nodemailer");
+const haiku = require('../helpers/haiku')
 const {Users}= require('../models');
 const {Op} = require("sequelize")
 const {createTokens, validateToken}=require("../middleware/JWT.js")
-require('dotenv').config();
+const { OAuth2Client } = require('google-auth-library')
+const client = new OAuth2Client(process.env.CLIENT_ID)
 
 const options = {
     host: process.env.EMAIL_HOST,
@@ -24,6 +27,7 @@ const options = {
 
 }
 const transporter = nodemailer.createTransport(options);
+
 
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
@@ -411,6 +415,68 @@ router.post("/forgotusername", async (request, response) => {
             }
         }
     })
+})
+
+// if user exists and password is correct, log in and return json web token.
+router.post('/googleoauth', async (request, response) => {
+    const {googleToken} = request.body;
+    console.log("google: ", googleToken)
+    const ticket = await client.verifyIdToken({
+        idToken: googleToken,
+        audience: process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID
+    });
+    const { name, email, picture } = ticket.getPayload();  
+    console.log(name, email);
+    console.log(picture);
+
+    //check if user is signed up. 
+    const user = await Users.findOne({ where: {email: email} })
+
+    // if account exists, login. else, create user. 
+    if(user)
+    {
+        const accessToken = createTokens(user.dataValues);
+        const expirationDate = 60*60*24*90*1000;
+        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+        response.json({username: user.username, id: user.id})
+    }
+    else 
+    {
+        // loop until i find a random username that is valid.
+        let newUsername;
+        for(let i=0; i<500; i++)
+        {
+            newUsername = haiku(500)
+            userExists=  await Users.findOne({ where: {username: newUsername} })
+            if(!userExists)
+            {
+                break
+            }
+        }
+        // create a random password that is very strong. 
+        crypto.randomBytes(200, async (err, buffer)=> {
+            if(err){
+                console.log(err)
+            }
+            else{
+                //succesfully create random password here:
+                const randomPassword = buffer.toString("hex")
+                // hash the password, then register user.
+                bcrypt.hash(randomPassword, 10).then( (hash) =>
+                {
+                    const newUser = {
+                        username: newUsername,
+                        password: hash,
+                        email: email
+                    };
+                    Users.create(newUser);
+                    response.json(newUser)
+                })
+            }   
+
+        })
+       
+    }
 })
 
 module.exports = router;
