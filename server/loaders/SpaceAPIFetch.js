@@ -5,9 +5,9 @@ const {APICounters}= require('../models');
 const fetch = require("node-fetch")
 const SpaceAPIUtils = require("./SpaceAPIFetchUtilities")
 
-const APICountersCheck = require("./APICountersMiddleware/APICountersCheck.js")
-const APICountersIncrement = require("./APICountersMiddleware/APICountersIncrement.js")
-const APICountersThrottle = require("./APICountersMiddleware/APICountersThrottle.js")
+const APICountersCheck = require("./SpaceAPICountersHelpers/APICountersCheck.js")
+const APICountersIncrement = require("./SpaceAPICountersHelpers/APICountersIncrement.js")
+const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js")
 
 const setAppropriateVars= (fetchFuture) => {
     let LaunchesTable;

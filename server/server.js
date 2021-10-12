@@ -5,10 +5,10 @@ const cron = require('node-cron');
 const fetch = require("node-fetch");
 const path = require('path');
 const cookieParser =require('cookie-parser')
-const SpaceAPIFetch = require('./middleware/SpaceAPIFetch')
+const SpaceAPIFetch = require('./loaders/SpaceAPIFetch')
 const noCache = require('./middleware/NoCache')
 
-const APICountersReset = require('./middleware/APICountersMiddleware/APICountersReset')
+const APICountersReset = require('./loaders/SpaceAPICountersHelpers/APICountersReset')
 require('dotenv').config();
 
 // --------------------- SELF PING SERVER ---------------------
