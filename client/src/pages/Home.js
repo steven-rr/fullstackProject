@@ -36,7 +36,6 @@ const Home = () => {
 
     return (
         <div className={HomeCSS.homeContainer}>
-            <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
             <div className= {HomeCSS.textStyle}> {futureFlag ? "Upcoming": "Previous"}</div>
             <div className={HomeCSS.buttonClass} onClick={toggleFutureFlag}> {futureFlag ? "See Previous Launches": "See Upcoming Launches"}</div>
             <div className={HomeCSS.buttonClass}> maybe sort by date</div>
