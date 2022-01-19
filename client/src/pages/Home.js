@@ -50,6 +50,14 @@ const Home = () => {
                                 <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                                 <div className={HomeCSS.textContainer}>
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                    {
+                                        (value.locationName=="Unknown Location" ) 
+                                        ?
+                                        ( (value.countryCode != "UNK") ? (<div>{value.countryCode}</div>) : "")
+                                        :
+                                        (<div>{value.locationName}</div>) 
+                                    }
+                                    <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
                                     <div>{value.description} </div>
                                     <div> {value.launchDate}</div>
                                     <div className={HomeCSS.buttnContainer}> 
@@ -66,6 +74,14 @@ const Home = () => {
                         return ( 
                             <div className={HomeCSS.launchItemContainer} key = {key}> 
                                 <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                {
+                                    (value.locationName=="Unknown Location" ) 
+                                    ?
+                                    ( (value.countryCode != "UNK") ? (<div>{value.countryCode}</div>) : "")
+                                    :
+                                    (<div>{value.locationName}</div>) 
+                                }
+                                <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
                                 <div>{value.description} </div>
                                 <div> {value.launchDate}</div>
                                 <div className={HomeCSS.buttnContainer}> 
@@ -88,6 +104,14 @@ const Home = () => {
                                 <div className={HomeCSS.textContainer}>
 
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                    {
+                                        (value.locationName=="Unknown Location" ) 
+                                        ?
+                                        ( (value.countryCode != "UNK") ? (<div>{value.countryCode}</div>) : "")
+                                        :
+                                        (<div>{value.locationName}</div>) 
+                                    }
+                                    <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
                                     <div>{value.description} </div>
                                     <div> {value.launchDate}</div>
                                     <div className={HomeCSS.buttnContainer}> 
@@ -103,6 +127,14 @@ const Home = () => {
                         return ( 
                             <div className={HomeCSS.launchItemContainer} key = {key}> 
                                 <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                {
+                                    (value.locationName=="Unknown Location" ) 
+                                    ?
+                                    ( (value.countryCode != "UNK") ? (<div>{value.countryCode}</div>) : "")
+                                    :
+                                    (<div>{value.locationName}</div>) 
+                                }
+                                <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
                                 <div>{value.description} </div>
                                 <div> {value.launchDate}</div>
                                 <div className={HomeCSS.buttnContainer}> 

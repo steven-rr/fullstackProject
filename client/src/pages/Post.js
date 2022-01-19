@@ -85,7 +85,7 @@ const Post = () => {
         console.log('clicked delete comment')
 
          // send delete request to backend.
-         axios
+         2
             .delete(`/api/comments/${commentId}`)
             .then( () => {
                 // rerender page by resetting commentData data. 
