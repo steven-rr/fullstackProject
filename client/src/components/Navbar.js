@@ -99,7 +99,7 @@ const Navbar = ({onClick}) => {
                     <ul className={NavbarCSS.navMainUl}>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
                         {!authState.authStatus ? 
-                            (<><li className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline} ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  LOGIN </li>
+                            (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`}>LOGIN</div>  </li>
                             <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li> </>) 
                             : 
                             (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>
