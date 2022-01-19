@@ -103,7 +103,7 @@ const Navbar = ({onClick}) => {
                             <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li> </>) 
                             : 
                             (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>
-                            <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button">   LOGOUT </button> </li></>)}
+                            <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button"> LOGOUT </button> </li></>)}
 
                         
                     </ul>
