@@ -31,6 +31,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true
       },
+      padName:
+      {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      locationName:
+      {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      countryCode:
+      {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
       postId:
       {
         type: DataTypes.INTEGER,

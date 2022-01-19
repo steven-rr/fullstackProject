@@ -16,12 +16,19 @@ const parseLaunchData = async(data_in) => {
     let imgURL;
     let vidURL;
     let launchDate;
-    try{ launch_id   =  await data_in.id;                                } catch {launch_id =null}
-    try{ title       =  await data_in.name;                              } catch {title =null}
-    try{ description =  await data_in.rocket.configuration.description;  } catch {description =null}
-    try{ imgURL      =  await data_in.image;                             } catch {imgURL =null}
-    try{ vidURL      =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
-    try{ launchDate  =  await new Date(data_in.net);                     } catch {launchDate =null}
+    let padName;
+    let locationName; 
+    let countryCode;
+    
+    try{ launch_id       =  await data_in.id;                                } catch {launch_id =null}
+    try{ title           =  await data_in.name;                              } catch {title =null}
+    try{ description     =  await data_in.rocket.configuration.description;  } catch {description =null}
+    try{ imgURL          =  await data_in.image;                             } catch {imgURL =null}
+    try{ vidURL          =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
+    try{ launchDate      =  await new Date(data_in.net);                     } catch {launchDate =null}
+    try{ padName         =  await data_in.pad.name;                          } catch {padName =null}
+    try{ locationName    =  await data_in.pad.location.name;                 } catch {locationName =null}
+    try{ countryCode     =  await data_in.pad.location.country_code;         } catch {countryCode =null}
 
     let newLaunch = {   
         launch_id: launch_id,
@@ -29,7 +36,10 @@ const parseLaunchData = async(data_in) => {
         description: description,
         imgURL: imgURL,
         vidURL: vidURL,
-        launchDate: launchDate
+        launchDate: launchDate,
+        padName: padName,
+        locationName: locationName,
+        countryCode: countryCode
     };
 
     // find if a post with the launch Id already exists. 
