@@ -74,6 +74,7 @@ const Posts = () => {
                 console.log(err);
             })
     }
+    
     return (
         <div className={PostsCSS.postsPageContainer}>
             <div className= {PostsCSS.textStyle}>Steven, check out these posts. </div>

@@ -78,6 +78,11 @@ const Navbar = ({onClick}) => {
                 console.log("logout failed..")
             });
     }
+    // for logging in.
+    const login = async () => {
+        
+    }
+
     return (
         <div className={ `${NavbarCSS.containerMain}` }> 
             <div className={NavbarCSS.navLinkItems}>

@@ -3,6 +3,7 @@ import HomeCSS from "./Home.module.css"
 import Button from "../components/Button.js"
 import axios from   "axios" 
 import {Link} from "react-router-dom"
+import Login from "./Login"
 
 const Home = () => {
 
@@ -37,18 +38,36 @@ const Home = () => {
 
     return (
         <div className={HomeCSS.homeContainer}>
-            <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
-            <div className= {HomeCSS.textStyle}> {futureFlag ? "Upcoming": "Previous"}</div>
-            <div className={HomeCSS.buttonClass} onClick={toggleFutureFlag}> {futureFlag ? "See Previous Launches": "See Upcoming Launches"}</div>
-            <div className={HomeCSS.buttonClass}> maybe sort</div>
-            <div className={`${futureFlag ? HomeCSS.deactivate: ''}`}> 
-                {launchDataPrevious.map((value, key) =>{
-                    if(value.imgURL)
-                    {
-                        return (
-                            <div className={HomeCSS.launchItemContainer} key = {key}> 
-                                <img className={HomeCSS.imgContainer} src={value.imgURL}/>
-                                <div className={HomeCSS.textContainer}>
+            <div className={HomeCSS.contentContainer}>
+                <div className= {HomeCSS.textStyle}>Welcome to your server, Steven! </div>
+                <div className= {HomeCSS.textStyle}> {futureFlag ? "Upcoming": "Previous"}</div>
+                <div className={HomeCSS.buttonClass} onClick={toggleFutureFlag}> {futureFlag ? "See Previous Launches": "See Upcoming Launches"}</div>
+                <div className={HomeCSS.buttonClass}> maybe sort by date</div>
+                <div className={HomeCSS.buttonClass}> maybe filter by country</div>
+                <div className={`${futureFlag ? HomeCSS.deactivate: ''}`}> 
+                    {launchDataPrevious.map((value, key) =>{
+                        if(value.imgURL)
+                        {
+                            return (
+                                <div className={HomeCSS.launchItemContainer} key = {key}> 
+                                    <img className={HomeCSS.imgContainer} src={value.imgURL}/>
+                                    <div className={HomeCSS.textContainer}>
+                                        <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                        <div>{value.description} </div>
+                                        <div> {value.launchDate}</div>
+                                        <div className={HomeCSS.buttnContainer}> 
+                                            {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
+                                            <Link to={`/blog/${value.postId}`} className={HomeCSS.buttonClass}>See Discussion</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            )
+                        }
+                        else
+                        {
+                            return ( 
+                                <div className={HomeCSS.launchItemContainer} key = {key}> 
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
                                     <div>{value.description} </div>
                                     <div> {value.launchDate}</div>
@@ -57,62 +76,51 @@ const Home = () => {
                                         <Link to={`/blog/${value.postId}`} className={HomeCSS.buttonClass}>See Discussion</Link>
                                     </div>
                                 </div>
-                            </div>
-                            
-                        )
-                    }
-                    else
-                    {
-                        return ( 
-                            <div className={HomeCSS.launchItemContainer} key = {key}> 
-                                <div className={HomeCSS.titleStyle}>{value.title} </div>
-                                <div>{value.description} </div>
-                                <div> {value.launchDate}</div>
-                                <div className={HomeCSS.buttnContainer}> 
-                                    {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
-                                    <Link to={`/blog/${value.postId}`} className={HomeCSS.buttonClass}>See Discussion</Link>
-                                </div>
-                            </div>
-                        )
-                    }
-                    
-                })}
-            </div> 
-            <div className={`${futureFlag ? '': HomeCSS.deactivate}`}> 
-                {launchDataUpcoming.map((value, key) =>{
-                    if(value.imgURL)
-                    {
-                        return (
-                            <div className={HomeCSS.launchItemContainer} key = {key}> 
-                                <img className={HomeCSS.imgContainer} src={value.imgURL}/>
-                                <div className={HomeCSS.textContainer}>
+                            )
+                        }
+                        
+                    })}
+                </div> 
+                <div className={`${futureFlag ? '': HomeCSS.deactivate}`}> 
+                    {launchDataUpcoming.map((value, key) =>{
+                        if(value.imgURL)
+                        {
+                            return (
+                                <div className={HomeCSS.launchItemContainer} key = {key}> 
+                                    <img className={HomeCSS.imgContainer} src={value.imgURL}/>
+                                    <div className={HomeCSS.textContainer}>
 
+                                        <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                        <div>{value.description} </div>
+                                        <div> {value.launchDate}</div>
+                                        <div className={HomeCSS.buttnContainer}> 
+                                            {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
+                                            <Link to={`/blog/${value.postId}`}className={HomeCSS.buttonClass}>See Discussion</Link>
+                                        </div>
+                                    </div>
+                                </div>   
+                            )
+                        }
+                        else
+                        {
+                            return ( 
+                                <div className={HomeCSS.launchItemContainer} key = {key}> 
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
                                     <div>{value.description} </div>
                                     <div> {value.launchDate}</div>
                                     <div className={HomeCSS.buttnContainer}> 
-                                        {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
-                                        <Link to={`/blog/${value.postId}`}className={HomeCSS.buttonClass}>See Discussion</Link>
+                                        {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
+                                        <Link to={`/blog/${value.postId}`} className={HomeCSS.buttonClass}>See Discussion</Link>
                                     </div>
                                 </div>
-                            </div>   
-                        )
-                    }
-                    else
-                    {
-                        return ( 
-                            <div className={HomeCSS.launchItemContainer} key = {key}> 
-                                <div className={HomeCSS.titleStyle}>{value.title} </div>
-                                <div>{value.description} </div>
-                                <div> {value.launchDate}</div>
-                                <div className={HomeCSS.buttnContainer}> 
-                                    {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
-                                    <Link to={`/blog/${value.postId}`} className={HomeCSS.buttonClass}>See Discussion</Link>
-                                </div>
-                            </div>
-                        )
-                    }
-                })}
+                            )
+                        }
+                    })}
+                </div>
+            </div>
+            <div className={HomeCSS.translucentLayer}></div>
+            <div className={HomeCSS.loginContainer}>
+                            <Login/>
             </div>
         </div>
     )

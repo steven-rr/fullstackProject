@@ -7,7 +7,8 @@ const APICountersIncrement = require("./SpaceAPICountersHelpers/APICountersIncre
 const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js")
 
 
-// parse out launch data.
+// This is called after the Individual API call is made. The purpose of this is to parse out launch data from the api call and return a newLaunch object. 
+// "data_in" has the response from the api call.
 const parseLaunchData = async(data_in) => {
     let launch_id;
     let title;
@@ -30,6 +31,17 @@ const parseLaunchData = async(data_in) => {
         vidURL: vidURL,
         launchDate: launchDate
     };
+
+    // find if a post with the launch Id already exists. 
+    const foundPost = await Posts.findOne({
+        where: {launchId: newLaunch.launch_id}
+    })  
+
+    // if it does, add the post ID.
+    if(foundPost)
+    {
+        newLaunch.postId = foundPost.id;
+    }
     return newLaunch;
 }
 // create new post if it doesn't exist yet.
@@ -53,7 +65,6 @@ const createNewPost = async( newLaunch) => {
 
         newLaunch.postId = newPostCreated.id;
         console.log("... NEW.... LAUNCH........MODIFIED.....:", newLaunch)
-
     }
     return newLaunch
 
@@ -61,7 +72,7 @@ const createNewPost = async( newLaunch) => {
 
 // insert launches from external SPACE api.
 const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =>{
-    // individual launch fetch    
+    // insert launches 1 by 1 within this loop.     
     for(let i = start_idx; i < 10; i++)
     {
         // make sure i dont exceed API call limit.
