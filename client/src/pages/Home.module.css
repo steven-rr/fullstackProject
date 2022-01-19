@@ -1,7 +1,4 @@
-/* html
-{
-    overflow: hidden;
-} */
+
 
 .deactivate
 {
@@ -11,19 +8,12 @@
 {
     background-color: rgb(29, 29, 29);
     height: 100%;
-    /* margin-top: 70px; */
+    margin-top: 70px;
     position: relative ; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     
 }
 
-.contentContainer
-{
-    position: relative;
-    top: 70px;
-}
+
 
 .titleStyle
 {
@@ -102,38 +92,7 @@
     justify-content: space-between;
 }
 
-.translucentLayer
-{
-    position: fixed;
-    display: block;
-    background-color: rgb(29, 29, 29);
-    height: 100%;
-    width: 100%;
-    z-index: 200;
-    opacity: 0.5;
-}
-.loginContainer
-{   
-    position: fixed;
-    opacity: 1.0;
-    display: block;
-    color: white;
-    font-family: Poppins;
-    top: 100px;
-    z-index: 300;
-    background-color: rgb(29, 29, 29);
-    height: 80%;
-    width: 80%;
-    
-}
-.translucentLayer
-{
-    display: none;
-}
-.loginContainer
-{
-    display: none;
-}
+
 @media screen and (max-width: 1000px)
 {
     .buttnContainer

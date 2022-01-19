@@ -53,7 +53,12 @@ const Navbar = ({onClick}) => {
             }
             };
     };
-
+    // handle clicking login, enable the hover for login screen.
+    const handleLoginOn = () => {
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, loginOn: !currentAuthState.loginOn}
+        })
+    };
     // useEffect for navbar scrolling. Only rerun when opening or closing menu.    
     useEffect(()=> {
         window.addEventListener('scroll', handleOnScroll());
@@ -80,7 +85,7 @@ const Navbar = ({onClick}) => {
     }
     // for logging in.
     const login = async () => {
-        
+
     }
 
     return (
@@ -94,7 +99,7 @@ const Navbar = ({onClick}) => {
                     <ul className={NavbarCSS.navMainUl}>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
                         {!authState.authStatus ? 
-                            (<><li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/login"  activeClassName={NavbarCSS.active}>   LOGIN </NavLink> </li>
+                            (<><li className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline} ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  LOGIN </li>
                             <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li> </>) 
                             : 
                             (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>

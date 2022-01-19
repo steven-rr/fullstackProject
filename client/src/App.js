@@ -1,3 +1,4 @@
+import AppCSS from "./App.module.css"
 import './App.css';
 import Home from "./pages/Home"
 import Form from "./pages/Form"
@@ -30,7 +31,7 @@ function App() {
   }
 
   // keep track of auth state in the app.
-  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false });
+  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false});
 
   // check if the token is valid, if so, true. else. false.
   useEffect( async () => {
@@ -73,6 +74,8 @@ function App() {
               <Route path="/login" exact component = {Login} />
               <Route component={Page404} />
             </Switch>
+            <div className={`${AppCSS.translucentLayer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}></div>
+            <div className={`${AppCSS.loginContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}> <Login/> </div>
           </div>
         </Router>
       </AuthContext.Provider>
