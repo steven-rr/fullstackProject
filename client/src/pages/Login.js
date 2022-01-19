@@ -105,8 +105,11 @@ const Login = () => {
                                     setAuthState( currentAuthState =>{ 
                                         return {...currentAuthState, username: res.data.username, UserId: res.data.id, authStatus: true}
                                         }); // set auth state is true when logging in.
-
-                                    history.push("/")
+                                    
+                                    setAuthState( currentAuthState =>{ 
+                                        return {...currentAuthState, loginOn: false}
+                                        });
+                                    // history.push("/")
                                     console.log("updated auth state: " , authState)
 
                                 })
