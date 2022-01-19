@@ -107,7 +107,14 @@ const Home = () => {
                                         (<div>{value.locationName}</div>) 
                                     }
                                     <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
-                                    <div>{value.description} </div>
+                                    {
+                                        (value.mission_description)
+                                        ?
+                                        (<div>{value.mission_description} </div>)
+                                        :
+                                        ( (value.vehicle_description) ? (<div>{value.vehicle_description}</div>) : "")
+                                    }   
+                                    
                                     <div> {value.launchDate}</div>
                                     <div className={HomeCSS.buttnContainer}> 
                                         {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
@@ -131,7 +138,13 @@ const Home = () => {
                                     (<div>{value.locationName}</div>) 
                                 }
                                 <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
-                                <div>{value.description} </div>
+                                {
+                                    (value.mission_description)
+                                    ?
+                                    (<div>{value.mission_description} </div>)
+                                    :
+                                    ( (value.vehicle_description) ? (<div>{value.vehicle_description}</div>) : "")
+                                }   
                                 <div> {value.launchDate}</div>
                                 <div className={HomeCSS.buttnContainer}> 
                                     {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
@@ -160,13 +173,44 @@ const Home = () => {
                                     {
                                         (value.locationName=="Unknown Location" ) 
                                         ?
-                                        ( (value.countryCode != "UNK") ? (<div>{value.countryCode}</div>) : "")
+                                        ( (value.countryCode != "UNK") ? (<div className={HomeCSS.locationNameStyle}>{value.countryCode}</div>) : "")
                                         :
-                                        (<div>{value.locationName}</div>) 
+                                        (<div className={HomeCSS.locationNameStyle}>{value.locationName}</div>) 
                                     }
-                                    <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
-                                    <div>{value.description} </div>
-                                    <div> {`${timeLeft.daysLeft} days : ${timeLeft.hoursLeft} hours : ${timeLeft.minutesLeft} minutes : ${timeLeft.secondsLeft} seconds`} </div>
+                                    <div className={` ${HomeCSS.padNameStyle} ${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
+                                    {
+                                        (value.mission_description)
+                                        ?
+                                        (<div className={HomeCSS.descriptionStyle}>{value.mission_description} </div>)
+                                        :
+                                        ( (value.vehicle_description) ? (<div className={HomeCSS.descriptionStyle}>{value.vehicle_description}</div>) : "")
+                                    }   
+                                    <div className={HomeCSS.timeLeftStyle2}>  
+                                       <div> T-</div>
+                                        <div className={HomeCSS.timeElementClass}> 
+                                            <div> {timeLeft.daysLeft}</div>
+                                            <div className={HomeCSS.subtitleClass}> Days </div>
+                                        </div>
+                                        <div className={HomeCSS.timeElementClass}> : </div>
+                                        <div className={HomeCSS.timeElementClass}> 
+                                            <div> {timeLeft.hoursLeft}</div>
+                                            <div className={HomeCSS.subtitleClass}> Hours </div>
+                                        </div>
+                                        <div className={HomeCSS.timeElementClass}> : </div>
+
+                                        <div className={HomeCSS.timeElementClass}> 
+                                            <div> {timeLeft.minutesLeft}</div>
+                                            <div className={HomeCSS.subtitleClass}> Mins </div>
+                                        </div>
+                                        <div className={HomeCSS.timeElementClass}> : </div>
+
+                                        <div className={HomeCSS.timeElementClass}> 
+                                            <div> {timeLeft.secondsLeft}</div>
+                                            <div className={HomeCSS.subtitleClass}> Secs </div>
+                                        </div>
+                                    </div>
+                                    
+
                                     <div> {value.launchDate}</div>
                                     <div className={HomeCSS.buttnContainer}> 
                                         {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
@@ -189,7 +233,13 @@ const Home = () => {
                                     (<div>{value.locationName}</div>) 
                                 }
                                 <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
-                                <div>{value.description} </div>
+                                {
+                                    (value.mission_description)
+                                    ?
+                                    (<div>{value.mission_description} </div>)
+                                    :
+                                    ( (value.vehicle_description) ? (<div>{value.vehicle_description}</div>) : "")
+                                }   
                                 <div> {value.launchDate}</div>
                                 <div className={HomeCSS.buttnContainer}> 
                                     {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}  
