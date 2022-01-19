@@ -49,20 +49,37 @@ const Home = () => {
         const secondsInAnHour = 60*60
         const secondsInAMinute = 60
         // calc days difference        
-        const daysLeft = Math.floor(delta/secondsInADay)
+        var daysLeft = Math.floor(delta/secondsInADay)
         delta = delta - daysLeft*secondsInADay 
 
         // calc hours difference
-        const hoursLeft= Math.floor(delta/secondsInAnHour)
+        var hoursLeft= Math.floor(delta/secondsInAnHour)
         delta = delta - hoursLeft*secondsInAnHour
 
         // calc minutes difference
-        const minutesLeft = Math.floor(delta/secondsInAMinute)
+        var minutesLeft = Math.floor(delta/secondsInAMinute)
         delta = delta - minutesLeft*secondsInAMinute
 
         // calc seconds difference
-        const secondsLeft = Math.floor(delta)
+        var secondsLeft = Math.floor(delta)
 
+        // parse for user-friendly output: 
+        if(daysLeft< 10)
+        {
+            daysLeft = "0" + daysLeft.toString()
+        }
+        if(hoursLeft < 10)
+        {
+            hoursLeft="0" + hoursLeft.toString()
+        }
+        if(minutesLeft < 10)
+        {
+            minutesLeft= "0" + minutesLeft.toString()
+        }
+        if(secondsLeft<10)
+        {
+            secondsLeft="0" + secondsLeft.toString()
+        }
         const timeLeft ={daysLeft: daysLeft, hoursLeft: hoursLeft, minutesLeft: minutesLeft, secondsLeft: secondsLeft}
         return timeLeft
     }
@@ -149,7 +166,7 @@ const Home = () => {
                                     }
                                     <div className={`${ (value.padName == "Unknown Pad") ? HomeCSS.deactivate: ""}`}>{value.padName}</div>
                                     <div>{value.description} </div>
-                                    <div> {`${timeLeft.daysLeft} : ${timeLeft.hoursLeft} : ${timeLeft.minutesLeft} : ${timeLeft.secondsLeft}`} </div>
+                                    <div> {`${timeLeft.daysLeft} days : ${timeLeft.hoursLeft} hours : ${timeLeft.minutesLeft} minutes : ${timeLeft.secondsLeft} seconds`} </div>
                                     <div> {value.launchDate}</div>
                                     <div className={HomeCSS.buttnContainer}> 
                                         {(value.vidURL == null) ? "":(<a className={HomeCSS.buttonClass} href ={value.vidURL}> Watch Video</a> )}
