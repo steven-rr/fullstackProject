@@ -14,32 +14,17 @@
 }
 
 
-
-.titleStyle
-{
-    font-size: 30px;
-}
-.textStyle
-{   
-    display: block;
-    padding-top: 50px;
-    color: #fff;
-    font-size: 50px;
-    
-}
-.buttnContainer
+.textContainer
 {
     display: flex;
-    color: #fff;
-    width: 60%;
-    height: 100px;
-    padding-bottom: 50px;
-    padding-left: 20%;
-    padding-right: 20%;
-
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     justify-content: center;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .launchItemContainer
 {
@@ -47,9 +32,11 @@
     color: #fff;
     display: flex;
     flex-direction: row;
-    height: 600px;
-    margin-right: 15%;
-    margin-left: 15%;
+    max-width: 1300px;
+    margin-right: 10%;
+    margin-left: 10%;
+    background-color: rgb(40, 40, 40);
+
 }
 .imgContainer
 {
@@ -60,7 +47,65 @@
     height: auto;
     object-fit: cover;
 }
+.titleStyle
+{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+.textStyle
+{   
+    display: block;
+    padding-top: 50px;
+    color: #fff;
+    font-size: 50px;
+    
+}
+.locationNameStyle
+{
+    margin-bottom: 10px;
+}
+.padNameStyle
+{
+    margin-bottom: 20px;
+}
+.descriptionStyle
+{
+    margin-bottom: 20px;
+}
+.timeLeftStyle
+{
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+.timeLeftStyle2
+{
+    margin-bottom: 10px;
+    font-size: 30px;
+    display:flex;
+    flex-direction: row;
 
+}
+.timeElementClass
+{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+.subtitleClass
+{
+    font-size: 15px;
+}
+.buttnContainer
+{
+    display: flex;
+    color: #fff;
+    width: 60%;
+    height: 100px;
+    
+
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+}
 
 .buttonClass
 {
@@ -84,13 +129,7 @@
 	transition: all 0.1s ease-out;
 }
 
-.textContainer
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
+
 
 
 @media screen and (max-width: 1000px)

@@ -12,7 +12,8 @@ const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrott
 const parseLaunchData = async(data_in) => {
     let launch_id;
     let title;
-    let description;
+    let vehicle_description;
+    let mission_description;
     let imgURL;
     let vidURL;
     let launchDate;
@@ -20,20 +21,22 @@ const parseLaunchData = async(data_in) => {
     let locationName; 
     let countryCode;
     
-    try{ launch_id       =  await data_in.id;                                } catch {launch_id =null}
-    try{ title           =  await data_in.name;                              } catch {title =null}
-    try{ description     =  await data_in.rocket.configuration.description;  } catch {description =null}
-    try{ imgURL          =  await data_in.image;                             } catch {imgURL =null}
-    try{ vidURL          =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
-    try{ launchDate      =  await new Date(data_in.net);                     } catch {launchDate =null}
-    try{ padName         =  await data_in.pad.name;                          } catch {padName =null}
-    try{ locationName    =  await data_in.pad.location.name;                 } catch {locationName =null}
-    try{ countryCode     =  await data_in.pad.location.country_code;         } catch {countryCode =null}
+    try{ launch_id             =  await data_in.id;                                } catch {launch_id =null}
+    try{ title                 =  await data_in.name;                              } catch {title =null}
+    try{ vehicle_description   =  await data_in.rocket.configuration.description;  } catch {vehicle_description =null}
+    try{ mission_description   =  await data_in.mission.description;               } catch {mission_description =null}
+    try{ imgURL                =  await data_in.image;                             } catch {imgURL =null}
+    try{ vidURL                =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
+    try{ launchDate            =  await new Date(data_in.net);                     } catch {launchDate =null}
+    try{ padName               =  await data_in.pad.name;                          } catch {padName =null}
+    try{ locationName          =  await data_in.pad.location.name;                 } catch {locationName =null}
+    try{ countryCode           =  await data_in.pad.location.country_code;         } catch {countryCode =null}
 
     let newLaunch = {   
         launch_id: launch_id,
         title: title,
-        description: description,
+        vehicle_description: vehicle_description,
+        mission_description: mission_description,
         imgURL: imgURL,
         vidURL: vidURL,
         launchDate: launchDate,
@@ -66,7 +69,7 @@ const createNewPost = async( newLaunch) => {
     {
         const newPost = {
             title: "Discussion thread -- " + newLaunch.title,
-            contentText: newLaunch.description + " -- To Launch: " + newLaunch.launchDate,
+            contentText: newLaunch.mission_description + " -- To Launch: " + newLaunch.launchDate,
             username: "mod",
             launchId: newLaunch.launch_id
         };
