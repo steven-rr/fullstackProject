@@ -152,6 +152,13 @@ const Login = () => {
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("password", e.target.value);
     }
+    // handle clicking on the X button in login page
+    const handleLoginOff = () => {
+        console.log("click login OFF")
+        setAuthState( currentAuthState => {
+            return { ...currentAuthState, loginOn: false}
+        })
+    }
     // google oath:
     const handleGoogleLoginFailure = () => {
         console.log("google sign in was unsuccesful!");
@@ -180,6 +187,7 @@ const Login = () => {
     }
     return (
         <div className={LoginCSS.loginContainer}>
+             <button className={LoginCSS.buttonClass} onClick={() => handleLoginOff()} type = "button"> X </button>
             <div className={LoginCSS.textStyle}> Login to post! </div>
             <form className= {LoginCSS.formClass}>
                 <div className={LoginCSS.inputsClass}>
