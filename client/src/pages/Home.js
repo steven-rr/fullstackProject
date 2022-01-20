@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react' 
 import HomeCSS from "./Home.module.css"
 import Button from "../components/Button.js"
+import Footer from "../components/Footer"
 import axios from   "axios" 
 import {Link} from "react-router-dom"
 
@@ -292,6 +293,7 @@ const Home = () => {
                     }
                 })}
             </div>
+            <Footer/>
         </div>
     )
 }
