@@ -75,7 +75,9 @@ function App() {
               <Route component={Page404} />
             </Switch>
             <div className={`${AppCSS.translucentLayer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}></div>
-            <div className={`${AppCSS.loginContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}> <Login/> </div>
+            <div className={`${AppCSS.loginOuterContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}>
+              <div className={`${AppCSS.loginContainer} `}> <Login/> </div>
+            </div>
           </div>
         </Router>
       </AuthContext.Provider>

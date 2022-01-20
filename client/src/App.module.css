@@ -10,19 +10,27 @@
     z-index: 200;
     opacity: 0.5;
 }
+.loginOuterContainer
+{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+}
 .loginContainer
 {   
-    position: fixed;
     opacity: 1.0;
     display: block;
     color: white;
     font-family: Poppins;
-    top: 100px;
-    z-index: 300;
     background-color: rgb(29, 29, 29);
-    height: 80%;
-    width: 80%;
-    
+    height: 600px;
+    width: 900px;    
 }
 .loginDeactivate
 {
