@@ -38,6 +38,11 @@
     border-radius: 5px;
 
 }
+.postContainer:hover
+{
+    border:  2px solid rgb(200,200,200);
+
+}
 .postLinkClass
 {
     text-decoration: none;
@@ -45,6 +50,7 @@
     color: #fff;
     text-align: left;
     margin-left: 50px;
+    margin-right: 10px;
 }
 .postTitle
 {
