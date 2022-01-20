@@ -126,24 +126,24 @@ const Home = () => {
                                     <div className={HomeCSS.timeLeftStyle2}>  
                                        <div> T+</div>
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.daysLeft}</div>
+                                            <div> {(timeLeft.daysLeft) ? timeLeft.daysLeft : "--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Days </div>
                                         </div>
                                         <div className={HomeCSS.timeElementClass}> : </div>
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.hoursLeft}</div>
+                                            <div> {(timeLeft.hoursLeft) ? timeLeft.hoursLeft:"--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Hours </div>
                                         </div>
                                         <div className={HomeCSS.timeElementClass}> : </div>
 
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.minutesLeft}</div>
+                                            <div> {(timeLeft.minutesLeft) ? timeLeft.minutesLeft : "--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Mins </div>
                                         </div>
                                         <div className={HomeCSS.timeElementClass}> : </div>
 
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.secondsLeft}</div>
+                                            <div> {(timeLeft.secondsLeft) ? timeLeft.secondsLeft : "--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Secs </div>
                                         </div>
                                     </div>
@@ -228,24 +228,24 @@ const Home = () => {
                                     <div className={HomeCSS.timeLeftStyle2}>  
                                        <div> T-</div>
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.daysLeft}</div>
+                                            <div> {(timeLeft.daysLeft) ? timeLeft.daysLeft : "--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Days </div>
                                         </div>
                                         <div className={HomeCSS.timeElementClass}> : </div>
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.hoursLeft}</div>
+                                            <div> {(timeLeft.hoursLeft) ? timeLeft.hoursLeft:"--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Hours </div>
                                         </div>
                                         <div className={HomeCSS.timeElementClass}> : </div>
 
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.minutesLeft}</div>
+                                            <div> {(timeLeft.minutesLeft) ? timeLeft.minutesLeft : "--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Mins </div>
                                         </div>
                                         <div className={HomeCSS.timeElementClass}> : </div>
 
                                         <div className={HomeCSS.timeElementClass}> 
-                                            <div> {timeLeft.secondsLeft}</div>
+                                            <div> {(timeLeft.secondsLeft) ? timeLeft.secondsLeft : "--"}</div>
                                             <div className={HomeCSS.subtitleClass}> Secs </div>
                                         </div>
                                     </div>
