@@ -104,6 +104,7 @@ const Home = () => {
                                 <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                                 <div className={HomeCSS.textContainer}>
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                    <div className={HomeCSS.statusStyle}> {value.status} </div>
                                     {
                                         (value.locationName=="Unknown Location" ) 
                                         ?
@@ -159,6 +160,7 @@ const Home = () => {
                             <div className={HomeCSS.launchItemContainer} key = {key}> 
                                 <div className={HomeCSS.textContainer}>
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                    <div className={HomeCSS.statusStyle}> {value.status} </div>
                                     {
                                         (value.locationName=="Unknown Location" ) 
                                         ?
@@ -199,7 +201,10 @@ const Home = () => {
                             <div className={HomeCSS.launchItemContainer} key = {key}> 
                                 <img className={HomeCSS.imgContainer} src={value.imgURL}/>
                                 <div className={HomeCSS.textContainer}>
-                                    <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                    <div className={HomeCSS.titleContainer}> 
+                                        <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                        <div className={HomeCSS.statusStyle}> {value.status} </div>
+                                    </div> 
                                     {
                                         (value.locationName=="Unknown Location" ) 
                                         ?
@@ -256,6 +261,7 @@ const Home = () => {
                             <div className={HomeCSS.launchItemContainer} key = {key}>
                                 <div className={HomeCSS.textContainer}>
                                     <div className={HomeCSS.titleStyle}>{value.title} </div>
+                                    <div className={HomeCSS.statusStyle}> {value.status} </div>
                                     {
                                         (value.locationName=="Unknown Location" ) 
                                         ?

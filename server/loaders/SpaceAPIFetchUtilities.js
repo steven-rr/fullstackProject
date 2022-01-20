@@ -14,6 +14,7 @@ const parseLaunchData = async(data_in) => {
     let title;
     let vehicle_description;
     let mission_description;
+    let status;
     let imgURL;
     let vidURL;
     let launchDate;
@@ -25,6 +26,7 @@ const parseLaunchData = async(data_in) => {
     try{ title                 =  await data_in.name;                              } catch {title =null}
     try{ vehicle_description   =  await data_in.rocket.configuration.description;  } catch {vehicle_description =null}
     try{ mission_description   =  await data_in.mission.description;               } catch {mission_description =null}
+    try{ status                =  await data_in.status.abbrev;                     } catch {status =null}
     try{ imgURL                =  await data_in.image;                             } catch {imgURL =null}
     try{ vidURL                =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
     try{ launchDate            =  await new Date(data_in.net);                     } catch {launchDate =null}
@@ -37,6 +39,7 @@ const parseLaunchData = async(data_in) => {
         title: title,
         vehicle_description: vehicle_description,
         mission_description: mission_description,
+        status: status,
         imgURL: imgURL,
         vidURL: vidURL,
         launchDate: launchDate,
