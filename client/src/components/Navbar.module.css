@@ -1,8 +1,8 @@
 .containerMain
 {
 	position: fixed;
-    /* background-color: rgb(32,32,32); */
-	background-color: rgb(0,0,0);
+    background-color: rgb(25,25,25);
+	/* background-color: rgb(0,0,0); */
 	width: 100vw;
 	height: 70px;
     top: 0px;
@@ -13,7 +13,7 @@
     z-index: 100;
 	overflow-x: hidden;	
 	overflow-y:hidden;
-	border-bottom: 2px solid rgb(32,32,32); 
+	border-bottom: 2px solid rgb(50,50,50); 
 	
 
 
@@ -89,8 +89,8 @@
 	list-style-type: none;
 	align-items: center;
 	justify-content: center;
-
 }
+
 
 .navMainLi
 {
@@ -102,6 +102,8 @@
 	align-items:center;
 	margin: 0;
 	padding: 0;
+	text-decoration: none;
+
 }
 .navMainAnchor
 {
@@ -113,6 +115,9 @@
 	padding-bottom: 5px;
 	padding-top: 5px;
 	text-transform:uppercase;
+	text-decoration: none;
+	color: white;
+
 }
 /* old way of doing border */
 
@@ -260,8 +265,8 @@ width: 100%;
 	.containerMain.open
 	{
 		position: fixed;
-		/* background-color: rgb(32,32,32); */
-		background-color: rgb(0,0,0);
+		background-color: rgb(32,32,32);
+		/* background-color: rgb(0,0,0); */
 		width: 100vw;
 		height: 310px;
 		display:flex;

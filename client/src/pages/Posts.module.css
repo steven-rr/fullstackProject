@@ -3,6 +3,11 @@
     margin-top: 70px;
 }
 
+.createPostClass
+{
+    margin-top: 50px !important;
+    margin-bottom: 20px !important; 
+}
 .textStyle
 {   
     display: block;
@@ -24,13 +29,13 @@
     position: relative;
     display:block;
     margin-top: 20px;
-    border: 1px solid #000;
-    width: 70%;
-    height: 150px;
+    border:  2px solid rgb(80,80,80);
+    width: 1050px;
     cursor: pointer;
     text-decoration: none;
     color: #fff;
-
+    background-color: rgb(25, 25, 25);
+    border-radius: 5px;
 
 }
 .postLinkClass
@@ -38,27 +43,51 @@
     text-decoration: none;
     display:block;
     color: #fff;
-    width: 100%;
-    height: 100%;
-
+    text-align: left;
+    margin-left: 50px;
 }
 .postTitle
 {
     font-size: 25px;
+    margin-top: 20px;
+    font-weight: bold;
 }
 
 .postContent
 {
+    margin-top: 20px;
     font-size: 15px;
 }
 
-.buttonClass
+.postAuthor
 {
-    z-index: 9001;
+    margin-top: 5px;
+    color: rgb(80,80,80)
 }
+
 .buttonListClass
 {
-    position: absolute;
-    bottom: 1px;
-    left: 100px;
+}
+.buttonClass
+{
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 18px 40px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 15px;
+	font-family: Poppins;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+    z-index: 9001;
+
+}
+.buttonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
 }

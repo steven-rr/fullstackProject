@@ -97,7 +97,6 @@ const Home = () => {
                     const options = {timezone: 'EST'}
                     const currDateStr = currDate.toLocaleDateString('en-US' ,options) + ", " + currDate.toLocaleTimeString('en-US', options) + " EST"
 
-
                     if(value.imgURL)
                     {
                         return (

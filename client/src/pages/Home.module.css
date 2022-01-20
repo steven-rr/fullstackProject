@@ -6,7 +6,7 @@
 }
 .homeContainer
 {
-    background-color: rgb(29, 29, 29);
+    background-color:  black;
     height: 100%;
     margin-top: 70px;
     position: relative ; 
@@ -34,8 +34,9 @@
     display: flex;
     flex-direction: row;
     width: 1050px;
-    background-color: rgb(40, 40, 40);
-
+    background-color: rgb(25, 25, 25);
+    border-radius: 5px;
+    border: 2px solid rgb(80,80,80);
 }
 .imgContainer
 {
@@ -44,6 +45,9 @@
     width: auto;
     height: auto;
     object-fit: cover;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
 }
 .titleContainer
 {
@@ -106,6 +110,7 @@
 .descriptionStyle
 {
     margin-bottom: 20px;
+    text-align: left;
 }
 .timeLeftStyle
 {
