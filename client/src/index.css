@@ -1,7 +1,8 @@
 html
 {
   /* #333 is pretty good bg color. */
-	background-color: rgb(29,29,29); 
+	/* background-color: rgb(29,29,29);  */
+  background-color: black;
 	overflow-x: hidden;	
 	-webkit-text-size-adjust: 100%;
 }

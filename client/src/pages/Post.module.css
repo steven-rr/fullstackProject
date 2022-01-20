@@ -12,10 +12,12 @@
 {
     margin-top : 10px;
     display:block;
-    border: 1px solid rgb(117, 35, 35);
+    border:  2px solid rgb(80,80,80);
     height: 400px;
-    width: 80%;
+    width: 1050px;
     padding-bottom: 10px;
+    background-color: rgb(25, 25, 25);
+    text-align: left;
 }
 
 .titleStyle
