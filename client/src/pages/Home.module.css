@@ -10,6 +10,7 @@
     height: 100%;
     margin-top: 70px;
     position: relative ; 
+    padding-bottom: 70px;
     
 }
 
@@ -33,7 +34,6 @@
     color: #fff;
     display: flex;
     flex-direction: row;
-   
     width: 1050px;
     background-color: rgb(40, 40, 40);
 
