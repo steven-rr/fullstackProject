@@ -10,6 +10,10 @@ const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrott
 // This is called after the Individual API call is made. The purpose of this is to parse out launch data from the api call and return a newLaunch object. 
 // "data_in" has the response from the api call.
 const parseLaunchData = async(data_in) => {
+
+   
+
+    // this is definitely a new launch, proceed.. 
     let launch_id;
     let title;
     let vehicle_description;
@@ -58,6 +62,8 @@ const parseLaunchData = async(data_in) => {
     {
         newLaunch.postId = foundPost.id;
     }
+
+    
     return newLaunch;
 }
 // create new post if it doesn't exist yet.
@@ -111,9 +117,22 @@ const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =
                         .json()
                         .then( async (data) => {
                             console.log("INSERTTTTT... NEW.... LAUNCHES........")
-                            let newLaunch = await parseLaunchData(data);
-                            newLaunch = await createNewPost(newLaunch);
-                            await Launches.create(newLaunch);
+                            
+                            // find if launch already exists with given launch Id. if it does, don't proceed.
+                            const foundLaunch = await Launches.findOne({
+                                where: {launch_id: data.id}
+                            })
+                            // if launch not found, this is definitely a new launch. proceed. 
+                            if (!foundLaunch)
+                            {
+                                let newLaunch = await parseLaunchData(data);
+                                newLaunch = await createNewPost(newLaunch);
+                                await Launches.create(newLaunch);
+                            }
+                            
+                            
+                            
+                            
                         })
 
             // increment API counter.
