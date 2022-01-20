@@ -17,6 +17,7 @@
 .textContainer
 {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -42,15 +43,28 @@
 {
     display: block;
     max-width: 250px; 
-    max-height: 500px;
     width: auto;
     height: auto;
     object-fit: cover;
 }
+.titleContainer
+{
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 .titleStyle
 {
     font-size: 30px;
-    margin-bottom: 20px;
+    
+}
+.statusStyle
+{
+    position: absolute;
+    right:20px;
 }
 .textStyle
 {   
