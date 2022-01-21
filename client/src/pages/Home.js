@@ -33,7 +33,6 @@ const Home = () => {
                         .get("/api/launches/upcoming")
                         .then(  (response) =>{
                             setLaunchDataUpcoming(response.data);
-                            console.log("launch upcoming: ", response.data)
                         })
                         .catch( (err) => {
                             console.log("ERROR in Home.js: ", err)
@@ -45,7 +44,6 @@ const Home = () => {
                 await axios
                         .get("/api/launches/uniqueCountries")
                         .then( (response) => {
-                            console.log("unique countries upcoming: ", response.data)
                             let countryCodeArray = [];
                             
                             for (var i = 0; i < response.data.length; i++) 
@@ -82,13 +80,11 @@ const Home = () => {
         {
             launchDataPrevious.sort((a,b)=>a.launchSeconds - b.launchSeconds)
             launchDataUpcoming.sort((a,b)=>b.launchSeconds - a.launchSeconds)
-            console.log("sort from today!")
         }
         else
         {
             launchDataPrevious.sort((a,b)=>b.launchSeconds - a.launchSeconds)
             launchDataUpcoming.sort((a,b)=>a.launchSeconds - b.launchSeconds)
-            console.log("sort to today!")
 
         }
         setSortFromTodayFlag(!sortFromTodayFlag)
@@ -101,7 +97,6 @@ const Home = () => {
         {
             launchDataPrevious.sort((a,b)=> b.likeCounter - a.likeCounter)
             launchDataUpcoming.sort((a,b)=> b.likeCounter - a.likeCounter)
-            console.log("ON!", sortByLikesFlag)
         }
         else
         {
@@ -219,7 +214,7 @@ const Home = () => {
                 <div className={`${HomeCSS.buttnBarButtn} ${sortFromTodayFlag ? "": HomeCSS.buttnBarButtn_active}`} onClick={toggleSortFromTodayFlag} > Reverse Sort </div>
                 <div className={`${HomeCSS.buttnBarButtn} ${sortByLikesFlag ? HomeCSS.buttnBarButtn_active:"" }`} onClick={toggleSortByLikesFlag}> Sort by Likes </div>
             </div>
-            <div className={`${futureFlag ? HomeCSS.deactivate: ''}`}> 
+            <div className={`${futureFlag ? HomeCSS.deactivate: HomeCSS.launchItemsContainer}`}> 
                 {launchDataPrevious.map((value, key) =>{
                     if(value.countryCode == currentAbbrev || currentAbbrev == "Everywhere")
                     {
@@ -325,7 +320,7 @@ const Home = () => {
                     
                 })}
             </div> 
-            <div className={`${futureFlag ? '': HomeCSS.deactivate}`}> 
+            <div className={`${futureFlag ? HomeCSS.launchItemsContainer: HomeCSS.deactivate}`}> 
                 {launchDataUpcoming.map((value, key) =>{
                     if(value.countryCode == currentAbbrev || currentAbbrev == "Everywhere") 
                     {
