@@ -41,6 +41,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true
       },
+      launchSeconds:
+      {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
       padName:
       {
         type: DataTypes.TEXT,
@@ -60,6 +65,12 @@ module.exports = (sequelize, DataTypes) => {
       {
         type: DataTypes.INTEGER,
         allowNull: true
+      },
+      likeCounter:
+      {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
       }
     });
   

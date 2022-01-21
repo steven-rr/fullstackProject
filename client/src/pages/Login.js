@@ -190,7 +190,7 @@ const Login = () => {
     }
     return (
         <div className={LoginCSS.loginContainer}>
-             <button className={LoginCSS.buttonClass} onClick={() => handleLoginOff()} type = "button"> X </button>
+            <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> X </button>
             <div className={LoginCSS.textStyle}> Login to post! </div>
             <form className= {LoginCSS.formClass}>
                 <div className={LoginCSS.inputsClass}>

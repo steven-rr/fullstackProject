@@ -7,6 +7,7 @@ const path = require('path');
 const cookieParser =require('cookie-parser')
 const SpaceAPIFetch = require('./loaders/SpaceAPIFetch')
 const noCache = require('./middleware/NoCache')
+const updateUniqueCountries = require('./helpers/updateUniqueCountries')
 
 const APICountersReset = require('./loaders/SpaceAPICountersHelpers/APICountersReset')
 require('dotenv').config();
@@ -28,7 +29,7 @@ cron
         console.log('cron reset hit!');
         APICountersReset();
     })
-// every 15 minutes, pull from external API and update launches.
+// every 15 minutes, pull from external API and update launches. 
 cron
     .schedule('*/15 * * * *', () =>{
         console.log('cron space api fetch hit!');
@@ -36,11 +37,20 @@ cron
     })
 // // --------------------- FETCH LAUNCH DATA --------------------
 
+// // --------------------- UPDATE UNIQUE COUNTRIES --------------------
+// every 15 minutes , update unique countries.
+// cron
+//     .schedule('*/15 * * * *', () =>{
+//         console.log('cron to update unique countries!');
+//         updateUniqueCountries();
+//     })
+// // --------------------- UPDATE UNIQUE COUNTRIES --------------------
+
 // instantiate server 
 const app = express()
 
 /// run on port specified, else run on 3001.
-const PORT = process.env.PORT || 3001 
+const PORT = process.env.PORT || 3001
 
 // specify host for heroku deployment
 const host = '0.0.0.0'
@@ -92,6 +102,7 @@ if(process.env.NODE_ENV === 'production') {
 db.sequelize
     .sync() 
     .then ( async () => {
+            await updateUniqueCountries();
             await SpaceAPIFetch(); 
             app.listen(PORT, host, () => console.log(`listening at ${PORT}`))
     })

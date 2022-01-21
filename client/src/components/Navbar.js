@@ -92,15 +92,15 @@ const Navbar = ({onClick}) => {
         <div className={ `${NavbarCSS.containerMain}` }> 
             <div className={NavbarCSS.navLinkItems}>
                 <div className={NavbarCSS.navHome}>
-                    <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} activeClassName={NavbarCSS.active}> HOME</NavLink> 
+                    <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} }`} > HOME</NavLink> 
                 </div>
 
                 <div className={NavbarCSS.navMain}>
                     <ul className={NavbarCSS.navMainUl}>
-                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/blog"   activeClassName={NavbarCSS.active}> POSTS </NavLink> </li>
+                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} `} to="/blog"   > POSTS </NavLink> </li>
                         {!authState.authStatus ? 
-                            (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`}>LOGIN</div>  </li>
-                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.underline}`} to="/form"   activeClassName={NavbarCSS.active}>  SIGNUP</NavLink> </li> </>) 
+                            (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} `}>LOGIN</div>  </li>
+                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} `} to="/form"   >  SIGNUP</NavLink> </li> </>) 
                             : 
                             (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>
                             <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button"> LOGOUT </button> </li></>)}

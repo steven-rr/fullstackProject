@@ -1,10 +1,10 @@
 const {Op} = require("sequelize")
 const {APICounters}= require('../models');
-const {Posts}= require('../models');
+const {Posts, UniqueCountries}= require('../models');
 const fetch = require("node-fetch")
 const APICountersCheck = require("./SpaceAPICountersHelpers/APICountersCheck.js")
 const APICountersIncrement = require("./SpaceAPICountersHelpers/APICountersIncrement.js")
-const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js")
+const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js");
 
 
 // This is called after the Individual API call is made. The purpose of this is to parse out launch data from the api call and return a newLaunch object. 
@@ -22,9 +22,11 @@ const parseLaunchData = async(data_in) => {
     let imgURL;
     let vidURL;
     let launchDate;
+    let launchSeconds; 
     let padName;
     let locationName; 
     let countryCode;
+    
     
     try{ launch_id             =  await data_in.id;                                } catch {launch_id =null}
     try{ title                 =  await data_in.name;                              } catch {title =null}
@@ -34,6 +36,7 @@ const parseLaunchData = async(data_in) => {
     try{ imgURL                =  await data_in.image;                             } catch {imgURL =null}
     try{ vidURL                =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
     try{ launchDate            =  await new Date(data_in.net);                     } catch {launchDate =null}
+    try{ launchSeconds         =  launchDate.getTime()/1000                      } catch {launchSeconds =null}
     try{ padName               =  await data_in.pad.name;                          } catch {padName =null}
     try{ locationName          =  await data_in.pad.location.name;                 } catch {locationName =null}
     try{ countryCode           =  await data_in.pad.location.country_code;         } catch {countryCode =null}
@@ -47,16 +50,16 @@ const parseLaunchData = async(data_in) => {
         imgURL: imgURL,
         vidURL: vidURL,
         launchDate: launchDate,
+        launchSeconds: launchSeconds,
         padName: padName,
         locationName: locationName,
         countryCode: countryCode
     };
-
+    
     // find if a post with the launch Id already exists. 
     const foundPost = await Posts.findOne({
         where: {launchId: newLaunch.launch_id}
     })  
-
     // if it does, add the post ID.
     if(foundPost)
     {
@@ -64,6 +67,7 @@ const parseLaunchData = async(data_in) => {
     }
 
     
+
     return newLaunch;
 }
 // create new post if it doesn't exist yet.

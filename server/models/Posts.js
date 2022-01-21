@@ -30,7 +30,14 @@ module.exports = (sequelize, DataTypes) => {
       UserId: {
          type: DataTypes.INTEGER,
          allowNull: true
+       },
+       likeCounter:
+       {
+         type: DataTypes.INTEGER,
+         allowNull: true,
+         defaultValue: 0
        }
+       
     });
     
     return Posts;
