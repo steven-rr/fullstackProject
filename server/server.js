@@ -39,11 +39,11 @@ cron
 
 // // --------------------- UPDATE UNIQUE COUNTRIES --------------------
 // every 15 minutes , update unique countries.
-// cron
-//     .schedule('*/15 * * * *', () =>{
-//         console.log('cron to update unique countries!');
-//         updateUniqueCountries();
-//     })
+cron
+    .schedule('*/15 * * * *', () =>{
+        console.log('cron to update unique countries!');
+        updateUniqueCountries();
+    })
 // // --------------------- UPDATE UNIQUE COUNTRIES --------------------
 
 // instantiate server 
