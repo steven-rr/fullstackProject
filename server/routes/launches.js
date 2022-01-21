@@ -8,7 +8,6 @@ const {UniqueCountries} = require('../models');
 
 // get launch info for display. 
 router.get('/previous', async (request, response) => {
-    console.log("GOT AN API GET REQUEST!!!")
     const launchData = await LaunchesPrevious.findAll({
                                                 order: [['id','DESC']]})
     response.json(launchData)
@@ -16,7 +15,6 @@ router.get('/previous', async (request, response) => {
 
 // get launch info for display. 
 router.get('/upcoming', async (request, response) => {
-    console.log("GOT AN API GET REQUEST!!!")
     const launchData = await LaunchesUpcoming.findAll()
 
     response.json(launchData)
