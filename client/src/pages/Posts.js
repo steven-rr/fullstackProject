@@ -138,9 +138,10 @@ const Posts = () => {
     }
     return (
         <div className={PostsCSS.postsPageContainer}>
-            {authState.authStatus ? (<><Link className={`${PostsCSS.buttonClass} ${PostsCSS.createPostClass}`} to="/createpost">Create Post</Link> </>) : <Link to="/login">Create Post</Link>}
+            {authState.authStatus ? (<><Link to="/createpost" className={`${PostsCSS.buttonClass} ${PostsCSS.createPostClass}`} >Create Post</Link> </>) : <Link to="/login" className={`${PostsCSS.buttonClass} ${PostsCSS.createPostClass}`} >Create Post</Link>}
             
             <div className={PostsCSS.postsBodyContainer}>
+                {console.log("POSTDATA: ", postData)}
                 {postData.map((value, key) =>{
                     let str = value.createdAt;
 

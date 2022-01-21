@@ -1,10 +1,8 @@
 
 .loginContainer
 {
+    position: relative;
     background-color: rgb(29, 29, 29);
-    height: 80%;
-    width: 80%;
-    margin-top: 70px;
 }
 
 .textStyle
@@ -47,6 +45,30 @@
     left: 350px;
 
 }
+.XButtonClass
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 1px 3px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 18px;
+	font-family: Arial;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+}
+.XButtonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
+
 .buttonClass
 {
 	background-color: Transparent;
@@ -55,10 +77,7 @@
 	padding: 18px 40px;
 	text-align: center;
 	text-decoration: none;
-	/* display: inline-block; */
-    /* position: fixed; */
-    /* top: 320px; */
-    /* left: 350px; */
+	
 	font-size: 15px;
 	font-family: Poppins;
 	letter-spacing: .10rem;

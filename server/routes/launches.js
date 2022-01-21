@@ -3,6 +3,7 @@ const fetch = require("node-fetch")
 const router = express.Router();
 const {LaunchesPrevious}= require('../models');
 const {LaunchesUpcoming}= require('../models');
+const {UniqueCountries} = require('../models');
 
 
 // get launch info for display. 
@@ -17,10 +18,15 @@ router.get('/previous', async (request, response) => {
 router.get('/upcoming', async (request, response) => {
     console.log("GOT AN API GET REQUEST!!!")
     const launchData = await LaunchesUpcoming.findAll()
+
     response.json(launchData)
 })
 
-
+// get unique country info for display on dropdown.
+router.get('/uniqueCountries', async(request, response) => {
+    const uniqueCountryData = await UniqueCountries.findAll()
+    response.json(uniqueCountryData)
+})
 module.exports = router;
 
 
