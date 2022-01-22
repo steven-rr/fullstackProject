@@ -36,7 +36,26 @@ const Home = () => {
                         .then(  (response) =>{
                             
                             setLaunchData( (prevState) => {
-                                return[...prevState, ...response.data]
+
+                                let stateSorted = [...prevState, ...response.data]
+                                stateSorted.sort( (a,b) => {
+                                    let todaySecs= (new Date())/1000
+                                    let deltaTimeB = Math.abs(b.launchSeconds - todaySecs)
+                                    let deltaTimeA = Math.abs(a.launchSeconds - todaySecs)
+                                    if(deltaTimeA > deltaTimeB)
+                                    {
+                                        return 1;
+                                    }
+                                    else if(deltaTimeA < deltaTimeB)
+                                    {
+                                        return -1;
+                                    } 
+                                    else
+                                    {   
+                                        return 0;
+                                    }
+                                })
+                                return stateSorted
                             })
                             
 
@@ -47,18 +66,39 @@ const Home = () => {
                 await axios 
                         .get("/api/launches/upcoming")
                         .then(  (response) =>{
-                            setLaunchData( (prevState) => {
-                                return[...prevState, ...response.data]
-                            })
 
+                            setLaunchData( (prevState) => {
+
+                                let stateSorted = [...prevState, ...response.data]
+                                stateSorted.sort( (a,b) => {
+                                    let todaySecs= (new Date())/1000
+                                    let deltaTimeB = Math.abs(b.launchSeconds - todaySecs)
+                                    let deltaTimeA = Math.abs(a.launchSeconds - todaySecs)
+                                    if(deltaTimeA > deltaTimeB)
+                                    {
+                                        return 1;
+                                    }
+                                    else if(deltaTimeA < deltaTimeB)
+                                    {
+                                        return -1;
+                                    } 
+                                    else
+                                    {   
+                                        return 0;
+                                    }
+                                })
+                                return stateSorted
+                            })                            
+                            
                             
                         })
                         .catch( (err) => {
                             console.log("ERROR in Home.js: ", err)
                         }) 
+                
                 console.log("launchDataGeneral!: " ,launchData)
-
                 console.log("ran first useeffect.")
+                
     }, []);
     useEffect( async () => {
                 await axios
@@ -118,6 +158,8 @@ const Home = () => {
                 }
             })
             setCurrentOrderingName("Recent")
+            console.log("1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
         }
         // distant
         else if (e.currentTarget.dataset.div_id == "2")
@@ -140,24 +182,32 @@ const Home = () => {
                 }
             })
             setCurrentOrderingName("Distant")
+            console.log("2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
         }
         // oldest 
         else if(e.currentTarget.dataset.div_id == "3")
         {
             launchData.sort( (a,b) => a.launchSeconds - b.launchSeconds) 
             setCurrentOrderingName("Oldest")
+            console.log("3!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
         }
         // newest
         else if(e.currentTarget.dataset.div_id == "4")
         {
             launchData.sort( (a,b) => b.launchSeconds - a.launchSeconds) 
             setCurrentOrderingName("Newest")
+            console.log("4!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
         }
         else if(e.currentTarget.dataset.div_id == "5")
         {
             launchData.sort( (a,b)=> b.likeCounter - a.likeCounter ) 
             setOrderingElementActive(e.currentTarget.dataset.div_id)
             setCurrentOrderingName("Top")
+            console.log("5!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
         }
             
     }
@@ -345,7 +395,7 @@ const Home = () => {
                         var timeLeft = calcDeltaTime(currDate)
                         const options = {timezone: 'EST'}
                         const currDateStr = currDate.toLocaleDateString('en-US' ,options) + ", " + currDate.toLocaleTimeString('en-US', options) + " EST"
-
+                        // if image is available, add it to the display. 
                         if(value.imgURL)
                         {
                             return (
@@ -405,6 +455,7 @@ const Home = () => {
                                 
                             )
                         }
+                        // assuming image is not available for display. 
                         else
                         {
                             return ( 
