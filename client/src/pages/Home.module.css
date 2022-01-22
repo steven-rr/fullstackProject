@@ -1,9 +1,6 @@
 
 
-.deactivate
-{
-    display:none;
-}
+
 .homeContainer
 {
     display: flex;
@@ -32,21 +29,27 @@
     flex-direction: row;
     align-items: left;
     justify-content: center;
-    background-color: rgb(25, 25, 25);
+    /* background-color: rgb(25, 25, 25); */
     border-radius: 5px;
-    border: 2px solid rgb(80,80,80);
+    /* border: 2px solid rgb(80,80,80); */
+    margin-bottom: 25px;
 
 }
 
 .buttnBarButtn
 {
-	background-color: Transparent;
-	border: 2px solid rgb(117, 35, 35);
+	/* background-color: Transparent; */
+	background-color: rgb(117,35,35);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* border: 2px solid rgb(117, 35, 35); */
 	color: white;
-	padding: 18px 40px;
+	padding: 8px 13px;
+    border-radius: 6px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 15px;
 	font-family: Poppins;
 	letter-spacing: .10rem;
@@ -57,17 +60,36 @@
 .buttnBarButtn:hover
 {
 	background-color: rgb(117,35,35);
+    /* background-color: rgb(80,80,80); */
+
 	transition: all 0.1s ease-out;
 }
 .buttnBarButtn_active
 {
     background-color: rgb(117,35,35);
+    /* background-color: rgb(80,80,80); */
+
 	transition: all 0.1s ease-out;
+}
+.buttnBar_text
+{
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.iconRotate
+{
+    margin-top:10px;
+    transform: rotate(90deg);
+    margin-left: 10px;
 }
 .locationButtnContainer
 {
     position: relative;
-    height: 100%;
+    height: 54px;
+    background-color: rgb(117,35,35);
+    border-radius: 6px;
+    margin-right: 50px;
 }
 .locationDropDownMenu
 {
@@ -91,6 +113,8 @@
 {
     color: rgb(200,200,200)
 }
+
+
 .textContainer
 {
     display: flex;
@@ -321,7 +345,7 @@
     }
     .launchItemContainer
     {
-        width: 90%;
+        width: 100%;
         margin-top: 20px;
         color: #fff;
         flex-direction: column;
@@ -334,7 +358,7 @@
     .imgContainer
     {
         max-height: 350px;
-        max-width: 600px;
+        max-width: 740px;
         
     }
     .textContainer
@@ -350,4 +374,14 @@
         margin-bottom:5px;
         margin-top: 5px;
     }
+}
+
+.deactivateOnClick
+{
+    display: none;
+}
+
+.deactivate
+{
+    display:none;
 }

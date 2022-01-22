@@ -27,9 +27,9 @@ const deriveCountryName = async (countryCode) => {
     {
         countryName = "Kazakhstan"
     }
-    else if(countryCode == "Everywhere")
+    else if(countryCode == "Global")
     {
-        countryName = "Everywhere"
+        countryName = "Global"
     }
     else if(countryCode == "UNK")
     {
@@ -55,7 +55,7 @@ const deriveSeenAlready = async() => {
     // now loop through all launches. 
     const launchDataPrevious = await LaunchesPrevious.findAll()
     const launchDataUpcoming = await LaunchesUpcoming.findAll()
-    seenAlready = ["Everywhere", "USA", "CHN", "RUS"]
+    seenAlready = ["Global", "USA", "CHN", "RUS"]
 
     launchDataPrevious.forEach( async (launchDatum) => {
         

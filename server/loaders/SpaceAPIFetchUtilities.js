@@ -9,7 +9,7 @@ const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrott
 
 // This is called after the Individual API call is made. The purpose of this is to parse out launch data from the api call and return a newLaunch object. 
 // "data_in" has the response from the api call.
-const parseLaunchData = async(data_in) => {
+const parseLaunchData = async(data_in, fetchFuture) => {
 
    
 
@@ -26,8 +26,18 @@ const parseLaunchData = async(data_in) => {
     let padName;
     let locationName; 
     let countryCode;
+    let futureFlag; 
+    let futureFlagToInsert;
     
-    
+    if(fetchFuture)
+    {
+        futureFlagToInsert = "Y"
+    }
+    else
+    {
+        futureFlagToInsert = "N"
+    }
+
     try{ launch_id             =  await data_in.id;                                } catch {launch_id =null}
     try{ title                 =  await data_in.name;                              } catch {title =null}
     try{ vehicle_description   =  await data_in.rocket.configuration.description;  } catch {vehicle_description =null}
@@ -40,6 +50,7 @@ const parseLaunchData = async(data_in) => {
     try{ padName               =  await data_in.pad.name;                          } catch {padName =null}
     try{ locationName          =  await data_in.pad.location.name;                 } catch {locationName =null}
     try{ countryCode           =  await data_in.pad.location.country_code;         } catch {countryCode =null}
+    try{ futureFlag            =  futureFlagToInsert                               } catch {futureFlag =null}
 
     let newLaunch = {   
         launch_id: launch_id,
@@ -53,7 +64,8 @@ const parseLaunchData = async(data_in) => {
         launchSeconds: launchSeconds,
         padName: padName,
         locationName: locationName,
-        countryCode: countryCode
+        countryCode: countryCode,
+        futureFlag: futureFlag
     };
     
     // find if a post with the launch Id already exists. 
@@ -129,7 +141,7 @@ const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =
                             // if launch not found, this is definitely a new launch. proceed. 
                             if (!foundLaunch)
                             {
-                                let newLaunch = await parseLaunchData(data);
+                                let newLaunch = await parseLaunchData(data, fetchFuture);
                                 newLaunch = await createNewPost(newLaunch);
                                 await Launches.create(newLaunch);
                             }

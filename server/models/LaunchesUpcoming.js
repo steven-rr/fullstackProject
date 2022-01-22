@@ -71,6 +71,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0
+      },
+      futureFlag:
+      {
+        type: DataTypes.STRING,
+        allownull: true
       }
     });
   
