@@ -16,7 +16,7 @@ const Home = () => {
     const [currentLocations  , setCurrentLocations]   = useState([])
     const [futureFlag, setFutureFlag]                 = useState("Y")
     
-    const [showAllFlag, setShowAllFlag]                 = useState([false])
+    const [showAllFlag, setShowAllFlag]                 = useState(false)
     const [todayTime, setTodayTime]                   = useState([new Date()])
     const [filterLocationOn, setFilterLocationOn]     = useState(false)
 
