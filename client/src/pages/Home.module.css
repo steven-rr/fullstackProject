@@ -36,18 +36,33 @@
     margin-bottom: 25px;
 
 }
-
+/* .barButtnContainer
+{
+    position: relative;
+    height: 54px;
+    background-color: rgb(80,80,80);
+    border-radius: 20px;
+    margin-right: 50px;
+} */
+.barButtnContainer
+{
+    position: relative;
+	background-color: rgb(117,35,35);
+    border-radius: 20px;
+    margin-right: 50px;
+}
 .buttnBarButtn
 {
 	/* background-color: Transparent; */
 	background-color: rgb(117,35,35);
+
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     /* border: 2px solid rgb(117, 35, 35); */
 	color: white;
-	padding: 8px 13px;
+	padding: 12px 23px;
     border-radius: 20px;
 	text-align: center;
 	text-decoration: none;
@@ -55,7 +70,7 @@
 	font-family: Poppins;
 	letter-spacing: .10rem;
 	font-weight: 400;
-	margin: 4px 10px;
+	/* margin: 4px 10px; */
 	cursor: pointer;
 }
 .buttnBarButtn:hover
@@ -84,14 +99,7 @@
     transform: rotate(90deg);
     margin-left: 10px;
 }
-.barButtnContainer
-{
-    position: relative;
-    height: 54px;
-    background-color: rgb(117,35,35);
-    border-radius: 20px;
-    margin-right: 50px;
-}
+
 .mobileDropdownMenu
 {
     display: none;
@@ -443,13 +451,14 @@
     .buttnBarButtn
     {   
         padding: 0;
-        margin-left: 10px;
-        margin-right: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 50px;
     }
     .barButtnContainer
     {
-        margin-right: 6px;
-        margin-left: 6px;
+        margin-right: 10px;
+        margin-left: 10px;
         display: flex;
         align-items: center;
         justify-content: center;

@@ -26,10 +26,7 @@ const Home = () => {
     const [orderDropdownOn, setOrderDropdown]           = useState(false)
     const [orderElementActive, setOrderingElementActive] = useState("1")
     const [currentOrderingName, setCurrentOrderingName]   = useState("Recent")
-    // mobile
-    const [mobileTimeDropdownOn, setMobileTimeDropdown]           = useState(false)
-    const [mobileOrderDropdownOn, setMobileOrderDropdown]           = useState(false)
-    const [mobileLocationDropdownOn, setMobileLocationDropdown]     = useState(false)
+    
 
     // }
     //on render, get launch data from backend and display for the user.
@@ -136,19 +133,14 @@ const Home = () => {
     
     const handleOrderingClick = () => {
         setOrderDropdown(currState=>!currState)
-        setMobileOrderDropdown(currState=>!currState)
     }
     const handleOrderingElementClick = (e) => {
         console.log("CLICK ORDERING ELEMENT!")
 
         setOrderDropdown(false)
-        if(e.currentTarget.dataset.div_id == "10" || e.currentTarget.dataset.div_id == "11" || e.currentTarget.dataset.div_id == "12" || e.currentTarget.dataset.div_id == "13"|| e.currentTarget.dataset.div_id == "14")
-        {
-            setMobileOrderDropdown(false)
-        }
         setOrderingElementActive(e.currentTarget.dataset.div_id)
         // recent. 
-        if(e.currentTarget.dataset.div_id == "1" )
+        if(e.currentTarget.dataset.div_id == "1")
         {
             launchData.sort( (a,b) => {
                 let todaySecs= todayTime/1000
@@ -225,23 +217,18 @@ const Home = () => {
 
     const handleTimingClick = () => {
         setTimeDropdown(currState=>!currState)
-        setMobileTimeDropdown(currState=> !currState)
     }
     const handleTimingElementClick = (e) => {
         console.log("CLICK TIMING ELEMENT!")
         setTimingElementActive(e.currentTarget.dataset.div_id)
         setTimeDropdown(false)
-        if(e.currentTarget.dataset.div_id == "10" ||e.currentTarget.dataset.div_id == "11" || e.currentTarget.dataset.div_id == "12"  )
-        {
-            setMobileTimeDropdown(false)
-        }
-        if(e.currentTarget.dataset.div_id == "1" || e.currentTarget.dataset.div_id == "10") 
+        if(e.currentTarget.dataset.div_id == "1")
         {
             setFutureFlag("Y")
             setShowAllFlag(false)
             setCurrentTimingName("Future")
         }
-        else if ( e.currentTarget.dataset.div_id == "2" || e.currentTarget.dataset.div_id == "11")
+        else if ( e.currentTarget.dataset.div_id == "2")
         {
             setFutureFlag("N")
             setShowAllFlag(false)
@@ -258,7 +245,6 @@ const Home = () => {
 
     const handleLocationClick = () => {
         setLocationDropdown(!locationDropdownOn)
-        setMobileLocationDropdown(!mobileLocationDropdownOn)
     }
     const handleLocationElementClick = (value) => {
         let countryCode;
@@ -305,17 +291,19 @@ const Home = () => {
         setLocationDropdown(false)
     }
     const handleDropdownBlur = (e) => {
-        if(e.currentTarget.dataset.div_id == "1" || e.currentTarget.dataset.div_id == "10")
+
+        if(e.currentTarget.dataset.div_id == "1" || e.currentTarget.dataset.div_id == "4")
         {
+            console.log("setting timedropdown to false.")
             setTimeDropdown(false)
 
         }
-        else if(e.currentTarget.dataset.div_id == "2" || e.currentTarget.dataset.div_id == "11")
+        else if(e.currentTarget.dataset.div_id == "2" || e.currentTarget.dataset.div_id == "5")
         {
             setOrderDropdown(false)
 
         }
-        else if(e.currentTarget.dataset.div_id == "3" || e.currentTarget.dataset.div_id == "12")
+        else if(e.currentTarget.dataset.div_id == "3" || e.currentTarget.dataset.div_id == "6")
         {
             setLocationDropdown(false)
         }
@@ -368,7 +356,7 @@ const Home = () => {
             {/* desktop button bar */}
             <div className={HomeCSS.buttnBarContainer}>
                 {/* future button */}
-                <div tabIndex="0"  className={HomeCSS.barButtnContainer} data-div_id="  1" onBlur={(e)=> handleDropdownBlur(e)}>
+                <div tabIndex="0" className={HomeCSS.barButtnContainer} data-div_id="1"  onBlur={(e)=> handleDropdownBlur(e)}>
                     <div className={`${HomeCSS.buttnBarButtn}` } onClick={() => handleTimingClick()}>
                         <div className={`${HomeCSS.buttnBar_text}  `} > {currentTimingName}  </div>
                         <div className={HomeCSS.iconRotate}>
@@ -377,28 +365,28 @@ const Home = () => {
                         </div>
                         
                     </div>
-                    <div className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `} > 
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onClick={(e) => handleTimingElementClick(e)}> Future </div>
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onClick={(e) => handleTimingElementClick(e)}> Past </div>
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onClick={(e) => handleTimingElementClick(e)}> All </div>
+                    <div className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `}   > 
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleTimingElementClick(e)}> Future </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleTimingElementClick(e)}> Past </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleTimingElementClick(e)}> All </div>
 
                     </div>
                 </div>
 
                 {/* ordering button */}
-                <div tabIndex="0"  className={HomeCSS.barButtnContainer}  data-div_id="2" onBlur={(e)=> handleDropdownBlur(e)}>
+                <div tabIndex="0" className={HomeCSS.barButtnContainer}  data-div_id="2" onBlur={(e)=> handleDropdownBlur(e)}>
                     <div className={`${HomeCSS.buttnBarButtn}` } onClick={() => handleOrderingClick()}>
                         <div className={`${HomeCSS.buttnBar_text}   `} >  {currentOrderingName}  </div>
                         <div className={HomeCSS.iconRotate}>
                             <MdArrowForwardIos />
                         </div>
                     </div>
-                    <div className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `}> 
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="1" onClick={(e) => handleOrderingElementClick(e)}> Recent </div>
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="2" onClick={(e) => handleOrderingElementClick(e)}> Distant </div>
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="3" onClick={(e) => handleOrderingElementClick(e)}> Oldest </div>
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="4" onClick={(e) => handleOrderingElementClick(e)}> Newest </div>
-                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="5" onClick={(e) => handleOrderingElementClick(e)}> Top </div>
+                    <div className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `} > 
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Recent </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Distant </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="5" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
                     </div>
                 </div>
                 {/* location button */}
@@ -411,31 +399,31 @@ const Home = () => {
                         <div className={`${HomeCSS.buttnBar_text} `}> {currentLocation} </div>
                     </div>
 
-                    <div className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `}> 
+                    <div className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `} > 
                         
                         {currentLocations.map( (value, key) => {    
-                            return( <div key={key} className={`${HomeCSS.barDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.barDropDownMenuElement_active: ""}`} onClick={() => handleLocationElementClick(value)} > {value} </div>)
+                            return( <div key={key} className={`${HomeCSS.barDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.barDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value)} > {value} </div>)
                         })}
                     </div>
                 </div> 
                 {/* mobile dropdown menu */}
-                <div className={`${mobileTimeDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `} > 
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="10" onClick={(e) => handleTimingElementClick(e)}> Future </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="11" onClick={(e) => handleTimingElementClick(e)}> Past </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="12" onClick={(e) => handleTimingElementClick(e)}> All </div>
+                <div tabIndex="0" className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `} data-div_id="4" onBlur={(e)=> handleDropdownBlur(e)} > 
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleTimingElementClick(e)}> Future </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleTimingElementClick(e)}> Past </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleTimingElementClick(e)}> All </div>
 
                 </div>  
-                <div className={`${mobileOrderDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `}> 
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="10" onClick={(e) => handleOrderingElementClick(e)}> Recent </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="11" onClick={(e) => handleOrderingElementClick(e)}> Distant </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="12" onClick={(e) => handleOrderingElementClick(e)}> Oldest </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="13" onClick={(e) => handleOrderingElementClick(e)}> Newest </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="14" onClick={(e) => handleOrderingElementClick(e)}> Top </div>
+                <div tabIndex="0" className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `} data-div_id="5" onBlur={(e)=> handleDropdownBlur(e)}> 
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Recent </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Distant </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="5" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
                 </div>
-                <div className={`${mobileLocationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `}> 
+                <div tabIndex="0" className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `} data-div_id="6" onBlur={(e)=> handleDropdownBlur(e)}> 
                         
                         {currentLocations.map( (value, key) => {    
-                            return( <div key={key} className={`${HomeCSS.mobileDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.mobileDropDownMenuElement_active: ""}`} onClick={() => handleLocationElementClick(value)} > {value} </div>)
+                            return( <div key={key} className={`${HomeCSS.mobileDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.mobileDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value)} > {value} </div>)
                         })}
                 </div>
             </div>
