@@ -30,6 +30,7 @@
     -moz-user-select: none; /* Old versions of Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* The rest */
+    outline: none;
     position: relative;
     width: 100%;
     display: flex;
@@ -58,6 +59,7 @@
     -moz-user-select: none; /* Old versions of Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* The rest */
+    outline: none;
     position: relative;
 	background-color: rgb(117,35,35);
     border-radius: 20px;
@@ -72,7 +74,7 @@
     -moz-user-select: none; /* Old versions of Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* The rest */
-
+    outline: none;
 	/* background-color: Transparent; */
 	background-color: rgb(117,35,35);
     height: 30px;
@@ -468,6 +470,7 @@
        -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* The rest */
+        outline: none;
     }
     .barButtnContainer
     {
@@ -478,6 +481,7 @@
         -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* The rest */
+        outline: none;
     }
     
     .buttnBarButtn
@@ -492,6 +496,8 @@
         -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* The rest */
+        outline: none;
+
     }
     .barButtnContainer
     {
@@ -505,7 +511,9 @@
         -khtml-user-select: none; /* Konqueror HTML */
         -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* The rest */
+        user-select: none; /* The rest */
+        outline: none;
+
     }
     
     .desktopBarDropDownMenu
@@ -525,7 +533,9 @@
         -khtml-user-select: none; /* Konqueror HTML */
         -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* The rest */
+        user-select: none; /* The rest */
+        outline: none;
+
     }
     .barButtnContainer
     {
@@ -539,7 +549,9 @@
         -khtml-user-select: none; /* Konqueror HTML */
         -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* The rest */
+        user-select: none; /* The rest */
+        outline: none;
+
     }
     
 }
