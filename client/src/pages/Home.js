@@ -18,7 +18,7 @@ const Home = () => {
     
     const [showAllFlag, setShowAllFlag]                 = useState(false)
     const [todayTime, setTodayTime]                   = useState([new Date()])
-    const [filterLocationOn, setFilterLocationOn]     = useState(false)
+    const [locationDropdownOn, setLocationDropdown]     = useState(false)
 
     const [timeDropdownOn, setTimeDropdown]           = useState(false)
     const [timingElementActive, setTimingElementActive] = useState("1")
@@ -241,7 +241,7 @@ const Home = () => {
     }
 
     const handleLocationClick = () => {
-        setFilterLocationOn(!filterLocationOn)
+        setLocationDropdown(!locationDropdownOn)
     }
     const handleLocationElementClick = (value) => {
         let countryCode;
@@ -284,7 +284,23 @@ const Home = () => {
         }
         setCurrentLocation(value)
         setCurrentAbbrev(countryCode)
-        setFilterLocationOn(false)
+        setLocationDropdown(false)
+    }
+    const handleDropdownBlur = (e) => {
+        if(e.currentTarget.dataset.div_id == "1")
+        {
+            setTimeDropdown(false)
+
+        }
+        else if(e.currentTarget.dataset.div_id == "2")
+        {
+            setOrderDropdown(false)
+
+        }
+        else if(e.currentTarget.dataset.div_id == "3")
+        {
+            setLocationDropdown(false)
+        }
     }
     const calcDeltaTime = (dateMission) => {
         // calc seconds difference first.
@@ -334,42 +350,41 @@ const Home = () => {
             {/* button bar */}
             <div className={HomeCSS.buttnBarContainer}>
                 {/* future button */}
-                <div className={HomeCSS.locationButtnContainer}>
+                <div tabIndex="0"  className={HomeCSS.barButtnContainer} data-div_id="1" onBlur={(e)=> handleDropdownBlur(e)}>
                     <div className={`${HomeCSS.buttnBarButtn}` } onClick={() => handleTimingClick()}>
                         <div className={`${HomeCSS.buttnBar_text}  `} > {currentTimingName}  </div>
-                        {/* <RiArrowDropDownLine size="40px" /> */}
                         <div className={HomeCSS.iconRotate}>
                             <MdArrowForwardIos />
 
                         </div>
                         
                     </div>
-                    <div className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.locationDropDownMenu} `}> 
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`} data-div_id="1" onClick={(e) => handleTimingElementClick(e)}> Future </div>
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`} data-div_id="2" onClick={(e) => handleTimingElementClick(e)}> Past </div>
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`} data-div_id="3" onClick={(e) => handleTimingElementClick(e)}> All </div>
+                    <div className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.barDropDownMenu} `} > 
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onClick={(e) => handleTimingElementClick(e)}> Future </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onClick={(e) => handleTimingElementClick(e)}> Past </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onClick={(e) => handleTimingElementClick(e)}> All </div>
 
                     </div>
                 </div>
 
                 {/* ordering button */}
-                <div className={HomeCSS.locationButtnContainer}>
+                <div tabIndex="0"  className={HomeCSS.barButtnContainer}  data-div_id="2" onBlur={(e)=> handleDropdownBlur(e)}>
                     <div className={`${HomeCSS.buttnBarButtn}` } onClick={() => handleOrderingClick()}>
                         <div className={`${HomeCSS.buttnBar_text}   `} >  {currentOrderingName}  </div>
                         <div className={HomeCSS.iconRotate}>
                             <MdArrowForwardIos />
                         </div>
                     </div>
-                    <div className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.locationDropDownMenu} `}> 
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`}  data-div_id="1" onClick={(e) => handleOrderingElementClick(e)}> Recent </div>
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`}  data-div_id="2" onClick={(e) => handleOrderingElementClick(e)}> Distant </div>
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`}  data-div_id="3" onClick={(e) => handleOrderingElementClick(e)}> Oldest </div>
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`}  data-div_id="4" onClick={(e) => handleOrderingElementClick(e)}> Newest </div>
-                        <div className={`${HomeCSS.locationDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.locationDropDownMenuElement_active : ""}`}  data-div_id="5" onClick={(e) => handleOrderingElementClick(e)}> Top </div>
+                    <div className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.barDropDownMenu} `}> 
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="1" onClick={(e) => handleOrderingElementClick(e)}> Recent </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="2" onClick={(e) => handleOrderingElementClick(e)}> Distant </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="3" onClick={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="4" onClick={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${HomeCSS.barDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.barDropDownMenuElement_active : ""}`}  data-div_id="5" onClick={(e) => handleOrderingElementClick(e)}> Top </div>
                     </div>
                 </div>
                 {/* location button */}
-                <div className={HomeCSS.locationButtnContainer}>
+                <div tabIndex="0" className={HomeCSS.barButtnContainer} data-div_id="3" onBlur={(e)=> handleDropdownBlur(e)}>
                     <div className={`${HomeCSS.buttnBarButtn}` } onClick={() => handleLocationClick()}>
                         <div> 
                             <MdOutlineLocationOn color="white" size="30px"/>
@@ -378,10 +393,10 @@ const Home = () => {
                         <div className={`${HomeCSS.buttnBar_text} `}> {currentLocation} </div>
                     </div>
 
-                    <div className={`${filterLocationOn ? "":HomeCSS.deactivate} ${HomeCSS.locationDropDownMenu} `}> 
+                    <div className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.barDropDownMenu} `}> 
                         
                         {currentLocations.map( (value, key) => {    
-                            return( <div key={key} className={`${HomeCSS.locationDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.locationDropDownMenuElement_active: ""}`} onClick={() => handleLocationElementClick(value)} > {value} </div>)
+                            return( <div key={key} className={`${HomeCSS.barDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.barDropDownMenuElement_active: ""}`} onClick={() => handleLocationElementClick(value)} > {value} </div>)
                         })}
                     </div>
                 </div> 
