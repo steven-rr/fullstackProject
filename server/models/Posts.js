@@ -36,6 +36,12 @@ module.exports = (sequelize, DataTypes) => {
          type: DataTypes.INTEGER,
          allowNull: true,
          defaultValue: 0
+       },
+       commentCounter:
+       {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
        }
        
     });
