@@ -24,6 +24,7 @@
 }
 .buttnBarContainer
 {
+    position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -91,7 +92,11 @@
     border-radius: 20px;
     margin-right: 50px;
 }
-.barDropDownMenu
+.mobileDropdownMenu
+{
+    display: none;
+}
+.desktopBarDropDownMenu
 {
     position: absolute;
     top: 90%;
@@ -335,10 +340,47 @@
         width: auto;
 
     }
+
 }
 
 @media screen and (max-width: 740px)
 {
+    .mobileDropdownMenu
+    {   
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        top: 90%;
+        width: 90%;
+        background-color: rgb(25, 25, 25);
+        border: 1px solid rgb(80,80,80);
+        z-index: 1000000;
+        color: white;
+
+    }
+    .mobileDropDownMenuElement
+    {
+        color: rgb(80, 80, 80);
+        cursor:pointer;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        font-weight: 500;
+
+    }
+    .mobileDropDownMenuElement:hover
+    {
+        color: rgb(200,200,200);
+        background-color:rgb(80, 80, 80);
+    }
+    .mobileDropDownMenuElement_active
+    {
+        color: rgb(200,200,200)
+    }
+    .mobileDropDownMenuElement
+    {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
     .homeContainer
     {
         width: 100%;
@@ -383,6 +425,12 @@
         margin-bottom:5px;
         margin-top: 5px;
     }
+    .desktopBarDropDownMenu
+    {   
+        left:0;
+        width: 100vw;
+        
+    }
     .buttnBarContainer
     {
         width:100%;
@@ -407,6 +455,10 @@
         justify-content: center;
     }
     
+    .desktopBarDropDownMenu
+    {
+        display: none;
+    }
 }
 @media screen and (max-width: 360px)
 {
@@ -424,6 +476,7 @@
         align-items: center;
         justify-content: center;
     }
+    
 }
 .deactivateOnClick
 {
