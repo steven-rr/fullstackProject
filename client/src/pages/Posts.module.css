@@ -3,6 +3,7 @@
     margin-top: 70px;
 }
 
+
 .createPostClass
 {
     margin-top: 50px !important;
@@ -27,7 +28,8 @@
 .postContainer
 {
     position: relative;
-    display:block;
+    display: flex;
+    flex-direction: row;
     margin-top: 20px;
     border:  2px solid rgb(80,80,80);
     width: 1050px;
@@ -42,6 +44,38 @@
 {
     border:  2px solid rgb(200,200,200);
 
+}
+.postContentClass
+{
+    display:flex;
+    flex-direction: column;
+}
+.likesContainer
+{   
+    display: flex;
+    flex-direction: column;
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
+.upvoteBackgroundClass
+{
+
+}
+.upvoteBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
+}
+.upvoteClass
+{
+    display: block;
+    z-index: 100000000000000;
+
+}
+.upvoteClass:hover
+{
+    /* background-color:rgb(31, 16, 158); */
+    color: rgb(117, 35, 35);
 }
 .postLinkClass
 {

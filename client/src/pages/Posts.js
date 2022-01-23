@@ -3,6 +3,7 @@ import PostsCSS from "./Posts.module.css"
 import axios from   "axios" 
 import { Link, useHistory} from 'react-router-dom'
 import {AuthContext} from "../App"
+import { BiUpvote, BiDownvote } from "react-icons/bi";
 
 const Posts = () => {
     // grabbing setAuthState.
@@ -150,21 +151,33 @@ const Posts = () => {
                     var dateStringPosted = postDateToDisplay(datePosted)
 
                     return (
+                            
                         <div className={PostsCSS.postContainer} key = {key}>
-                            <Link  className={PostsCSS.postLinkClass}  to={`/blog/${value.id}`}> 
-                                <div className = {PostsCSS.postAuthor}>{`Posted by ${value.username} ${dateStringPosted}`} </div>
-                                <div className = {PostsCSS.postTitle}>{value.title} </div>
-                                <div className = {PostsCSS.postContent}>{value.contentText} </div>
-
-                            </Link>
-                            <div className={PostsCSS.buttonListClass}> 
-                                <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments </Link>
-                                {(authState.UserId === value.UserId) ?   (<><button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button></>) : ""}
-                                {(authState.UserId === value.UserId) ?   (<button> editpost</button>) : ""}
-                                {(authState.authStatus) ?   (<button onClick={() => handleLike(value.id) }> like</button>) : ""}
-                                <div> likes: {value.Likes.length}</div>
+                            
+                            <div className={PostsCSS.likesContainer}>
+                                <div className={PostsCSS.upvoteBackgroundClass} onClick={() => handleLike(value.id) }>
+                                    <BiUpvote className={PostsCSS.upvoteClass} size="40px" />
+                                </div>
+                                {value.Likes.length}
+                                <div className={PostsCSS.upvoteBackgroundClass} onClick={() => handleLike(value.id) }>
+                                    <BiDownvote className={PostsCSS.upvoteClass} size="40px" />
+                                </div>
                             </div>
+                            <div className={PostsCSS.postContentClass}>
+                                <Link  className={PostsCSS.postLinkClass}  to={`/blog/${value.id}`}> 
+                                    <div className = {PostsCSS.postAuthor}>{`Posted by ${value.username} ${dateStringPosted}`} </div>
+                                    <div className = {PostsCSS.postTitle}>{value.title} </div>
+                                    <div className = {PostsCSS.postContent}>{value.contentText} </div>
 
+                                </Link>
+                                <div className={PostsCSS.buttonListClass}> 
+                                    <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments </Link>
+                                    {(authState.UserId === value.UserId) ?   (<><button className= {PostsCSS.buttonClass} onClick={()=> handleOnClickDelete(value.id)}> delete me</button></>) : ""}
+                                    {(authState.UserId === value.UserId) ?   (<button> editpost</button>) : ""}
+                                    {(authState.authStatus) ?   (<button onClick={() => handleLike(value.id) }> like</button>) : ""}
+                                    <div> likes: {value.Likes.length}</div>
+                                </div>
+                            </div>
                         </div>
                     )
                 })}
