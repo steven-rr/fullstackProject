@@ -69,7 +69,7 @@
 
 	/* background-color: Transparent; */
 	background-color: rgb(117,35,35);
-
+    height: 30px;
     display: flex;
     flex-direction: row;
     align-items: center;
