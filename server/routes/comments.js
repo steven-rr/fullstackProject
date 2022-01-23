@@ -1,6 +1,6 @@
 const express= require('express');
 const router = express.Router();
-const {Comments}= require('../models');
+const {Comments, Posts}= require('../models');
 const {validateToken}=require("../middleware/JWT.js")
 
 // get all comment data for a specific user. send to frontend.
@@ -49,6 +49,11 @@ router.post("/",validateToken, async(request, response) => {
     newComment.UserId = request.user.id; // set userId from validateToken();
     newComment.parentId = null;
     const newCommentCreated = await Comments.create(newComment);
+
+    //increment comment counter.
+    await Posts.increment('commentCounter', { where: {id:newComment.PostId}});
+
+    //return response.
     response.json(newCommentCreated)
 })
 
@@ -70,7 +75,11 @@ router.delete("/:commentId", validateToken, async(request,response) => {
         }
         else
         {
+            // decrement comment counter after succesfully deleting
+            await Posts.decrement('commentCounter', { where: {postId:individualCommentData.PostId}});
+
             console.log("deleted succesfully.")
+            //return response.
             response.json({msg: "success!"});
         }
     }
