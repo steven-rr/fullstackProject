@@ -399,7 +399,7 @@ const Home = () => {
                         <div className={`${HomeCSS.buttnBar_text} `}> {currentLocation} </div>
                     </div>
 
-                    <div className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu} `} > 
+                    <div className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu}`} > 
                         
                         {currentLocations.map( (value, key) => {    
                             return( <div key={key} className={`${HomeCSS.barDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.barDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value)} > {value} </div>)
