@@ -149,6 +149,7 @@ const Posts = () => {
     }
     return (
         <div className={PostsCSS.postsPageContainer}>
+            
             {/* create post button */}
             {authState.authStatus ? 
                 <div className={PostsCSS.createPostContainer}>
@@ -164,6 +165,12 @@ const Posts = () => {
                 </div>
             }
             
+            {/* sorting buttons */}
+            <div className={PostsCSS.buttonClass}>
+                Sort by.. 
+            </div>
+
+            {/* display all posts */}
             <div className={PostsCSS.postsBodyContainer}>
                 {console.log("POSTDATA: ", postData)}
                 {postData.map((value, key) =>{
@@ -203,20 +210,14 @@ const Posts = () => {
                                 <div className={PostsCSS.buttonListClass}> 
                                     {/* <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments <BiComment/> </Link> */}
                                     <Link to = {`/blog/${value.id}`} className= {PostsCSS.upvoteBackgroundClass} > 
-                                        <div>
                                             <BiComment className={PostsCSS.upvoteClass}  size="30px"/> 
                                             <div className={PostsCSS.upvoteTextClass}> {value.commentCounter} comments</div>
-                                        </div>
                                     </Link>
                                     {(authState.UserId === value.UserId) 
                                     ?   
                                     (<button className= {PostsCSS.upvoteBackgroundClass} onClick={()=> handleOnClickDelete(value.id)}>  
-                                        <div>
                                             <AiOutlineDelete className={PostsCSS.upvoteClass}  size="30px"/>
-                                            <div className={PostsCSS.upvoteTextClass}>Delete Post </div>
-
-                                        </div>
-                                            
+                                            <div className={PostsCSS.upvoteTextClass}>Delete Post </div>     
                                     </button>) 
                                     : 
                                     ""
@@ -224,10 +225,8 @@ const Posts = () => {
                                     {(authState.UserId === value.UserId) 
                                     ?   
                                     (<button className= {PostsCSS.upvoteBackgroundClass}> 
-                                        <div>
                                             <FiEdit2 className={PostsCSS.upvoteClass}  size="30px"/>
                                             <div className={PostsCSS.upvoteTextClass}> Edit Post</div>
-                                        </div>
                                     </button>) 
                                     : 
                                     ""
