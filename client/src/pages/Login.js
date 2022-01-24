@@ -109,6 +109,7 @@ const Login = () => {
                                     setAuthState( currentAuthState =>{ 
                                         return {...currentAuthState, loginOn: false}
                                         });
+                                    window.location.reload();
                                     // history.push("/")
                                     console.log("updated auth state: " , authState)
 
