@@ -276,24 +276,24 @@ const Posts = () => {
                                 {/* Buttons */}
                                 <div className={PostsCSS.buttonListClass}> 
                                     {/* <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments <BiComment/> </Link> */}
-                                    <Link to = {`/blog/${value.id}`} className= {PostsCSS.upvoteBackgroundClass} > 
-                                            <BiComment className={PostsCSS.upvoteClass}  size="30px"/> 
-                                            <div className={PostsCSS.upvoteTextClass}> {value.commentCounter} comments</div>
+                                    <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttnElementBackgroundClass} > 
+                                            <BiComment className={PostsCSS.buttnElementClass}  size="30px"/> 
+                                            <div className={PostsCSS.buttnElementTextClass}> {value.commentCounter} comments</div>
                                     </Link>
                                     {(authState.UserId === value.UserId) 
                                     ?   
-                                    (<button className= {PostsCSS.upvoteBackgroundClass} onClick={()=> handleOnClickDelete(value.id)}>  
-                                            <AiOutlineDelete className={PostsCSS.upvoteClass}  size="30px"/>
-                                            <div className={PostsCSS.upvoteTextClass}>Delete Post </div>     
+                                    (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={()=> handleOnClickDelete(value.id)}>  
+                                            <AiOutlineDelete className={PostsCSS.buttnElementClass}  size="30px"/>
+                                            <div className={PostsCSS.buttnElementTextClass}>Delete Post </div>     
                                     </button>) 
                                     : 
                                     ""
                                     }
                                     {(authState.UserId === value.UserId) 
                                     ?   
-                                    (<button className= {PostsCSS.upvoteBackgroundClass}> 
-                                            <FiEdit2 className={PostsCSS.upvoteClass}  size="30px"/>
-                                            <div className={PostsCSS.upvoteTextClass}> Edit Post</div>
+                                    (<button className= {PostsCSS.buttnElementBackgroundClass}> 
+                                            <FiEdit2 className={PostsCSS.buttnElementClass}  size="30px"/>
+                                            <div className={PostsCSS.buttnElementTextClass}> Edit Post</div>
                                     </button>) 
                                     : 
                                     ""
