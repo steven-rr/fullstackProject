@@ -92,11 +92,13 @@ const createNewPost = async( newLaunch) => {
     // if no post is found, create a new post for the launch!
     if(!foundPost) 
     {
+        let currTime_secs = (new Date()).getTime() / 1000
         const newPost = {
             title: "Discussion thread -- " + newLaunch.title,
             contentText: newLaunch.mission_description + " -- To Launch: " + newLaunch.launchDate,
             username: "mod",
-            launchId: newLaunch.launch_id
+            launchId: newLaunch.launch_id,
+            timePosted_seconds: currTime_secs
         };
         const newPostCreated= await Posts.create(newPost);
         console.log("... NEW.... POST........CREATED.....:", newPostCreated)

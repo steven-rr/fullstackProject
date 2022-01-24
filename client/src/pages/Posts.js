@@ -3,9 +3,12 @@ import PostsCSS from "./Posts.module.css"
 import axios from   "axios" 
 import { Link, useHistory} from 'react-router-dom'
 import {AuthContext} from "../App"
+// import { MdArrowForwardIos } from "react-icons/md";
 import { BiUpvote, BiDownvote,BiComment } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+
+import { MdArrowForwardIos } from "react-icons/md";
 
 
 
@@ -19,13 +22,36 @@ const Posts = () => {
     
     // use state.
     const [postData, setPostData] = useState([])
+    const [dropdownOn, setDropdown]           = useState(false)
+    const [dropdownElementActive, setDropdownElementActive] = useState("1")
+    const [currentOrderingName, setCurrentOrderingName]   = useState("Top")
+
 
     // on render, get posts from backend and display for the user.
     useEffect( () => {
         axios.get("/api/posts").then( (response) =>{
-            console.log("GETTING POSTS!!!!: " ,response.data);
-
-            setPostData(response.data);
+            // when i receive post data, sort by likes.
+            setPostData( (prevState)=>{
+                let stateSorted = response.data
+                stateSorted.sort( (a,b) => {
+                    let likesOfA =  a.likeCounter
+                    let likesOfB =  b.likeCounter
+                    if(likesOfA < likesOfB)
+                    {
+                        return 1;
+                    }
+                    else if(likesOfA > likesOfB)
+                    {
+                        return -1;
+                    } 
+                    else
+                    {   
+                        return 0;
+                    }
+                })
+                return stateSorted;
+            });
+            
         })
     }, []);
 
@@ -95,7 +121,7 @@ const Posts = () => {
                         return post;
                     }
                 }))
-                console.log(response.data)})
+            })
             .catch( (err) => {
                 console.log(err);
             })
@@ -109,7 +135,7 @@ const Posts = () => {
                 setPostData(postData.map( (post) => {
                     // look for post to modify like array.
                     if(post.id === PostId) 
-                    {   
+                    {      
                         // if liked, increment like array size by 1. else , decrement it by 1.
                         if(response.data.disliked)
                         {
@@ -137,12 +163,116 @@ const Posts = () => {
                         return post;
                     }
                 }))
-                console.log(response.data)})
+            })
             .catch( (err) => {
                 console.log(err);
             })
     }
-    // calc time posted to display
+
+    // dropdowns:
+    const handleDropdownBlur = (e) => {
+
+        if(e.currentTarget.dataset.div_id == "1" || e.currentTarget.dataset.div_id == "4")
+        {
+            console.log("setting dropdown to false.")
+            setDropdown(false)
+
+        }
+    }
+    const handleOrderingElementClick = (e) => {
+        console.log("CLICK ORDERING ELEMENT!")
+        setDropdownElementActive(e.currentTarget.dataset.div_id)
+        setDropdown(false)
+        // top 
+        if(e.currentTarget.dataset.div_id == "1")
+        {
+            console.log("top!")
+            setCurrentOrderingName("Top")
+            postData.sort( (a,b) => {
+                let likesOfA =  a.likeCounter
+                let likesOfB =  b.likeCounter
+                if(likesOfA < likesOfB)
+                {
+                    return 1;
+                }
+                else if(likesOfA > likesOfB)
+                {
+                    return -1;
+                } 
+                else
+                {   
+                    return 0;
+                }
+            })
+        }
+        // newest
+        else if ( e.currentTarget.dataset.div_id == "2")
+        {
+            console.log("newest!")
+            setCurrentOrderingName("Newest")
+            postData.sort( (a,b) => {
+                if(b.timePosted_seconds > a.timePosted_seconds)
+                {
+                    return 1;
+                }
+                else if(b.timePosted_seconds < a.timePosted_seconds)
+                {
+                    return -1;
+                } 
+                else
+                {   
+                    return 0;
+                }
+            })
+        } 
+        // oldest
+        else if(e.currentTarget.dataset.div_id == "3")
+        {   
+            console.log("oldest!")
+            setCurrentOrderingName("Oldest")
+            postData.sort( (a,b) => {
+                if(b.timePosted_seconds < a.timePosted_seconds)
+                {
+                    return 1;
+                }
+                else if(b.timePosted_seconds > a.timePosted_seconds)
+                {
+                    return -1;
+                } 
+                else
+                {   
+                    return 0;
+                }
+            })
+        }
+        // contraversial 
+        else if(e.currentTarget.dataset.div_id == "4")
+        {
+            console.log("contraversial!")
+            setCurrentOrderingName("Contraversial")
+            postData.sort( (a,b) => {
+                let commentsOfA =  a.commentCounter
+                let commentsOfB =  b.commentCounter
+                if(commentsOfA < commentsOfB)
+                {
+                    return 1;
+                }
+                else if(commentsOfA > commentsOfB)
+                {
+                    return -1;
+                } 
+                else
+                {   
+                    return 0;
+                }
+            })
+        }
+    
+    }
+    const handleOrderingClick = () => {
+        setDropdown(currState=>!currState)
+    }
+    // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
         let result; 
@@ -216,15 +346,32 @@ const Posts = () => {
             }
             
             {/* sorting buttons */}
-            <div className={PostsCSS.buttonClass}>
+            {/* <div className={PostsCSS.buttonClass}>
+                
                 Sort by.. 
+            </div> */}
+            {/* future button */}
+            <div className={PostsCSS.buttnBarContainer}>
+                <div tabIndex="0" className={PostsCSS.barButtnContainer} data-div_id="1"  onBlur={(e)=> handleDropdownBlur(e)}>
+                    <div className={`${PostsCSS.buttnBarButtn}` } onMouseDown={() => handleOrderingClick()}>
+                        <div className={`${PostsCSS.buttnBar_text}  `} > {currentOrderingName}  </div>
+                        <div className={PostsCSS.iconRotate}>
+                            <MdArrowForwardIos />
+                        </div>
+                        
+                    </div>
+                    <div className={`${dropdownOn ? "":PostsCSS.deactivate} ${PostsCSS.desktopBarDropDownMenu} `}   > 
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "1" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "2" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "3" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "4" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Controversial </div>
+                    </div>
+                </div>
             </div>
 
             {/* display all posts */}
             <div className={PostsCSS.postsBodyContainer}>
-                {console.log("POSTDATA: ", postData)}
                 {postData.map((value, key) =>{
-                    console.log("value: ", value)
                     let str = value.createdAt;
 
                     var datePosted= new Date(str)

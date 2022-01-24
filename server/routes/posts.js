@@ -124,12 +124,16 @@ router.get('/',peekToken, async (request, response) => {
 router.post("/", validateToken, async(request, response) => {
     // parse out info from body.
     const {title, contentText}  = request.body;
+    // get current time the post is being posted in seconds.
+    let currTime_secs = (new Date()).getTime() / 1000
+
     // use info from body, and info from token (user info).
     const newPost = {
         title: title,
         contentText: contentText,
         username: request.user.username,
-        UserId: request.user.id
+        UserId: request.user.id,
+        timePosted_seconds: currTime_secs
     };
     const newPostCreated= await Posts.create(newPost);
     response.json(newPostCreated)

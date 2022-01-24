@@ -31,6 +31,14 @@ const deriveCountryName = async (countryCode) => {
     {
         countryName = "Global"
     }
+    else if(countryCode== "NZL")
+    {
+        countryName = "New Zealand"
+    }
+    else if(countryCode == "GUF")
+    {
+        countryName ="French Guiana"
+    }
     else if(countryCode == "UNK")
     {
         countryName = "Unknown"
