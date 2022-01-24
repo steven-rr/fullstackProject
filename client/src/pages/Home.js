@@ -13,7 +13,9 @@ const Home = () => {
     const [launchData, setLaunchData ]                = useState([])
     const [currentLocation  , setCurrentLocation]     = useState("Global")
     const [currentAbbrev  , setCurrentAbbrev]         = useState("Global")
-    const [currentLocations  , setCurrentLocations]   = useState([])
+    const [currentCountryCodes  , setCurrentCountryCodes]   = useState([])
+    const [currentCountryNames  , setCurrentCountryNames]   = useState([])
+
     const [futureFlag, setFutureFlag]                 = useState("Y")
     
     const [showAllFlag, setShowAllFlag]                 = useState(false)
@@ -105,13 +107,17 @@ const Home = () => {
                         .get("/api/launches/uniqueCountries")
                         .then( (response) => {
                             let countryCodeArray = [];
-                            
+                            let countryNameArray = [];
                             for (var i = 0; i < response.data.length; i++) 
                             {   
-                                countryCodeArray.push(response.data[i].countryName)
+                                countryNameArray.push(response.data[i].countryName)
+                                countryCodeArray.push(response.data[i].countryCode)
                             }
-                            setCurrentLocations( prevState => {
+                            setCurrentCountryCodes( prevState => {
                                 return countryCodeArray
+                            })
+                            setCurrentCountryNames( prevState => {
+                                return countryNameArray
                             })
 
 
@@ -246,56 +252,11 @@ const Home = () => {
     const handleLocationClick = () => {
         setLocationDropdown(!locationDropdownOn)
     }
-    const handleLocationElementClick = (value) => {
-        let countryCode;
+    const handleLocationElementClick = (value, key) => {
         console.log("CLICK LOCATION ELEMENT!")
 
-        if(value == "USA")
-        {
-            countryCode = "USA" 
-        }
-        else if(value== "Kazakhstan")
-        {
-            countryCode = "KAZ"
-        }
-        else if(value== "China")
-        {
-            countryCode = "CHN"
-        }
-        else if(value== "Russia")
-        {
-            countryCode = "RUS"
-        }
-        else if(value== "India")
-        {
-            countryCode = "IND"
-        }
-        else if(value== "Iran")
-        {
-            countryCode = "IRN"
-        }
-        else if(value== "New Zealand")
-        {
-            countryCode = "NZL"
-        }
-        else if(value == "French Guiana")
-        {
-            countryCode ="GUF"
-        }
-        else if(value== "Unknown")
-        {
-            countryCode = "UNK"
-        }
-        else if(value =="Global")
-        {
-            countryCode = "Global"
-        }
-        else
-        {
-            countryCode = "NA"
-        }
         setCurrentLocation(value)
-        setCurrentAbbrev(countryCode)
+        setCurrentAbbrev(currentCountryCodes[key])
         setLocationDropdown(false)
     }
     const handleDropdownBlur = (e) => {
@@ -408,9 +369,8 @@ const Home = () => {
                     </div>
 
                     <div className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.desktopBarDropDownMenu}`} > 
-                        
-                        {currentLocations.map( (value, key) => {    
-                            return( <div key={key} className={`${HomeCSS.barDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.barDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value)} > {value} </div>)
+                        {currentCountryNames.map( (value, key) => {    
+                            return( <div key={key} className={`${HomeCSS.barDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.barDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value, key)} > {value} </div>)
                         })}
                     </div>
                 </div> 
@@ -430,8 +390,8 @@ const Home = () => {
                 </div>
                 <div tabIndex="0" className={`${locationDropdownOn ? "":HomeCSS.deactivate} ${HomeCSS.mobileDropdownMenu} `} data-div_id="6" onBlur={(e)=> handleDropdownBlur(e)}> 
                         
-                        {currentLocations.map( (value, key) => {    
-                            return( <div key={key} className={`${HomeCSS.mobileDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.mobileDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value)} > {value} </div>)
+                        {currentCountryNames.map( (value, key) => {    
+                            return( <div key={key} className={`${HomeCSS.mobileDropDownMenuElement} ${(value == currentLocation) ? HomeCSS.mobileDropDownMenuElement_active: ""}`} onMouseDown={() => handleLocationElementClick(value, key)} > {value} </div>)
                         })}
                 </div>
             </div>

@@ -11,6 +11,10 @@ const deriveCountryName = async (countryCode) => {
     {
         countryName = "China"
     }
+    else if(countryCode == "JPN")
+    {
+        countryName = "Japan"
+    }
     else if(countryCode == "RUS")
     {
         countryName = "Russia"
@@ -26,6 +30,10 @@ const deriveCountryName = async (countryCode) => {
     else if(countryCode == "KAZ")
     {
         countryName = "Kazakhstan"
+    }
+    else if(countryCode =="MHL")
+    {
+        countryName = "Marshall Islands"
     }
     else if(countryCode == "Global")
     {
