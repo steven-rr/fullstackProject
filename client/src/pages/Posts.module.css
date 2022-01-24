@@ -55,6 +55,126 @@
     border:  2px solid rgb(255,255,255);
     background: rgb(20,20,20);
 }
+/* end create post style */
+/* dropdown styling */
+    /* dropdown button */
+.buttnBarContainer
+{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* The rest */
+    outline: none;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    justify-content: center;
+    border-radius: 5px;
+    margin-bottom: 25px;
+
+}
+
+.barButtnContainer
+{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* The rest */
+    outline: none;
+    position: relative;
+	background-color: rgb(117,35,35);
+    border-radius: 20px;
+    margin-right: 50px;
+    
+}
+.buttnBarButtn
+{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* The rest */
+    outline: none;
+	background-color: rgb(117,35,35);
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+	color: white;
+	padding: 15px 27px;
+    border-radius: 20px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 15px;
+	font-family: Poppins;
+	letter-spacing: .10rem;
+	font-weight: 400;
+    
+	cursor: pointer;
+}
+.buttnBarButtn:hover
+{
+	background-color: rgb(117,35,35);
+
+	transition: all 0.1s ease-out;
+}
+.buttnBarButtn_active
+{
+    background-color: rgb(117,35,35);
+
+	transition: all 0.1s ease-out;
+}
+.buttnBar_text
+{
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.iconRotate
+{
+    margin-top:10px;
+    transform: rotate(90deg);
+    margin-left: 10px;
+}
+    /* dropdown menu */
+.desktopBarDropDownMenu
+{
+    position: absolute;
+    top: 90%;
+    left: 0%;
+    background-color: rgb(25, 25, 25);
+    z-index: 1000000;
+    color: white;
+    width: 93%;
+}
+.barDropDownMenuElement
+{
+    color: rgb(80, 80, 80);
+    cursor:pointer;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-weight: 500;
+
+}
+.barDropDownMenuElement:hover
+{
+    color: rgb(200,200,200);
+    background-color:rgb(80, 80, 80);
+}
+.barDropDownMenuElement_active
+{
+    color: rgb(200,200,200)
+}
+
+
 /* post cards styling */
 .postsBodyContainer
 {
@@ -189,6 +309,7 @@
 .buttonClass
 {
 	background-color: rgb(117, 35, 35);
+    /* background-color: red; */
 	border: 2px solid rgb(117, 35, 35);
 	color: white;
 	padding: 18px 40px;
@@ -210,4 +331,15 @@
 {
 	background-color: rgb(117,35,35);
 	transition: all 0.1s ease-out;
+}
+
+
+.deactivateOnClick
+{
+    display: none;
+}
+
+.deactivate
+{
+    display:none;
 }

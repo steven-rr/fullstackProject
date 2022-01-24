@@ -128,6 +128,7 @@ const Post = () => {
     {
         return (
             <div className={PostCSS.postPageContainer}> 
+                {/* display posts */}
                 <div className={PostCSS.postBodyContainer}>
                     <div className={PostCSS.titleStyle}> {`Welcome to post ${id}`} </div>
                     <div className={PostCSS.titleStyle}> {individualPostData.title}</div>

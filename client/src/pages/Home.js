@@ -274,6 +274,14 @@ const Home = () => {
         {
             countryCode = "IRN"
         }
+        else if(value== "New Zealand")
+        {
+            countryCode = "NZL"
+        }
+        else if(value == "French Guiana")
+        {
+            countryCode ="GUF"
+        }
         else if(value== "Unknown")
         {
             countryCode = "UNK"

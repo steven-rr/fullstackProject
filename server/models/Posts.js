@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0
+       },
+       timePosted_seconds: 
+       {
+         type:DataTypes.INTEGER,
+         allowNull: false
        }
        
     });
