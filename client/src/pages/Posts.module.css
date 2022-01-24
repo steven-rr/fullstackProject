@@ -140,32 +140,12 @@
     border: 0px;
     cursor:pointer;
 }
+
 .buttnElementBackgroundClass:hover
 {
     background-color: rgb(35,35,35);
-}
-
-.buttnElementClass
-{
-    display: block;
-
-}
-.buttnElementClass:hover
-{
-    /* background-color:rgb(31, 16, 158); */
-    color: rgb(117, 35, 35);
-}
-
-
-.buttnElementTextClass
-{
-    color: rgb(120,120,120);
-}
-.buttnElementTextClass:hover
-{
     color: white;
 }
-
 
 /* post main text styling. */
 .postMainTextClass
