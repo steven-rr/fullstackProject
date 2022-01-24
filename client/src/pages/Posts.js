@@ -277,14 +277,14 @@ const Posts = () => {
                                 <div className={PostsCSS.buttonListClass}> 
                                     {/* <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments <BiComment/> </Link> */}
                                     <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttnElementBackgroundClass} > 
-                                            <BiComment className={PostsCSS.buttnElementClass}  size="30px"/> 
-                                            <div className={PostsCSS.buttnElementTextClass}> {value.commentCounter} comments</div>
+                                            <BiComment size="30px"/> 
+                                            <div > {value.commentCounter} comments</div>
                                     </Link>
                                     {(authState.UserId === value.UserId) 
                                     ?   
                                     (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={()=> handleOnClickDelete(value.id)}>  
-                                            <AiOutlineDelete className={PostsCSS.buttnElementClass}  size="30px"/>
-                                            <div className={PostsCSS.buttnElementTextClass}>Delete Post </div>     
+                                            <AiOutlineDelete  size="30px"/>
+                                            <div >Delete Post </div>     
                                     </button>) 
                                     : 
                                     ""
@@ -292,8 +292,8 @@ const Posts = () => {
                                     {(authState.UserId === value.UserId) 
                                     ?   
                                     (<button className= {PostsCSS.buttnElementBackgroundClass}> 
-                                            <FiEdit2 className={PostsCSS.buttnElementClass}  size="30px"/>
-                                            <div className={PostsCSS.buttnElementTextClass}> Edit Post</div>
+                                            <FiEdit2 size="30px"/>
+                                            <div > Edit Post</div>
                                     </button>) 
                                     : 
                                     ""
