@@ -129,7 +129,7 @@
 /* end likes styling */
 
 /* comment elements */
-.upvoteBackgroundClass
+.buttnElementBackgroundClass
 {
     display:flex; 
     flex-direction: row;
@@ -140,28 +140,28 @@
     border: 0px;
     cursor:pointer;
 }
-.upvoteBackgroundClass:hover
+.buttnElementBackgroundClass:hover
 {
     background-color: rgb(35,35,35);
 }
 
-.upvoteClass
+.buttnElementClass
 {
     display: block;
 
 }
-.upvoteClass:hover
+.buttnElementClass:hover
 {
     /* background-color:rgb(31, 16, 158); */
     color: rgb(117, 35, 35);
 }
 
 
-.upvoteTextClass
+.buttnElementTextClass
 {
     color: rgb(120,120,120);
 }
-.upvoteTextClass:hover
+.buttnElementTextClass:hover
 {
     color: white;
 }
