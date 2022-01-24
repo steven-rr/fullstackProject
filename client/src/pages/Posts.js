@@ -13,7 +13,7 @@ const Posts = () => {
     // grabbing setAuthState.
     const {authState, setAuthState} = useContext(AuthContext)
     const [todayTime, setTodayTime] = useState(new Date())
-
+    
     // instantiate history.
     const history = useHistory();
     
@@ -58,7 +58,7 @@ const Posts = () => {
     const handleLike = (PostId) => {
         console.log("like clicked!" ) 
         axios  
-            .post(`/api/likes/`, {PostId: PostId})
+            .post(`/api/likes/like`, {PostId: PostId})
             .then( (response)=> {
                 setPostData(postData.map( (post) => {
                     // look for post to modify like array.
@@ -66,16 +66,71 @@ const Posts = () => {
                     {   
                         // if liked, increment like array size by 1. else , decrement it by 1.
                         if(response.data.liked)
-                        {
-                            return { ...post, Likes: [...post.Likes , 0 ]}
+                        {   
+                            // if dislike exists, also remove it before adding on the like. 
+                            if(response.data.dislikeExists)
+                            {
+                                const currentPostDislikes = post.Dislikes;
+                                currentPostDislikes.pop();
+                                return { ...post, Likes: [...post.Likes , 0 ], Dislikes: currentPostDislikes, liked: true, disliked: false}
+                            }
+                            // no dislike exists, simply like the post. 
+                            else
+                            {
+                                return { ...post, Likes: [...post.Likes , 0 ], liked:true}
+                            }
+
                         }
                         else
                         {
                             const currentPostLikes = post.Likes;
                             currentPostLikes.pop();
-                            return{...post, Likes: currentPostLikes}
+                            return{...post, Likes: currentPostLikes, liked: false}
                         }
-                        
+                        // if liked, decrement dislikes if necessary.
+
+                    }
+                    else
+                    {
+                        return post;
+                    }
+                }))
+                console.log(response.data)})
+            .catch( (err) => {
+                console.log(err);
+            })
+    }
+    // dislike a post .
+    const handleDislike = (PostId) => {
+        console.log("dislike clicked!" ) 
+        axios  
+            .post(`/api/likes/dislike`, {PostId: PostId})
+            .then( (response)=> {
+                setPostData(postData.map( (post) => {
+                    // look for post to modify like array.
+                    if(post.id === PostId) 
+                    {   
+                        // if liked, increment like array size by 1. else , decrement it by 1.
+                        if(response.data.disliked)
+                        {
+                            // if like exists, also remove it before adding on the dislike
+                            if(response.data.likeExists)
+                            {
+                                const currentPostLikes = post.Likes;
+                                currentPostLikes.pop();    
+                                return{...post, Likes: currentPostLikes,  Dislikes:[...post.Dislikes , 0 ], disliked: true, liked: false}          
+                            }
+                            else
+                            {
+                                return { ...post, Dislikes: [...post.Dislikes , 0 ], disliked: true}
+                            }
+                        }
+                        else
+                        {
+                            const currentPostDislikes = post.Dislikes;
+                            currentPostDislikes.pop();
+                            return{...post, Dislikes: currentPostDislikes, disliked: false}
+                        }
                     }
                     else
                     {
@@ -97,18 +152,13 @@ const Posts = () => {
 
 
         // check first if post divisible by years:
-        console.log("todayTime: ",todayTime)
-        console.log("datePosted: ", datePosted)
         let yearDiff = todayTime.getFullYear() - datePosted.getFullYear()
         let monthDiff = todayTime.getMonth() - datePosted.getMonth()
         let daysDiff = todayTime.getDate() - datePosted.getDate()
         let hoursDiff = todayTime.getHours() - datePosted.getHours()
         let minutesDiff = todayTime.getMinutes() - datePosted.getMinutes()
         let secondsDiff = Math.floor(todayTime.getSeconds() - datePosted.getSeconds())
-        console.log(yearDiff)
-        console.log(monthDiff)
-        console.log(daysDiff)
-        console.log(secondsDiff)
+        
         if(yearDiff > 0)
         {
             result = `${yearDiff} years ago`
@@ -174,9 +224,9 @@ const Posts = () => {
             <div className={PostsCSS.postsBodyContainer}>
                 {console.log("POSTDATA: ", postData)}
                 {postData.map((value, key) =>{
+                    console.log("value: ", value)
                     let str = value.createdAt;
 
-                    console.log("createdAt: ", str.substring(0, str.length - 5))
                     var datePosted= new Date(str)
                     var dateStringPosted = postDateToDisplay(datePosted)
 
@@ -184,19 +234,36 @@ const Posts = () => {
                             
                         <div className={PostsCSS.postContainer} key = {key}>
                             {/* likes */}
-                            <div className={PostsCSS.likesContainer}>
-                                <div className={PostsCSS.upvoteBackgroundClass} onClick={() => handleLike(value.id) }>
-                                    <BiUpvote className={PostsCSS.upvoteClass} size="40px" />
+                            
+                                {authState.authStatus 
+                                ?
+                                // do something
+                                <div className={PostsCSS.likesContainer}>
+                                    <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={() => handleLike(value.id) }>
+                                        <BiUpvote className={PostsCSS.likeClass} size="40px" />
+                                    </div>
+                                    <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
+                                    <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={() => handleDislike(value.id) }>
+                                        <BiDownvote className={PostsCSS.likeClass} size="40px" />
+                                    </div>
                                 </div>
-                                {value.Likes.length}
-                                <div className={PostsCSS.upvoteBackgroundClass} onClick={() => handleLike(value.id) }>
-                                    <BiDownvote className={PostsCSS.upvoteClass} size="40px" />
-                                </div>
-                            </div>
+                                :
+                                // do something else.
+                                <div className={PostsCSS.likesContainer}>
+                                    <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
+                                        <BiUpvote className={PostsCSS.likeClass} size="40px" />
+                                    </div>
+                                    <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
+                                    <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
+                                        <BiDownvote className={PostsCSS.likeClass} size="40px" />
+                                    </div>
+                                </div>  
+                                }
+                                
                             {/* content */}
                             <div className={PostsCSS.postContentClass}>
                                 {/* Text */}
-                                <Link  className={PostsCSS.postLinkClass}  to={`/blog/${value.id}`}> 
+                                <Link  className={PostsCSS.postMainTextClass}  to={`/blog/${value.id}`}> 
                                     <div className = {PostsCSS.postAuthor}>{`Posted by ${value.username} ${dateStringPosted}`} </div>
                                     <div className = {PostsCSS.postTitle}>
                                         {value.title.length > 300 ? value.title.substring(0, 300) + "..." : value.title} 

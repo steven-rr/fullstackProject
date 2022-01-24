@@ -1,8 +1,8 @@
 const { response } = require('express');
 const express= require('express');
 const router = express.Router();
-const {Posts, Likes}= require('../models');
-const {validateToken}=require("../middleware/JWT.js")
+const {Posts, Likes, Dislikes}= require('../models');
+const {validateToken, peekToken}=require("../middleware/JWT.js")
 const {LaunchesUpcoming}= require('../models');
 const {Op} = require("sequelize")
 const sequelize= require("sequelize")
@@ -25,7 +25,7 @@ router.get('/byUserId/:UserId', async (request, response) => {
 })
 
 // get all posts in database and send to frontend.
-router.get('/', async (request, response) => {
+router.get('/',peekToken, async (request, response) => {
     
 
     // sort data.
@@ -47,8 +47,76 @@ router.get('/', async (request, response) => {
 
     // sort by priority.
     const postData = await Posts.findAll({
-                        include: [Likes] , 
+                        include: [ {model: Likes}, {model: Dislikes}] , 
                         order: [['inflatedPriority','DESC']]})
+
+
+
+    // if user exists, append to the postData array whether user likes or dislikes. 
+    let postIDsDisliked =[];
+    let postIDsLiked =[];
+
+    if(request.user)
+    {
+        const userLikes = await Likes.findAll({where: {UserId: request.user.id}})
+
+        // find which post ID's liked by user. 
+        for(let i =0; i< userLikes.length;i ++)
+        {
+            postIDsLiked.push(userLikes[i].dataValues.PostId)
+        }
+
+        // console.log("postdata: ", postData[0].dataValues.title)
+        // console.log("userInfo: ", request.user)
+        for(let i=0 ; i < postIDsLiked.length; i++)
+        {
+            for(let j = 0; j < postData.length; j++)
+            {
+                
+                if(postIDsLiked[i] == postData[j].dataValues.id)
+                {
+                    postData[j].dataValues.liked = true
+                    
+                } 
+                else if(postData[j].dataValues.liked ==null)
+                {
+                    postData[j].dataValues.liked = false
+                }
+
+            }
+        }
+
+        // do the same for dislikes:
+        const userDislikes = await Dislikes.findAll({where: {UserId: request.user.id}})
+
+        for(let i =0; i< userDislikes.length;i ++)
+        {
+            postIDsDisliked.push(userDislikes[i].dataValues.PostId)
+        }
+
+        for(let i=0 ; i < postIDsDisliked.length; i++)
+        {
+            for(let j = 0; j < postData.length; j++)
+            {
+                
+                if(postIDsDisliked[i] == postData[j].dataValues.id)
+                {
+                    postData[j].dataValues.disliked = true;
+                    break;
+                } 
+                else if(postData[j].dataValues.disliked == null)
+                {
+                    postData[j].dataValues.disliked = false
+                }
+
+            }
+        }
+    }
+        console.log("postIDsLiked: ", postIDsLiked)
+        console.log("postIDsDisliked: ", postIDsDisliked)
+
+    // console.log("postdata: ", postData)
+
     response.json(postData)
 })
 

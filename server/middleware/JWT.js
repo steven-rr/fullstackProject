@@ -37,4 +37,31 @@ const validateToken = (request, response, next) => {
         return response.status(404).json({error: err})
     }
 }
-module.exports = {createTokens, validateToken};
+
+const peekToken = (request, response, next) => {
+    const accessToken = request.cookies["access-token"];
+
+    if(!accessToken)
+    {
+        request.user = null;
+        return next()
+    }
+
+    // try to make sure that the token is valid. if so, then authentication is good, can proceed with request.
+    try 
+    {
+        const validToken = verify(accessToken , process.env.JSON_WEB_TOKEN_SECRET_KEY)
+        request.user = validToken;
+        if(validToken)
+        {
+            request.authenticated = true;
+            return next();
+        }
+        
+    }
+    catch(err)
+    {
+        return next();
+    }
+}
+module.exports = {createTokens, validateToken, peekToken};
