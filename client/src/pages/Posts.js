@@ -7,8 +7,8 @@ import {AuthContext} from "../App"
 import { BiUpvote, BiDownvote,BiComment } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
-
 import { MdArrowForwardIos } from "react-icons/md";
+import Footer from "../components/Footer"
 
 
 
@@ -595,6 +595,7 @@ const Posts = () => {
                     }
                 })}
             </div>
+            <Footer/>
         </div>
     )
 }
