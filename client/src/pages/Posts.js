@@ -480,19 +480,19 @@ const Posts = () => {
                     </div>
                 </div>
                 {/* mobile dropdown menu */}
-                {/* <div tabIndex="0" className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${PostsCSS.mobileDropdownMenu} `} data-div_id="4" onBlur={(e)=> handleDropdownBlur(e)} > 
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleTimingElementClick(e)}> Future </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleTimingElementClick(e)}> Past </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleTimingElementClick(e)}> All </div>
+                <div tabIndex="0" className={`${orderDropdownOn ? "":PostsCSS.deactivate} ${PostsCSS.mobileDropdownMenu} `} data-div_id="4" onBlur={(e)=> handleDropdownBlur(e)}> 
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (orderElementActive == "1" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (orderElementActive == "2" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (orderElementActive == "3" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (orderElementActive == "4" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Contraversial </div>
+                </div>
+                <div tabIndex="0" className={`${timeDropdownOn ? "":PostsCSS.deactivate} ${PostsCSS.mobileDropdownMenu} `} data-div_id="5" onBlur={(e)=> handleDropdownBlur(e)} > 
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (timingElementActive == "1" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleTimingElementClick(e)}> All Time </div>
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (timingElementActive == "2" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleTimingElementClick(e)}> This Week </div>
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (timingElementActive == "3" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleTimingElementClick(e)}> This Month </div>
+                        <div className={`${PostsCSS.mobileDropDownMenuElement} ${ (timingElementActive == "3" ) ? PostsCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="4" onMouseDown={(e) => handleTimingElementClick(e)}> This Year </div>
 
                 </div>  
-                <div tabIndex="0" className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${PostsCSS.mobileDropdownMenu} `} data-div_id="5" onBlur={(e)=> handleDropdownBlur(e)}> 
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Recent </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Distant </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
-                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="5" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
-                </div> */}
                
             </div>
 
