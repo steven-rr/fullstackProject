@@ -2,6 +2,10 @@
 .postsPageContainer
 {
     margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 /* old create post styling */
 .createPostClass
@@ -90,8 +94,8 @@
     position: relative;
 	background-color: rgb(117,35,35);
     border-radius: 20px;
-    margin-right: 50px;
-    
+    margin-right: 25px;
+    margin-left: 25px;
 }
 .buttnBarButtn
 {
@@ -173,7 +177,10 @@
 {
     color: rgb(200,200,200)
 }
-
+.mobileDropdownMenu
+{
+    display: none;
+}
 
 /* post cards styling */
 .postsBodyContainer
@@ -207,15 +214,23 @@
 {
     display:flex;
     flex-direction: column;
+    width: 100%;
+    margin: 0;
+
 }
 /* likes styling */
-.likesContainer
+.desktopLikesContainer
 {   
     display: flex;
     flex-direction: column;
     color: rgb(80,80,80);
     align-items: center;
     justify-content: center;
+    margin-left: 10px;
+}
+.mobileLikesContainer
+{
+    display: none;
 }
 .likeBackgroundClass_active
 {
@@ -232,6 +247,10 @@
     color:rgb(80,80,80);
     border: 0px;
     cursor:pointer;
+}
+.likeBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
 }
 .likeClass
 {
@@ -266,7 +285,10 @@
     background-color: rgb(35,35,35);
     color: white;
 }
+.buttnDisplayText
+{
 
+}
 /* post main text styling. */
 .postMainTextClass
 {
@@ -274,8 +296,8 @@
     display:block;
     color: #fff;
     text-align: left;
-    margin-left: 50px;
-    margin-right: 10px;
+    padding-left: 30px;
+    padding-right: 10px;
 }
 .postTitle
 {
@@ -299,12 +321,11 @@
 
 .buttonListClass
 {
-    margin-top: 20px;
-    margin-left: 50px;
-    margin-right: 10px;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 10px;
     display:flex;
     flex-direction: row;
-
 }
 .buttonClass
 {
@@ -342,4 +363,100 @@
 .deactivate
 {
     display:none;
+}
+
+
+@media screen and (max-width: 1100px)
+{
+    .createPostContainer
+    {
+        width: 800px;
+    }
+    .postContainer
+    {
+        width: 800px;
+        /* margin-top: 20px; */
+    }
+    .buttnBarContainer
+    {
+        width: 800px;
+    }
+    
+}
+
+@media screen and (max-width: 900px)
+{
+    
+    .createPostContainer
+    {
+        width: 600px;     
+    }
+    .postContainer
+    {
+        width: 600px;
+    }
+    .buttnBarContainer
+    {
+        width: 600px;
+    }
+}
+
+@media screen and (max-width: 700px)
+{
+    /* likes */
+    .desktopLikesContainer
+    {
+        display: none;
+    }
+    .mobileLikesContainer
+    {
+        display: flex;
+        flex-direction: row;
+        color: rgb(80,80,80);
+        align-items: center;
+        justify-content: space-between;
+        width: 110px;
+    }
+        /* padding to align the arrows best. */
+    .buttonListClass
+    {
+        padding-left: 20px;
+    }
+        /* for placing comments button correctly */
+    .buttnElementBackgroundClass
+    {
+        margin-left: 10px;
+    }
+    /* general page container */
+    .postsPageContainer
+    {
+        width: 99%;
+    }
+    .createPostContainer
+    {
+        width: 90%;
+    }
+    .postContainer
+    {
+        width: 100%;
+        border-radius: 0;
+    }
+    .buttnBarContainer
+    {
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width: 530px)
+{
+    .buttnDisplayText
+    {
+        display: none;
+    }
+    .buttnElementBackgroundClass
+    {
+        margin-left:    30px;
+        margin-right: 0px;
+    }
 }

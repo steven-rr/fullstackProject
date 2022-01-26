@@ -22,9 +22,14 @@ const Posts = () => {
     
     // use state.
     const [postData, setPostData] = useState([])
-    const [dropdownOn, setDropdown]           = useState(false)
-    const [dropdownElementActive, setDropdownElementActive] = useState("1")
-    const [currentOrderingName, setCurrentOrderingName]   = useState("Top")
+    // order dropdown states. 
+    const [orderDropdownOn, setOrderDropdown]           = useState(false)
+    const [orderElementActive, setOrderElementActive] = useState("1")
+    const [currentOrderingName, setCurrentOrderingName]   = useState("Newest")
+    // time dropdown states. 
+    const [timeDropdownOn, setTimeDropdown]           = useState(false)
+    const [timingElementActive, setTimingElementActive] = useState("1")
+    const [currentTimingName, setCurrentTimingName]   = useState("All Time")
 
 
     // on render, get posts from backend and display for the user.
@@ -34,13 +39,11 @@ const Posts = () => {
             setPostData( (prevState)=>{
                 let stateSorted = response.data
                 stateSorted.sort( (a,b) => {
-                    let likesOfA =  a.likeCounter
-                    let likesOfB =  b.likeCounter
-                    if(likesOfA < likesOfB)
+                    if(b.timePosted_seconds > a.timePosted_seconds)
                     {
                         return 1;
                     }
-                    else if(likesOfA > likesOfB)
+                    else if(b.timePosted_seconds < a.timePosted_seconds)
                     {
                         return -1;
                     } 
@@ -65,8 +68,8 @@ const Posts = () => {
     const handleOnClickComments = () => {
         console.log("button clicked!");
     }
-    const handleOnClickDelete = (id) => {
-        console.log("button clicked!");
+    const handleOnClickDelete = (e, id) => {
+        console.log("delete clicked!");
         // send delete request to backend.
         axios
             .delete(`/api/posts/${id}`)
@@ -79,9 +82,10 @@ const Posts = () => {
             .catch ( () => {
                 console.log("delete failed!");
             })
+        e.stopPropagation();
     }
     // like a post .
-    const handleLike = (PostId) => {
+    const handleLike = (e, PostId) => {
         console.log("like clicked!" ) 
         axios  
             .post(`/api/likes/like`, {PostId: PostId})
@@ -125,9 +129,11 @@ const Posts = () => {
             .catch( (err) => {
                 console.log(err);
             })
+        // prevent post from linking.
+        e.stopPropagation()
     }
     // dislike a post .
-    const handleDislike = (PostId) => {
+    const handleDislike = (e, PostId) => {
         console.log("dislike clicked!" ) 
         axios  
             .post(`/api/likes/dislike`, {PostId: PostId})
@@ -167,6 +173,7 @@ const Posts = () => {
             .catch( (err) => {
                 console.log(err);
             })
+        e.stopPropagation()
     }
 
     // dropdowns:
@@ -175,38 +182,21 @@ const Posts = () => {
         if(e.currentTarget.dataset.div_id == "1" || e.currentTarget.dataset.div_id == "4")
         {
             console.log("setting dropdown to false.")
-            setDropdown(false)
+            setOrderDropdown(false)
+        }
+        if(e.currentTarget.dataset.div_id == "2" || e.currentTarget.dataset.div_id == "5")
+        {
+            console.log("setting dropdown to false.")
+            setTimeDropdown(false)
 
         }
     }
     const handleOrderingElementClick = (e) => {
         console.log("CLICK ORDERING ELEMENT!")
-        setDropdownElementActive(e.currentTarget.dataset.div_id)
-        setDropdown(false)
-        // top 
+        setOrderElementActive(e.currentTarget.dataset.div_id)
+        setOrderDropdown(false)
+        // newest 
         if(e.currentTarget.dataset.div_id == "1")
-        {
-            console.log("top!")
-            setCurrentOrderingName("Top")
-            postData.sort( (a,b) => {
-                let likesOfA =  a.likeCounter
-                let likesOfB =  b.likeCounter
-                if(likesOfA < likesOfB)
-                {
-                    return 1;
-                }
-                else if(likesOfA > likesOfB)
-                {
-                    return -1;
-                } 
-                else
-                {   
-                    return 0;
-                }
-            })
-        }
-        // newest
-        else if ( e.currentTarget.dataset.div_id == "2")
         {
             console.log("newest!")
             setCurrentOrderingName("Newest")
@@ -224,10 +214,11 @@ const Posts = () => {
                     return 0;
                 }
             })
-        } 
+            
+        }
         // oldest
-        else if(e.currentTarget.dataset.div_id == "3")
-        {   
+        else if ( e.currentTarget.dataset.div_id == "2")
+        {
             console.log("oldest!")
             setCurrentOrderingName("Oldest")
             postData.sort( (a,b) => {
@@ -236,6 +227,28 @@ const Posts = () => {
                     return 1;
                 }
                 else if(b.timePosted_seconds > a.timePosted_seconds)
+                {
+                    return -1;
+                } 
+                else
+                {   
+                    return 0;
+                }
+            })
+        } 
+        // top
+        else if(e.currentTarget.dataset.div_id == "3")
+        {   
+            console.log("top!")
+            setCurrentOrderingName("Top")
+            postData.sort( (a,b) => {
+                let likesOfA =  a.likeCounter
+                let likesOfB =  b.likeCounter
+                if(likesOfA < likesOfB)
+                {
+                    return 1;
+                }
+                else if(likesOfA > likesOfB)
                 {
                     return -1;
                 } 
@@ -270,7 +283,91 @@ const Posts = () => {
     
     }
     const handleOrderingClick = () => {
-        setDropdown(currState=>!currState)
+        setOrderDropdown(currState=>!currState)
+    }
+    // timing dropdown: 
+    const handleTimingClick = () => {
+        setTimeDropdown(currState=>!currState)
+    }
+    const handleTimingElementClick = (e) => {
+        console.log("CLICK TIMING ELEMENT!")
+        setTimingElementActive(e.currentTarget.dataset.div_id)
+        setTimeDropdown(false)
+
+        // params:
+        let oneWeek_secs = 60*60*24;
+        let oneMonth_secs = oneWeek_secs * 4;
+        let oneYear_secs = oneWeek_secs * 52;
+        let todayTime_updated = (new Date()).getTime()/1000;
+
+        // all time. 
+        if(e.currentTarget.dataset.div_id == "1")
+        {
+            setCurrentTimingName("All Time")
+            for(let i =0; i<postData.length; i ++)
+            {
+                postData[i].inTime_bool = true;
+            }
+        }
+        // this week
+        else if ( e.currentTarget.dataset.div_id == "2")
+        {   
+            setCurrentTimingName("This Week")
+            for(let i =0; i<postData.length; i ++)
+            {
+                let timeDiff = todayTime_updated - postData[i].timePosted_seconds
+                if( timeDiff > 0 && timeDiff < oneWeek_secs  )
+                {
+                    postData[i].inTime_bool = true
+                }
+                else
+                {
+                    postData[i].inTime_bool = false
+                }
+            }
+            
+        }
+        // this month.
+        else if( e.currentTarget.dataset.div_id == "3")
+        {   
+            setCurrentTimingName("This Month")
+            for(let i =0; i<postData.length; i ++)
+            {
+                let timeDiff = todayTime_updated - postData[i].timePosted_seconds
+                if( timeDiff > 0 && timeDiff < oneMonth_secs  )
+                {
+                    postData[i].inTime_bool = true
+                }
+                else
+                {
+                    postData[i].inTime_bool = false
+                }
+            }
+        }
+        // this year
+        else
+        {    
+            setCurrentTimingName("This Year")
+            for(let i =0; i<postData.length; i ++)
+            {
+                let timeDiff = todayTime_updated - postData[i].timePosted_seconds
+                if( timeDiff > 0 && timeDiff < oneYear_secs  )
+                {
+                    postData[i].inTime_bool = true
+                }
+                else
+                {
+                    postData[i].inTime_bool = false
+                }
+            }
+        }   
+
+    }
+
+    // handle post onclick
+    const handlePostOnClick = (id) => {
+        console.log("post clicked!")
+        history.push(`/blog/${id}`)
     }
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
@@ -327,6 +424,11 @@ const Posts = () => {
         
         
     }
+
+    const handleEditClick = (e) => {
+        console.log("edit clicked!")
+        e.stopPropagation();
+    }
     return (
         <div className={PostsCSS.postsPageContainer}>
             
@@ -345,111 +447,152 @@ const Posts = () => {
                 </div>
             }
             
-            {/* sorting buttons */}
-            {/* <div className={PostsCSS.buttonClass}>
-                
-                Sort by.. 
-            </div> */}
-            {/* future button */}
+            
+            {/* button bar for sorting  */}
             <div className={PostsCSS.buttnBarContainer}>
+                {/* desktop dropdown buttons */}
                 <div tabIndex="0" className={PostsCSS.barButtnContainer} data-div_id="1"  onBlur={(e)=> handleDropdownBlur(e)}>
                     <div className={`${PostsCSS.buttnBarButtn}` } onMouseDown={() => handleOrderingClick()}>
                         <div className={`${PostsCSS.buttnBar_text}  `} > {currentOrderingName}  </div>
                         <div className={PostsCSS.iconRotate}>
                             <MdArrowForwardIos />
                         </div>
-                        
                     </div>
-                    <div className={`${dropdownOn ? "":PostsCSS.deactivate} ${PostsCSS.desktopBarDropDownMenu} `}   > 
-                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "1" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
-                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "2" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
-                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "3" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
-                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (dropdownElementActive == "4" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Controversial </div>
+                    <div className={`${orderDropdownOn ? "":PostsCSS.deactivate} ${PostsCSS.desktopBarDropDownMenu} `}   > 
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (orderElementActive == "1" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (orderElementActive == "2" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (orderElementActive == "3" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (orderElementActive == "4" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Controversial </div>
+                    </div>                   
+                </div>
+                <div tabIndex="0" className={PostsCSS.barButtnContainer} data-div_id="2"  onBlur={(e)=> handleDropdownBlur(e)}>
+                    <div className={`${PostsCSS.buttnBarButtn}` } onClick={() => handleTimingClick()}>
+                        <div className={`${PostsCSS.buttnBar_text}  `} > {currentTimingName}  </div>
+                        <div className={PostsCSS.iconRotate}>
+                            <MdArrowForwardIos />
+                        </div>
+                    </div>
+                    <div className={`${timeDropdownOn ? "":PostsCSS.deactivate} ${PostsCSS.desktopBarDropDownMenu} `}   > 
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (timingElementActive == "1" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleTimingElementClick(e)}> All Time </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (timingElementActive == "2" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleTimingElementClick(e)}> This Week </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (timingElementActive == "3" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleTimingElementClick(e)}> This Month </div>
+                        <div className={`${PostsCSS.barDropDownMenuElement} ${ (timingElementActive == "4" ) ? PostsCSS.barDropDownMenuElement_active : ""}`} data-div_id="4" onMouseDown={(e) => handleTimingElementClick(e)}> This Year </div>
                     </div>
                 </div>
+                {/* mobile dropdown menu */}
+                {/* <div tabIndex="0" className={`${timeDropdownOn ? "":HomeCSS.deactivate} ${PostsCSS.mobileDropdownMenu} `} data-div_id="4" onBlur={(e)=> handleDropdownBlur(e)} > 
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="1" onMouseDown={(e) => handleTimingElementClick(e)}> Future </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="2" onMouseDown={(e) => handleTimingElementClick(e)}> Past </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (timingElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`} data-div_id="3" onMouseDown={(e) => handleTimingElementClick(e)}> All </div>
+
+                </div>  
+                <div tabIndex="0" className={`${orderDropdownOn ? "":HomeCSS.deactivate} ${PostsCSS.mobileDropdownMenu} `} data-div_id="5" onBlur={(e)=> handleDropdownBlur(e)}> 
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "1" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="1" onMouseDown={(e) => handleOrderingElementClick(e)}> Recent </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "2" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="2" onMouseDown={(e) => handleOrderingElementClick(e)}> Distant </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "3" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="3" onMouseDown={(e) => handleOrderingElementClick(e)}> Oldest </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "4" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="4" onMouseDown={(e) => handleOrderingElementClick(e)}> Newest </div>
+                        <div className={`${HomeCSS.mobileDropDownMenuElement} ${ (orderElementActive == "5" ) ? HomeCSS.mobileDropDownMenuElement_active : ""}`}  data-div_id="5" onMouseDown={(e) => handleOrderingElementClick(e)}> Top </div>
+                </div> */}
+               
             </div>
 
             {/* display all posts */}
             <div className={PostsCSS.postsBodyContainer}>
                 {postData.map((value, key) =>{
-                    let str = value.createdAt;
-
-                    var datePosted= new Date(str)
-                    var dateStringPosted = postDateToDisplay(datePosted)
-
-                    return (
-                            
-                        <div className={PostsCSS.postContainer} key = {key}>
-                            {/* likes */}
-                            
-                                {authState.authStatus 
-                                ?
-                                // do something
-                                <div className={PostsCSS.likesContainer}>
-                                    <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={() => handleLike(value.id) }>
-                                        <BiUpvote className={PostsCSS.likeClass} size="40px" />
-                                    </div>
-                                    <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
-                                    <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={() => handleDislike(value.id) }>
-                                        <BiDownvote className={PostsCSS.likeClass} size="40px" />
-                                    </div>
-                                </div>
-                                :
-                                // do something else.
-                                <div className={PostsCSS.likesContainer}>
-                                    <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
-                                        <BiUpvote className={PostsCSS.likeClass} size="40px" />
-                                    </div>
-                                    <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
-                                    <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
-                                        <BiDownvote className={PostsCSS.likeClass} size="40px" />
-                                    </div>
-                                </div>  
-                                }
+                    if(value.inTime_bool)
+                    {                
+                        let str = value.createdAt;
+                        var datePosted= new Date(str)
+                        var dateStringPosted = postDateToDisplay(datePosted)
+                        return (
                                 
-                            {/* content */}
-                            <div className={PostsCSS.postContentClass}>
-                                {/* Text */}
-                                <Link  className={PostsCSS.postMainTextClass}  to={`/blog/${value.id}`}> 
-                                    <div className = {PostsCSS.postAuthor}>{`Posted by ${value.username} ${dateStringPosted}`} </div>
-                                    <div className = {PostsCSS.postTitle}>
-                                        {value.title.length > 300 ? value.title.substring(0, 300) + "..." : value.title} 
+                            <div className={PostsCSS.postContainer} onClick= {()=>handlePostOnClick(value.id)}  key = {key}>
+                                {/* likes */}
+                                
+                                    {authState.authStatus 
+                                    ?
+                                    // do something
+                                    <div className={PostsCSS.desktopLikesContainer}>
+                                        <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e,value.id) }>
+                                            <BiUpvote className={PostsCSS.likeClass} size="40px" />
+                                        </div>
+                                        <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
+                                        <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e,value.id) }>
+                                            <BiDownvote className={PostsCSS.likeClass} size="40px" />
+                                        </div>
                                     </div>
-                                    <div className = {PostsCSS.postContent}>
-                                        {value.contentText.length > 800 ? value.contentText.substring(0,800) + "..." : value.contentText} 
-                                    </div>
+                                    :
+                                    // do something else.
+                                    <div className={PostsCSS.desktopLikesContainer}>
+                                        <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
+                                            <BiUpvote className={PostsCSS.likeClass} size="40px" />
+                                        </div>
+                                        <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
+                                        <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
+                                            <BiDownvote className={PostsCSS.likeClass} size="40px" />
+                                        </div>
+                                    </div>  
+                                    }
+                                {/* <div className={PostsCSS.postContentClass}> */}
+                                    {/* Text */}
+                                    {/* <Link  className={PostsCSS.postMainTextClass}  to={`/blog/${value.id}`}>  */}
+                                {/* content */}
+                                <div className={PostsCSS.postContentClass} >
+                                    {/* Text */}
+                                    <div  className={PostsCSS.postMainTextClass}  > 
+                                        <div className = {PostsCSS.postAuthor}>{`Posted by ${value.username} ${dateStringPosted}`} </div>
+                                        <div className = {PostsCSS.postTitle}>
+                                            {value.title.length > 300 ? value.title.substring(0, 300) + "..." : value.title} 
+                                        </div>
+                                        <div className = {PostsCSS.postContent}>
+                                            {value.contentText.length > 800 ? value.contentText.substring(0,800) + "..." : value.contentText} 
+                                        </div>
 
-                                </Link>
-                                {/* Buttons */}
-                                <div className={PostsCSS.buttonListClass}> 
-                                    {/* <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttonClass} > comments <BiComment/> </Link> */}
-                                    <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttnElementBackgroundClass} > 
-                                            <BiComment size="30px"/> 
-                                            <div > {value.commentCounter} comments</div>
-                                    </Link>
-                                    {(authState.UserId === value.UserId) 
-                                    ?   
-                                    (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={()=> handleOnClickDelete(value.id)}>  
-                                            <AiOutlineDelete  size="30px"/>
-                                            <div >Delete Post </div>     
-                                    </button>) 
-                                    : 
-                                    ""
-                                    }
-                                    {(authState.UserId === value.UserId) 
-                                    ?   
-                                    (<button className= {PostsCSS.buttnElementBackgroundClass}> 
-                                            <FiEdit2 size="30px"/>
-                                            <div > Edit Post</div>
-                                    </button>) 
-                                    : 
-                                    ""
-                                    }
-                                    
+                                    </div>
+                                    {/* Buttons */}
+                                    <div className={PostsCSS.buttonListClass}> 
+                                        {/* upvotes buttons */}
+                                        <div className={PostsCSS.mobileLikesContainer}>
+                                            <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e, value.id) }>
+                                                <BiUpvote className={PostsCSS.likeClass} size="40px" />
+                                            </div>
+                                            <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
+                                            <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e, value.id) }>
+                                                <BiDownvote className={PostsCSS.likeClass} size="40px" />
+                                            </div>
+                                        </div>
+
+                                        {/* comments button */}
+                                        <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttnElementBackgroundClass} > 
+                                                <BiComment size="30px"/> 
+                                                <div className={PostsCSS.buttnDisplayText}> {value.commentCounter} comments</div>
+                                        </Link>
+                                        {/* delete button */}
+                                        {(authState.UserId === value.UserId) 
+                                        ?   
+                                        (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={(e)=> handleOnClickDelete(e, value.id)}>  
+                                                <AiOutlineDelete  size="30px"/>
+                                                <div className={PostsCSS.buttnDisplayText}>Delete Post </div>     
+                                        </button>) 
+                                        : 
+                                        ""
+                                        }
+                                        {/* edit button */}
+                                        {(authState.UserId === value.UserId) 
+                                        ?   
+                                        (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={(e) => handleEditClick(e)} > 
+                                                <FiEdit2 size="30px"/>
+                                                <div className={PostsCSS.buttnDisplayText}> Edit Post</div>
+                                        </button>) 
+                                        : 
+                                        ""
+                                        }
+                                        
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )
+                        )
+                    }
                 })}
             </div>
         </div>
