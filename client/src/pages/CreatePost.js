@@ -12,7 +12,7 @@ const CreatePost = () => {
     const [newPost, setNewPost] = useState({title: "", contentText: "", username: "admin"})
     // create post on click with create post button.
     const createPost = async () => {
-        console.log("attempting to submit!!!!!", newPost)
+        console.log("attempting to submit!!!!", newPost)
         // post the new post on the server.
         await axios
             .post('/api/posts',newPost)
