@@ -47,6 +47,12 @@ module.exports = (sequelize, DataTypes) => {
        {
          type:DataTypes.INTEGER,
          allowNull: false
+       },
+       inTime_bool: 
+       {
+         type: DataTypes.BOOLEAN,
+         allowNull: true,
+         defaultValue: true
        }
        
     });
