@@ -2,6 +2,12 @@ import React, {useState, useEffect, useContext} from 'react'
 import NavbarCSS from './Navbar.module.css'
 import { NavLink, Link, useHistory} from 'react-router-dom'
 import {AuthContext} from "../App"
+import rocketLogo from '../rocketLogo.png'
+import spaceLaunchTxt from '../spaceLaunchTxt.png'
+import lightSpeed from '../lightSpeed.png'
+import rocketSmoke from '../rocketSmoke.png'
+import rocketStars from '../rocketStars.png'
+
 import axios from 'axios'
 
 const Navbar = ({onClick}) => {
@@ -92,9 +98,11 @@ const Navbar = ({onClick}) => {
         <div className={ `${NavbarCSS.containerMain}` }> 
             <div className={NavbarCSS.navLinkItems}>
                 <div className={NavbarCSS.navHome}>
-                    <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} }`} > HOME</NavLink> 
+                    <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} }`} > 
+                        <img className = {NavbarCSS.rocketLogo} src= {rocketStars}/>    
+                        <img className = {NavbarCSS.spaceLaunchTxt} src= {spaceLaunchTxt}/>    
+                    </NavLink> 
                 </div>
-
                 <div className={NavbarCSS.navMain}>
                     <ul className={NavbarCSS.navMainUl}>
                         <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} `} to="/blog"   > POSTS </NavLink> </li>
@@ -102,7 +110,7 @@ const Navbar = ({onClick}) => {
                             (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} `}>LOGIN</div>  </li>
                             <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} `} to="/form"   >  SIGNUP</NavLink> </li> </>) 
                             : 
-                            (<><li className={NavbarCSS.navMainLi}> <Link to ={`/user/${authState.UserId}`}>{authState.username} </Link></li>
+                            (<><li className={NavbarCSS.navMainLi}> <Link className={`${NavbarCSS.navMainAnchor} `} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
                             <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button"> LOGOUT </button> </li></>)}
 
                         
