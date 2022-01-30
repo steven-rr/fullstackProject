@@ -295,7 +295,7 @@ const Posts = () => {
         setTimeDropdown(false)
 
         // params:
-        let oneWeek_secs = 60*60*24;
+        let oneWeek_secs = 60*60*24*7;
         let oneMonth_secs = oneWeek_secs * 4;
         let oneYear_secs = oneWeek_secs * 52;
         let todayTime_updated = (new Date()).getTime()/1000;
