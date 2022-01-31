@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react'
 import NavbarCSS from './Navbar.module.css'
 import { NavLink, Link, useHistory} from 'react-router-dom'
+import NavButton from './NavButton'
 import {AuthContext} from "../App"
 import rocketLogo from '../rocketLogo.png'
 import spaceLaunchTxt from '../spaceLaunchTxt.png'
@@ -95,7 +96,7 @@ const Navbar = ({onClick}) => {
     }
 
     return (
-        <div className={ `${NavbarCSS.containerMain}` }> 
+        <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.open : '' } ${state.fade ? NavbarCSS.transition : '' } ` }> 
             <div className={NavbarCSS.navLinkItems}>
                 <div className={NavbarCSS.navHome}>
                     <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} }`} > 
@@ -105,18 +106,23 @@ const Navbar = ({onClick}) => {
                 </div>
                 <div className={NavbarCSS.navMain}>
                     <ul className={NavbarCSS.navMainUl}>
-                        <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} `} to="/blog"   > POSTS </NavLink> </li>
+                        <li className={`${NavbarCSS.navMainLiPosts}`}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
                         {!authState.authStatus ? 
-                            (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} `}>LOGIN</div>  </li>
-                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.navMainAnchor} `} to="/form"   >  SIGNUP</NavLink> </li> </>) 
+                            (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `}>LOGIN</div>  </li>
+                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.signupClass} ${NavbarCSS.specialButtn}`} to="/form"   >  SIGNUP</NavLink> </li> </>) 
                             : 
-                            (<><li className={NavbarCSS.navMainLi}> <Link className={`${NavbarCSS.navMainAnchor} `} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
-                            <li className={NavbarCSS.navMainLi}><button onClick={() => logout()} type = "button"> LOGOUT </button> </li></>)}
-
-                        
+                            (<><li className={NavbarCSS.navMainLi}> <Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
+                            <li className={`${NavbarCSS.navMainLi} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchor}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li></>)}
                     </ul>
                 </div>
             </div>
+            <div className={`${NavbarCSS.navPostsContainer}`}><NavLink className={`${NavbarCSS.navPostsAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
+            <NavButton
+                menuOpen={state.menuOpen}
+                onClick={handleMenuClick}
+                fade={state.fade}
+                onEnd={onTransitionEnd}
+            />
             
           
             
