@@ -1,3 +1,4 @@
+/* initially, dont activate */
 .navContainer
 {
     display: none;
@@ -5,6 +6,92 @@
 .menuButtnContainer
 {
     display: none;
+}
+
+/* activate once logged in. */
+.navContainerActivated
+{
+    display: block;
+    position: relative;
+    right: 0px;
+    width: 80px;
+    height: 100%;
+}
+.menuButtnContainerActivated
+{
+    position: absolute;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    top: 0px;
+    right: 0px;
+    width: 80px;
+    height: 70px;
+    text-transform: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+}
+
+/* css styling for subcomponents. */
+.menuButtn
+{
+    position : absolute;
+    width: 30px;
+    height: 70px;
+    margin: 0;
+    padding: 0;
+
+}
+.menuButtnTop
+{
+    background-color: #fff;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    content: '';
+    width: 30px;
+    height: 1px;
+    transform: translatey(-5px);
+    transition: transform 250ms cubic-bezier(.2,.6,.3,1),width 250ms cubic-bezier(.2,.6,.3,1);
+    will-change: transform,width;
+
+}
+
+.menuButtnTopActive
+{
+    transform: translatex(1px) rotate(-135deg);
+    width: 30px;
+}
+
+.menuButtnBottom
+{
+    background-color: #fff;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    content: '';
+    width: 30px;
+    height: 1px;
+    transform: translatey(5px);
+    transition: transform 250ms cubic-bezier(.2,.6,.3,1),width 250ms cubic-bezier(.2,.6,.3,1);
+    will-change: transform,width;
+
+    
+}
+
+.menuButtnBottomActive
+{
+    transform: translatex(1px) rotate(135deg);
+    width: 30px;
 }
 
 @media screen and (max-width: 1000px)
@@ -33,62 +120,5 @@
         margin: 0;
         padding: 0;
         z-index: 1000;
-    }
-    .menuButtn
-    {
-        position : absolute;
-        width: 30px;
-        height: 70px;
-        margin: 0;
-        padding: 0;
-
-    }
-    .menuButtnTop
-    {
-        background-color: #fff;
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        margin: auto;
-        content: '';
-        width: 30px;
-        height: 1px;
-        transform: translatey(-5px);
-        transition: transform 250ms cubic-bezier(.2,.6,.3,1),width 250ms cubic-bezier(.2,.6,.3,1);
-        will-change: transform,width;
-
-    }
-
-    .menuButtnTopActive
-    {
-        transform: translatex(1px) rotate(-135deg);
-        width: 30px;
-    }
-
-    .menuButtnBottom
-    {
-        background-color: #fff;
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        margin: auto;
-        content: '';
-        width: 30px;
-        height: 1px;
-        transform: translatey(5px);
-        transition: transform 250ms cubic-bezier(.2,.6,.3,1),width 250ms cubic-bezier(.2,.6,.3,1);
-        will-change: transform,width;
-
-        
-    }
-
-    .menuButtnBottomActive
-    {
-        transform: translatex(1px) rotate(135deg);
-        width: 30px;
     }
 }

@@ -96,37 +96,62 @@ const Navbar = ({onClick}) => {
     }
 
     return (
-        <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.open : '' } ${state.fade ? NavbarCSS.transition : '' } ` }> 
-            <div className={NavbarCSS.navLinkItems}>
-                <div className={NavbarCSS.navHome}>
-                    <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} }`} > 
-                        <img className = {NavbarCSS.rocketLogo} src= {rocketStars}/>    
-                        <img className = {NavbarCSS.spaceLaunchTxt} src= {spaceLaunchTxt}/>    
-                    </NavLink> 
+        authState.authStatus
+        ?
+            <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.openLoggedIn : '' } ${state.fade ? NavbarCSS.transitionLoggedIn : '' } ` }> 
+                <div className={NavbarCSS.navLinkItemsLoggedIn}>
+                    <div className={NavbarCSS.navHomeLoggedIn}>
+                        <NavLink exact to="/" className={`${NavbarCSS.navMainAnchorLoggedIn} }`} > 
+                            <img className = {NavbarCSS.rocketLogoLoggedIn} src= {rocketStars}/>    
+                            <img className = {NavbarCSS.spaceLaunchTxtLoggedIn} src= {spaceLaunchTxt}/>    
+                        </NavLink> 
+                    </div>
+                    <div className={NavbarCSS.navMainLoggedIn}>
+                        <ul className={NavbarCSS.navMainUlLoggedIn}>
+                            <li className={`${NavbarCSS.navMainLiPostsLoggedIn}`}><NavLink className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
+                            <><li className={NavbarCSS.navMainLiLoggedIn}> <Link className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
+                                <li className={`${NavbarCSS.navMainLiLoggedIn} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchorLoggedIn}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li></>
+                        </ul>
+                    </div>
                 </div>
-                <div className={NavbarCSS.navMain}>
-                    <ul className={NavbarCSS.navMainUl}>
-                        <li className={`${NavbarCSS.navMainLiPosts}`}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
-                        {!authState.authStatus ? 
-                            (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `}>LOGIN</div>  </li>
-                            <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.signupClass} ${NavbarCSS.specialButtn}`} to="/form"   >  SIGNUP</NavLink> </li> </>) 
-                            : 
-                            (<><li className={NavbarCSS.navMainLi}> <Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
-                            <li className={`${NavbarCSS.navMainLi} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchor}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li></>)}
-                    </ul>
-                </div>
+                <div className={`${NavbarCSS.navPostsContainerLoggedIn}`}><NavLink className={`${NavbarCSS.navPostsAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
+                <NavButton
+                    menuOpen={state.menuOpen}
+                    onClick={handleMenuClick}
+                    fade={state.fade}
+                    onEnd={onTransitionEnd}
+                />
             </div>
-            <div className={`${NavbarCSS.navPostsContainer}`}><NavLink className={`${NavbarCSS.navPostsAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
-            <NavButton
-                menuOpen={state.menuOpen}
-                onClick={handleMenuClick}
-                fade={state.fade}
-                onEnd={onTransitionEnd}
-            />
-            
-          
-            
-        </div>
+        :
+            <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.open : '' } ${state.fade ? NavbarCSS.transition : '' } ` }> 
+                <div className={NavbarCSS.navLinkItems}>
+                    <div className={NavbarCSS.navHome}>
+                        <NavLink exact to="/" className={`${NavbarCSS.navMainAnchor} }`} > 
+                            <img className = {NavbarCSS.rocketLogo} src= {rocketStars}/>    
+                            <img className = {NavbarCSS.spaceLaunchTxt} src= {spaceLaunchTxt}/>    
+                        </NavLink> 
+                    </div>
+                    <div className={NavbarCSS.navMain}>
+                        <ul className={NavbarCSS.navMainUl}>
+                            <li className={`${NavbarCSS.navMainLiPosts}`}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
+                            {!authState.authStatus ? 
+                                (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `}>LOGIN</div>  </li>
+                                <li className={NavbarCSS.navMainLi}><NavLink className={`${NavbarCSS.signupClass} ${NavbarCSS.specialButtn}`} to="/form"   >  SIGNUP</NavLink> </li> </>) 
+                                : 
+                                (<><li className={NavbarCSS.navMainLi}> <Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
+                                <li className={`${NavbarCSS.navMainLi} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchor}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li></>)}
+                        </ul>
+                    </div>
+                </div>
+                <div className={`${NavbarCSS.navPostsContainer}`}><NavLink className={`${NavbarCSS.navPostsAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
+                <NavButton
+                    menuOpen={state.menuOpen}
+                    onClick={handleMenuClick}
+                    fade={state.fade}
+                    onEnd={onTransitionEnd}
+                />
+            </div>
+
     )
 }
 
