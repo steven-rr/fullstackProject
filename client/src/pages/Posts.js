@@ -376,15 +376,17 @@ const Posts = () => {
         // parameters
         const secsInYear = 60*60*24*365;
         const secsInMonth = 60*60*24*30;
+        const secsInDay = 60*60*24
+        const secsInHour = 60*60
+        const secsInMin = 60
 
-
-        // check first if post divisible by years:
-        let yearDiff = todayTime.getFullYear() - datePosted.getFullYear()
-        let monthDiff = todayTime.getMonth() - datePosted.getMonth()
-        let daysDiff = todayTime.getDate() - datePosted.getDate()
-        let hoursDiff = todayTime.getHours() - datePosted.getHours()
-        let minutesDiff = todayTime.getMinutes() - datePosted.getMinutes()
-        let secondsDiff = Math.floor(todayTime.getSeconds() - datePosted.getSeconds())
+        let timeDiff_secs = (todayTime.getTime() - datePosted.getTime()) / 1000.0
+        let yearDiff = Math.floor(timeDiff_secs / secsInYear)
+        let monthDiff = Math.floor(timeDiff_secs / secsInMonth)
+        let daysDiff = Math.floor(timeDiff_secs / secsInDay)
+        let hoursDiff = Math.floor(timeDiff_secs / secsInHour)
+        let minutesDiff = Math.floor(timeDiff_secs / secsInMin)
+        let secondsDiff = Math.floor(timeDiff_secs)
         
         if(yearDiff > 0)
         {

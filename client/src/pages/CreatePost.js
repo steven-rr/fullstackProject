@@ -42,32 +42,37 @@ const CreatePost = () => {
     }
     return (
         <div className={CreatePostCSS.createPostPageContainer}>
-            <div className={CreatePostCSS.createPostHeaderContainer}> 
-                <div className={CreatePostCSS.headerStyle}> Create a Post </div>
+            <div className={CreatePostCSS.createPostMobile}>
+                <div className={CreatePostCSS.createPostHeaderContainer}> 
+                    <div className={CreatePostCSS.headerStyle}> Create a Post </div>
+                </div>
+                <div className={CreatePostCSS.createPostBodyContainer}>
+                    <textarea 
+                        className={CreatePostCSS.titleField}
+                        name="title" 
+                        rows="1" 
+                        cols="1" 
+                        wrap="soft"
+                        placeholder="Title..."
+                        onChange={postTitleOnChange}
+                        value={newPost.title}
+                    />
+                    
+                    <textarea  
+                        className={CreatePostCSS.bodyField} 
+                        name="body" 
+                        rows="14" 
+                        cols="10" 
+                        wrap="soft" 
+                        placeholder="Enter your thoughts here..." 
+                        onChange={postContentOnChange}
+                        value={newPost.contentText}
+                    />
+                    <button className={CreatePostCSS.buttonClass} onClick={createPost}> POST </button>
+                </div>
             </div>
-            <div className={CreatePostCSS.createPostBodyContainer}>
-                <textarea 
-                    className={CreatePostCSS.titleField}
-                    name="title" 
-                    rows="1" 
-                    cols="1" 
-                    wrap="soft"
-                    placeholder="Title..."
-                    onChange={postTitleOnChange}
-                    value={newPost.title}
-                />
-                
-                <textarea  
-                    className={CreatePostCSS.bodyField} 
-                    name="body" 
-                    rows="14" 
-                    cols="10" 
-                    wrap="soft" 
-                    placeholder="Enter your thoughts here..." 
-                    onChange={postContentOnChange}
-                    value={newPost.contentText}
-                />
-                <button className={CreatePostCSS.buttonClass} onClick={createPost}> POST </button>
+            <div className={CreatePostCSS.createPostDesktop}>
+                hi
             </div>
         </div>
     )

@@ -101,7 +101,7 @@ const Navbar = ({onClick}) => {
             <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.openLoggedIn : '' } ${state.fade ? NavbarCSS.transitionLoggedIn : '' } ` }> 
                 <div className={NavbarCSS.navLinkItemsLoggedIn}>
                     <div className={NavbarCSS.navHomeLoggedIn}>
-                        <NavLink exact to="/" className={`${NavbarCSS.navMainAnchorLoggedIn} }`} > 
+                        <NavLink exact to="/" className={`${NavbarCSS.navHomeAnchorLoggedIn} }`} > 
                             <img className = {NavbarCSS.rocketLogoLoggedIn} src= {rocketStars}/>    
                             <img className = {NavbarCSS.spaceLaunchTxtLoggedIn} src= {spaceLaunchTxt}/>    
                         </NavLink> 
@@ -109,18 +109,21 @@ const Navbar = ({onClick}) => {
                     <div className={NavbarCSS.navMainLoggedIn}>
                         <ul className={NavbarCSS.navMainUlLoggedIn}>
                             <li className={`${NavbarCSS.navMainLiPostsLoggedIn}`}><NavLink className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
-                            <><li className={NavbarCSS.navMainLiLoggedIn}> <Link className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
-                                <li className={`${NavbarCSS.navMainLiLoggedIn} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchorLoggedIn}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li></>
+                            <li className={NavbarCSS.navMainLiLoggedIn}> <Link className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
+                            <li className={`${NavbarCSS.navMainLiLoggedIn} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchorLoggedIn}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li>
                         </ul>
                     </div>
                 </div>
-                <div className={`${NavbarCSS.navPostsContainerLoggedIn}`}><NavLink className={`${NavbarCSS.navPostsAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
-                <NavButton
-                    menuOpen={state.menuOpen}
-                    onClick={handleMenuClick}
-                    fade={state.fade}
-                    onEnd={onTransitionEnd}
-                />
+                <div className={NavbarCSS.navMain2LoggedIn}>
+                    <div className={`${NavbarCSS.navPostsContainerLoggedIn}`}><NavLink className={`${NavbarCSS.navPostsAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
+                    <NavButton
+                        menuOpen={state.menuOpen}
+                        onClick={handleMenuClick}
+                        fade={state.fade}
+                        onEnd={onTransitionEnd}
+                    />
+                </div>
+                
             </div>
         :
             <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.open : '' } ${state.fade ? NavbarCSS.transition : '' } ` }> 

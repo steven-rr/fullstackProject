@@ -244,15 +244,32 @@
 	text-align: left;
 	cursor: pointer;
 	color: #fff;
-	top: 10px;
-	left: 35px;
+	top: 5px;
+	left: 8vw;
 	z-index: 10000000000;
 	
+}
+.navHomeAnchorLoggedIn
+{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	text-transform:uppercase;
+	text-decoration: none;
+	color: white;
+	border-bottom: 2px solid transparent;
+	height: auto;
 }
 	/* image css. */
 .rocketLogoLoggedIn
 {
-	display: none;
+	width: auto;
+	height: 60PX;
+	z-index: 999;
 }
 .spaceLaunchTxtLoggedIn
 {
@@ -260,12 +277,22 @@
 	height: 40PX;
 	margin-left:10px;
 }
+/* container to hold posts, and navbutton */
+.navMain2LoggedIn
+{
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	top: 5px;
+	right: 6vw;
+	height: 60px;
+}
 /* container to hold posts, login, signup, logout, etc. using ul and li's. style for ul, li , etc. is included below. */
 .navMainLoggedIn
 {
-	right: 8vw; 
+	/* right: 8vw;  */
 	position:absolute;
-	left: 45px;
+	right:calc( 12vw );
 	top: 20px;
 	display:flex;
 	flex-direction: column;
@@ -356,12 +383,13 @@
 .navPostsContainerLoggedIn
 {
 	position: relative;
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	cursor: pointer;
-	padding-bottom: 5px;
-	padding-top: 5px;
 	height: 100%;
-	width: 150px;
+	width: 100px;
 }
 .navMainLiPostsLoggedIn
 {
@@ -370,14 +398,16 @@
 .navPostsAnchorLoggedIn
 {
 	position: absolute;
-	top: -70px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	left: 0px;
-	padding-top: 100px;
 	text-transform:uppercase;
 	text-decoration: none;
 	color: white;
 	height: 30px;
 	border-bottom: 2px solid transparent;
+	z-index: 10000;
 }
 
 
@@ -423,8 +453,23 @@
 		left: 35px;
 		z-index: 10000000000;
 	}
+	.navHomeLoggedIn
+	{
+		top: 10px;
+		left: 35px;
+		z-index: 10000000000;
+		
+	}
+	.navHomeAnchorLoggedIn
+	{
+	}
+
 		/* image css. */
 	.rocketLogo
+	{
+		display: none;
+	}
+	.rocketLogoLoggedIn
 	{
 		display: none;
 	}
@@ -438,7 +483,7 @@
 	.navMain
 	{
 		position:absolute;
-		left: 45px;
+		right: 45px;
 		top: 20px;
 		display:flex;
 		flex-direction: column;
@@ -452,6 +497,7 @@
 		text-align: center;		
 		
 	}
+	
 		/* styling for ul, li's, and anchors */
 	.navMainUl
 	{
