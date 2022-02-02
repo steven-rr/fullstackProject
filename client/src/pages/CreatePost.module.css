@@ -11,6 +11,10 @@
 
 }
 
+.createPostMobile
+{
+    display: none;
+}
 .createPostBodyContainer
 {
     display:flex;
@@ -81,3 +85,22 @@
 	background-color: rgb(117,35,35);
 	transition: all 0.1s ease-out;
 }
+
+/* draft js */
+.createPostDesktop
+{
+    display: block;
+}
+@media screen and (max-width: 1000px)
+{
+
+    .createPostMobile
+    {
+        display: block;
+    }
+    .createPostDesktop
+    {
+        display: none;
+    }
+}
+
