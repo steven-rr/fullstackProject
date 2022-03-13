@@ -115,7 +115,6 @@ router.get('/',peekToken, async (request, response) => {
         console.log("postIDsLiked: ", postIDsLiked)
         console.log("postIDsDisliked: ", postIDsDisliked)
 
-    // console.log("postdata: ", postData)
 
     response.json(postData)
 })
@@ -140,10 +139,10 @@ router.post("/", validateToken, async(request, response) => {
 })
 
 // get individual post data in database and send to frontend.
-router.get('/:id', async (request, response) => {
+router.get('/:id', peekToken, async (request, response) => {
     const id = request.params.id;
-    const individualPostData = await Posts.findByPk(id)
-
+    const individualPostData = await Posts.findOne( {where: {id: id} , include: [ {model: Likes}, {model: Dislikes}]})
+   
     // if post data not found, return 404. else, return post data.
     if(!individualPostData)
     {
@@ -151,7 +150,35 @@ router.get('/:id', async (request, response) => {
 
     }
     else
-    {
+    {   
+        // get all likes that this user liked.
+        // const userLikes = await Likes.findAll({where: {UserId: request.user.id}})
+        const userLikes = await Likes.findOne({where: {UserId: request.user.id, PostId: id}})
+
+        // get post ids in an array format. 
+        if(userLikes)
+        {
+            individualPostData.dataValues.liked = true
+        }
+        else
+        {
+            individualPostData.dataValues.liked = false
+        }
+
+
+        // do the same for dislikes
+        const userDislikes = await Dislikes.findOne({where: {UserId: request.user.id, PostId: id}})
+
+        // get post ids in an array format. 
+        if(userDislikes)
+        {
+            individualPostData.dataValues.disliked = true
+        }
+        else
+        {
+            individualPostData.dataValues.disliked = false
+        }
+
         response.json(individualPostData)
 
     }

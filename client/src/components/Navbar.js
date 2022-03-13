@@ -98,21 +98,14 @@ const Navbar = ({onClick}) => {
     return (
         authState.authStatus
         ?
-            <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}  ${state.menuOpen ? NavbarCSS.openLoggedIn : '' } ${state.fade ? NavbarCSS.transitionLoggedIn : '' } ` }> 
+            <div  onTransitionEnd={onTransitionEnd} className={ `${NavbarCSS.containerMain}   ${state.fade ? NavbarCSS.transitionLoggedIn : '' } ` }> 
                 <div className={NavbarCSS.navLinkItemsLoggedIn}>
                     <div className={NavbarCSS.navHomeLoggedIn}>
                         <NavLink exact to="/" className={`${NavbarCSS.navHomeAnchorLoggedIn} }`} > 
                             <img className = {NavbarCSS.rocketLogoLoggedIn} src= {rocketStars}/>    
                             <img className = {NavbarCSS.spaceLaunchTxtLoggedIn} src= {spaceLaunchTxt}/>    
                         </NavLink> 
-                    </div>
-                    <div className={NavbarCSS.navMainLoggedIn}>
-                        <ul className={NavbarCSS.navMainUlLoggedIn}>
-                            <li className={`${NavbarCSS.navMainLiPostsLoggedIn}`}><NavLink className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
-                            <li className={NavbarCSS.navMainLiLoggedIn}> <Link className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
-                            <li className={`${NavbarCSS.navMainLiLoggedIn} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchorLoggedIn}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li>
-                        </ul>
-                    </div>
+                    </div>                
                 </div>
                 <div className={NavbarCSS.navMain2LoggedIn}>
                     <div className={`${NavbarCSS.navPostsContainerLoggedIn}`}><NavLink className={`${NavbarCSS.navPostsAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </div> 
@@ -122,6 +115,16 @@ const Navbar = ({onClick}) => {
                         fade={state.fade}
                         onEnd={onTransitionEnd}
                     />
+                </div>
+                <div className={` ${state.menuOpen ? NavbarCSS.openLoggedIn : NavbarCSS.deactivate } `}>
+                    <div className={NavbarCSS.navMainLoggedIn}>
+                        <ul className={NavbarCSS.navMainUlLoggedIn}>
+                            <li className={NavbarCSS.accountHeader}> {authState.username}  </li>
+                            <li className={`${NavbarCSS.navMainLiPostsLoggedIn}`}><NavLink className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
+                            <li className={NavbarCSS.navMainLiLoggedIn}> <Link className={`${NavbarCSS.navMainAnchorLoggedIn} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
+                            <li className={`${NavbarCSS.navMainLiLoggedIn} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchorLoggedIn}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li>
+                        </ul>
+                    </div>
                 </div>
                 
             </div>
