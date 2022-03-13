@@ -54,15 +54,16 @@ const Posts = () => {
                 })
                 return stateSorted;
             });
-            
+            console.log(response.data)
         })
     }, []);
 
-    const handleLoginFromPosts = () => {
+    const handleLoginFromPosts = (e) => {
 
         setAuthState( currentAuthState=> {
             return { ...currentAuthState, loginOn: !currentAuthState.loginOn}
         })
+        e.stopPropagation()
     }
 
     const handleOnClickComments = () => {
@@ -443,7 +444,7 @@ const Posts = () => {
                 </div>
                 : 
                 <div className={PostsCSS.createPostContainer}>
-                    <div className={`${PostsCSS.linkCreatePostField}  `} onClick={()=> handleLoginFromPosts()}>
+                    <div className={`${PostsCSS.linkCreatePostField}  `} onClick={(e)=> handleLoginFromPosts(e)}>
                         Create Post
                     </div>
                 </div>
@@ -526,11 +527,11 @@ const Posts = () => {
                                     :
                                     // do something else.
                                     <div className={PostsCSS.desktopLikesContainer}>
-                                        <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
+                                        <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e)=> handleLoginFromPosts(e)}>
                                             <BiUpvote className={PostsCSS.likeClass} size="40px" />
                                         </div>
                                         <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
-                                        <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={()=> handleLoginFromPosts()}>
+                                        <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e)=> handleLoginFromPosts(e)}>
                                             <BiDownvote className={PostsCSS.likeClass} size="40px" />
                                         </div>
                                     </div>  
