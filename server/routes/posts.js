@@ -149,7 +149,7 @@ router.get('/:id', peekToken, async (request, response) => {
         response.status(404).json({msg: "post not found!!!"})
 
     }
-    else
+    else if(request.user)
     {   
         // get all likes that this user liked.
         // const userLikes = await Likes.findAll({where: {UserId: request.user.id}})
@@ -178,10 +178,9 @@ router.get('/:id', peekToken, async (request, response) => {
         {
             individualPostData.dataValues.disliked = false
         }
-
-        response.json(individualPostData)
-
     }
+    response.json(individualPostData)
+
 })
 
 // cookie on backend used to ensure user is authorized. if so, attempt to delete post. 

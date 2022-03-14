@@ -203,7 +203,13 @@ const Post = () => {
             })
         e.stopPropagation()
     }
+    const handleLoginFromPosts = (e) => {
 
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, loginOn: !currentAuthState.loginOn}
+        })
+        e.stopPropagation()
+    }
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
@@ -275,53 +281,43 @@ const Post = () => {
             <div className={PostCSS.postPageContainer}> 
                 {/* display posts */}
                 <div className={PostCSS.postBodyContainer}> 
-                    <div className={PostCSS.desktopLikesContainer}>
+                    {authState.authStatus 
+                        ?
+                        // do something
+                        <div className={PostCSS.desktopLikesContainer}>
                             <div className={`${individualPostData.liked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e) }>
-                                <BiUpvote className={PostCSS.likeClass} size="40px" />
+                                <BiUpvote className={PostCSS.likeClass} size="30px" />
                             </div>
                             {console.log("IN THE WEEDS: ", individualPostData.Dislikes)}
                             <div className={`${ (individualPostData.liked || individualPostData.disliked) ? PostCSS.likeCounterClass_active: ""}`}> {`${(individualPostData.Likes && individualPostData.Dislikes) ? individualPostData.Likes.length - individualPostData.Dislikes.length : ""}`}</div>
                             <div className={`${individualPostData.disliked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e) }>
-                                <BiDownvote className={PostCSS.likeClass} size="40px" />
-                            </div>
-                    </div>
-                    {/* {authState.authStatus 
-                        ?
-                        // do something
-                        <div className={PostCSS.desktopLikesContainer}>
-                            <div className={`${individualPostData.liked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e,value.id) }>
-                                <BiUpvote className={PostCSS.likeClass} size="40px" />
-                            </div>
-                            <div className={`${ (value.liked || value.disliked) ? PostCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
-                            <div className={`${value.disliked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e,value.id) }>
-                                <BiDownvote className={PostCSS.likeClass} size="40px" />
+                                <BiDownvote className={PostCSS.likeClass} size="30px" />
                             </div>
                         </div>
                         :
                         // do something else.
-                        <div className={PostsCSS.desktopLikesContainer}>
-                            <div className={`${value.liked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e)=> handleLoginFromPosts(e)}>
-                                <BiUpvote className={PostsCSS.likeClass} size="40px" />
+                        <div className={PostCSS.desktopLikesContainer}>
+                            <div className={`${individualPostData.liked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e)=> handleLoginFromPosts(e)}>
+                                <BiUpvote className={PostCSS.likeClass} size="30px" />
                             </div>
-                            <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div>
-                            <div className={`${value.disliked ? PostsCSS.likeBackgroundClass_active: ""} ${PostsCSS.likeBackgroundClass}`} onClick={(e)=> handleLoginFromPosts(e)}>
-                                <BiDownvote className={PostsCSS.likeClass} size="40px" />
+                            <div className={`${ (individualPostData.liked || individualPostData.disliked) ? PostCSS.likeCounterClass_active: ""}`}> {`${(individualPostData.Likes && individualPostData.Dislikes) ? individualPostData.Likes.length - individualPostData.Dislikes.length : ""}`} </div>
+                            <div className={`${individualPostData.disliked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e)=> handleLoginFromPosts(e)}>
+                                <BiDownvote className={PostCSS.likeClass} size="30px" />
                             </div>
-                    </div>  
-                    } */}
+                        </div>  
+                    }
                     
                     
                     <div className={PostCSS.postBodyContentContainer}>
-                        <div>Posted by {individualPostData.username} {dateStringPosted}  </div>
-                        <div className={PostCSS.titleStyle}> {`Welcome to post ${id}`} </div>
+                        <div className={PostCSS.authorClass}>Posted by {individualPostData.username} {dateStringPosted}  </div>
                         <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
                         <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
-                        <div className={PostCSS.contentStyle}> posted by {individualPostData.username}</div>
                         {(authState.UserId === individualPostData.UserId) ?   (<div><button className= {PostCSS.buttonClass} onClick={deletePost}> delete me</button><button className= {PostCSS.buttonClass}>  editpost</button></div>) : ""}
                     </div>
                     
                 </div>
                 <div className={PostCSS.createCommentContainer}>
+                    <div className={`${authState.authStatus ? PostCSS.commentAuthor: PostCSS.deactivate}`}>Comment as {authState.username}</div> 
                     <textarea
                         className={PostCSS.createCommentField}
                         name="body" 
