@@ -15,7 +15,7 @@
     flex-direction: row;
     border:  2px solid rgb(80,80,80);
     height: 100%;
-    width: 1050px;
+    width: 800px;
     padding-bottom: 10px;
     background-color: rgb(25, 25, 25);
     text-align: left;
@@ -23,6 +23,7 @@
 .postBodyContentContainer
 {
     display: block;
+    margin-top: 6px;
 }
 
 .desktopLikesContainer
@@ -33,7 +34,26 @@
     align-items: center;
     justify-content: center;
     margin-left: 10px;
+    margin-right: 10px;
+    height: 100%;
+    margin-top: 5px;
 }
+.likeBackgroundClass
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    color:rgb(80,80,80);
+    border: 0px;
+    cursor:pointer;
+}
+.likeBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
+}
+
 .likeBackgroundClass_active
 {
     color: red !important;
@@ -55,19 +75,27 @@
 {
     
 }
+.authorClass
+{
+    display: block;
+    color: rgb(80,80,80);
+    font-size: 12px;
+}
 .titleStyle
 {
     display: block;
-    padding-top: 50px;
+    padding-top: 10px;
     color: #fff;
-    font-size: 50px;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .contentStyle
 {
     display: block;
     color: #fff;
-    font-size: 20px;
+    padding-top: 10px;
+    font-size: 15px;
     color: #fff;
 
 
@@ -79,6 +107,11 @@
     align-items: center;
     width: 70%;
     margin-top: 50px;
+}
+.commentAuthor
+{
+    color: white;
+
 }
 .createCommentField
 {
@@ -176,4 +209,9 @@
     {
         display: none;
     }
+}
+
+.deactivate
+{
+    display:none;
 }

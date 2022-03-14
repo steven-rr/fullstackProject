@@ -305,7 +305,7 @@
 .postTitle
 {
     font-size: 25px;
-    margin-top: 20px;
+    margin-top: 10px;
     font-weight: bold;
 }
 
@@ -318,7 +318,8 @@
 .postAuthor
 {
     margin-top: 5px;
-    color: rgb(80,80,80)
+    color: rgb(80,80,80);
+    font-size: 12px;
 }
 /* end post main text styling. */
 
