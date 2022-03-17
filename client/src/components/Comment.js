@@ -101,8 +101,11 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
     
         return (
             <div className = {CommentCSS.commentBodyContainer} >
+                <div className={CommentCSS.commentAuthorContainer}>
+                    <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
+                    <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
+                </div>
                 <div className ={CommentCSS.commentText}> {comment.contentText} </div>
-                <div> posted by {comment.username}</div>
                 <div>
                     <button onClick={() => handleReply()}> reply </button>
                    

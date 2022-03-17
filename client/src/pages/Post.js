@@ -316,58 +316,58 @@ const Post = () => {
                     </div>
                     
                 </div>
-                    {authState.authStatus
-                    ?
-                        <div className={PostCSS.createCommentOuterContainer}>
-                            <div className={PostCSS.createCommentContainer}>
-                                <div className={`${authState.authStatus ? PostCSS.commentAuthor: PostCSS.deactivate}`}>Comment as {authState.username}</div> 
-                                <textarea
-                                    className={PostCSS.createCommentField}
-                                    name="body" 
-                                    rows="14" 
-                                    cols="10" 
-                                    wrap="soft" 
-                                    placeholder="Enter your thoughts here..." 
-                                    onChange={commentOnChange}
-                                    value={newComment}
-                                /> 
-                                <button className={PostCSS.buttonClass} onClick ={createComment}> CREATE COMMENT!</button>
-                            </div>
+                {authState.authStatus
+                ?
+                    <div className={PostCSS.createCommentOuterContainer}>
+                        <div className={PostCSS.createCommentContainer}>
+                            <div className={`${authState.authStatus ? PostCSS.commentAuthor: PostCSS.deactivate}`}>Comment as {authState.username}</div> 
+                            <textarea
+                                className={PostCSS.createCommentField}
+                                name="body" 
+                                rows="14" 
+                                cols="10" 
+                                wrap="soft" 
+                                placeholder="Enter your thoughts here..." 
+                                onChange={commentOnChange}
+                                value={newComment}
+                            /> 
+                            <button className={PostCSS.commentButtonClass} onClick ={createComment}> Comment </button>
                         </div>
-                        :
-                        <div className={PostCSS.createCommentOuterContainer}>
-                            <div className={PostCSS.createCommentContainer}>
-                                <textarea
-                                    className={PostCSS.createCommentField}
-                                    name="body" 
-                                    rows="14" 
-                                    cols="10" 
-                                    wrap="soft" 
-                                    placeholder="Login to Comment..." 
-                                    onClick={(e)=> handleLoginFromPosts(e)}
-                                    value={newComment}
-                                /> 
-                                <button className={PostCSS.buttonClass} onClick ={(e)=> handleLoginFromPosts(e)}> LOG IN!</button>
-                            </div>
+                    </div>
+                    :
+                    <div className={PostCSS.createCommentOuterContainer}>
+                        <div className={PostCSS.createCommentContainer}>
+                            <textarea
+                                className={PostCSS.createCommentField}
+                                name="body" 
+                                rows="14" 
+                                cols="10" 
+                                wrap="soft" 
+                                placeholder="Login to Comment..." 
+                                onClick={(e)=> handleLoginFromPosts(e)}
+                                value={newComment}
+                            /> 
+                            <button className={PostCSS.buttonClass} onClick ={(e)=> handleLoginFromPosts(e)}> LOG IN!</button>
                         </div>
-                    }
-                    
-
-
+                    </div>
+                }
+                
                 {/* display comments */}
                 <div className={PostCSS.commentsBodyContainer}>
                     {comments.map((value) =>{
                         if(value.parentId === null)
                         {
                             return (
-                                <Comment
-                                    key= {value.id}
-                                    comment= {value}
-                                    comments = {comments} 
-                                    setComments={setComments}
-                                    MIN_LEVEL= {0}
-                                    postID ={id}
-                                />
+                                <div className={PostCSS.commentBodyContainer}>
+                                    <Comment
+                                        key= {value.id}
+                                        comment= {value}
+                                        comments = {comments} 
+                                        setComments={setComments}
+                                        MIN_LEVEL= {0}
+                                        postID ={id}
+                                    />
+                                </div>
                             )
                         }
                         
