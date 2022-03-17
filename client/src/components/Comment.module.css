@@ -48,6 +48,46 @@
     font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 
 }
+.commentButtnContainer
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.mobileLikesContainer
+{
+    display: flex;
+    flex-direction: row;
+    color: rgb(80,80,80);
+    align-items: center;
+    justify-content: space-between;
+    width: 80px;
+}
+.likeBackgroundClass_active
+{
+    color: red !important;
+}
+
+.likeBackgroundClass
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    color:rgb(80,80,80);
+    border: 0px;
+    cursor:pointer;
+}
+.likeBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
+}
+.likeClass
+{
+    display: block;
+    
+}
 .replyField
 {
     display: none;

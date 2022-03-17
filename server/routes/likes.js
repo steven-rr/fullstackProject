@@ -162,14 +162,11 @@ router.post("/dislike", validateToken, async(request, response) => {
     
 })
 
-// post a like, for backend.
+// post a like for comments, for backend.
 router.post("/likeComment", validateToken, async(request, response) => {
     const {CommentId} = request.body;
     const UserId = request.user.id;
     
-    // find out whether relevant launch exists in launchesprev. used for determining what to decrement or increment. 
-    let launchPrev = await Comments.findOne({where: {id: CommentId} })
-
     // find out whether a like exists or not. 
     const likeExists = await Likes.findOne({where: {CommentId: CommentId, UserId: UserId} })
     const dislikeExists = await Dislikes.findOne({where: {CommentId: CommentId, UserId: UserId} })
@@ -177,18 +174,9 @@ router.post("/likeComment", validateToken, async(request, response) => {
     if(likeExists)
     {
         await Likes.destroy({where:  {UserId: UserId, CommentId: CommentId}})
-        // decrement likecounter in posts
-        await Posts.decrement('likeCounter', { where: {id:PostId}});
-        // increment likecounter in launches
-        if(launchPrev)
-        {
-            await LaunchesPrevious.decrement('likeCounter', { where: {postId:PostId}});
-        }
-        else
-        {
-            await LaunchesUpcoming.decrement('likeCounter', { where: {postId:PostId}});
-        }
-
+        // decrement likecounter in comments
+        await Comments.decrement('likeCounter', { where: {id:PostId}});
+       
         response.json({liked: false})
     }
     // else, create the like and increment counters. if dislike exists, destroy any dislikes and increment counter..
@@ -196,45 +184,19 @@ router.post("/likeComment", validateToken, async(request, response) => {
     {
         const newLike= {
             UserId: UserId,
-            PostId: PostId 
+            CommentId: CommentId 
         };
         const newLikeCreated = await Likes.create(newLike)
         
-        // increment likecounter in posts
-        await Posts.increment('likeCounter', { where: {id:PostId}});
+        // increment likecounter in comments
+        await Comments.increment('likeCounter', { where: {id:CommentId}});
         
-        
-        // increment likecounter in launches
-        if(launchPrev)
-        {
-            await LaunchesPrevious.increment('likeCounter', { where: {postId:PostId}});
-        }
-        else
-        {
-            await LaunchesUpcoming.increment('likeCounter', { where: {postId:PostId}}); 
-        }
-
         // if a dislike exists , destroy it and increment counter back up on both tables. 
         if(dislikeExists)
         {
-            await Dislikes.destroy({where:  {UserId: UserId, PostId: PostId}})
-            await Posts.increment('likeCounter', { where: {id:PostId}});
-            if(launchPrev)
-            {
-                // if dislike exist, we destroyed it so increment the likeCounter. 
-                if(dislikeExists)
-                {
-                    await LaunchesPrevious.increment('likeCounter', { where: {postId:PostId}});
-                }
-            }
-            else
-            {
-                // if dislike exist, we destroyed it so increment the likeCounter. 
-                if(dislikeExists)
-                {
-                    await LaunchesPrevious.increment('likeCounter', { where: {postId:PostId}});
-                }
-            }
+            await Dislikes.destroy({where:  {UserId: UserId, CommentId: CommentId}})
+            await Comments.increment('likeCounter', { where: {id:CommentId}});
+           
         }
 
 
@@ -244,6 +206,50 @@ router.post("/likeComment", validateToken, async(request, response) => {
     }
 })
 
+// post a dislike comments, for backend.
+router.post("/dislikeComment", validateToken, async(request, response) => {
+    const {CommentId} = request.body;
+    const UserId = request.user.id;
+    
+    // find out whether a like exists or not. 
+    const dislikeExists = await Dislikes.findOne({where: {CommentId: CommentId, UserId: UserId} })
+    const likeExists = await Likes.findOne({where: {CommentId: CommentId, UserId: UserId} })
+
+    console.log(dislikeExists)
+    // if the dislikelike exists, destroy it (unliking). 
+    if(dislikeExists)
+    {
+        await Dislikes.destroy({where:  {UserId: UserId, CommentId: CommentId}})
+        // increment likecounter in comments after removing dislike
+        await Comments.increment('likeCounter', { where: {id:CommentId}});
+
+        response.json({disliked: false})
+    }
+    // else, create the dislike. if a like exists, destroy it and decrement counter. 
+    else
+    {
+        console.log("creating new dislike...")
+        const newDislike= {
+            CommentId: CommentId, 
+            UserId: UserId,
+        };
+        const newDislikeCreated = await Dislikes.create(newDislike)
+        // decrement likecounter in posts
+        await Comments.decrement('likeCounter', { where: {id:CommentId}});
+        
+        // if a like exists , destroy it and decrement counter back down on both tables. 
+        if(likeExists)
+        {
+            await Likes.destroy({where:  {UserId: UserId, CommentId: CommentId}})
+            await Comments.decrement('likeCounter', { where: {id:CommentId}});
+           
+        }
+        response.json({disliked: true, likeExists: likeExists})
+        
+    }
+
+    
+})
 
 module.exports = router;
 
