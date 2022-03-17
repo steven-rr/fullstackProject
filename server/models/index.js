@@ -41,6 +41,9 @@ db["Posts"].hasMany(db["Comments"], options)
 db["Posts"].hasMany(db["Likes"], options)
 db["Posts"].hasMany(db["Dislikes"], options)
 
+db["Comments"].hasMany(db["Likes"], options)
+db["Comments"].hasMany(db["Dislikes"], options)
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

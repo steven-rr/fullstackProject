@@ -109,7 +109,7 @@
     width: 800px;
     border:  2px solid rgb(80,80,80);
     margin-top: 20px;
-    padding-bottom: 30px;
+    padding-bottom: 15px;
 }
 .createCommentContainer
 {
@@ -142,29 +142,31 @@
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    margin-bottom: 5px;
     font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 
 }
 
 .commentsBodyContainer
 {
+    box-sizing: border-box;
     display:flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 300px;
-    width: 80%
+    width: 800px;
+    background-color: rgb(25, 25, 25);
+    border:  2px solid rgb(80,80,80);
+    padding: 10px;
 }
 
 .commentBodyContainer
 {
     display:block;
     border: 1px solid #000;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-bottom: 20px;
+    padding: 0px;
+    margin-bottom: 100px;
     text-align: left;
     width: 100%;
 }
@@ -172,17 +174,39 @@
 {
     color: #fff;
 }
+
+.commentButtonClass
+{
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 12px 30px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+}
+
+.commentButtonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
+
 .buttonClass
 {
 	background-color: Transparent;
 	border: 2px solid rgb(117, 35, 35);
 	color: white;
-	padding: 18px 40px;
+	padding: 12px 30px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	font-size: 15px;
-	font-family: Poppins;
+	font-size: 12px;
 	letter-spacing: .10rem;
 	font-weight: 400;
 	margin: 4px 10px;
