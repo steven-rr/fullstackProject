@@ -64,8 +64,9 @@ router.get('/',peekToken, async (request, response) => {
         for(let i =0; i< userLikes.length;i ++)
         {
             postIDsLiked.push(userLikes[i].dataValues.PostId)
+            console.log("hi!")
         }
-
+        
         // console.log("postdata: ", postData[0].dataValues.title)
         // console.log("userInfo: ", request.user)
         for(let i=0 ; i < postIDsLiked.length; i++)

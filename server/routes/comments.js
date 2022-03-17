@@ -1,7 +1,7 @@
 const express= require('express');
 const router = express.Router();
 const {Comments, Posts}= require('../models');
-const {validateToken}=require("../middleware/JWT.js")
+const {validateToken, peekToken}=require("../middleware/JWT.js")
 
 // get all comment data for a specific user. send to frontend.
 router.get('/byUserId/:UserId', async (request, response) => {
@@ -22,11 +22,13 @@ router.get('/byUserId/:UserId', async (request, response) => {
 })
 
 // get comments of an individual post in database and send to frontend.
-router.get('/:postId', async (request, response) => {
+router.get('/:postId', peekToken, async (request, response) => {
     const postId = request.params.postId;
-    const comments = await Comments.findAll({where: {PostId: postId}})
+    // const comments = await Comments.findAll( {where: {PostId: postId}, include: [{model: Likes} , {model: Dislikes}]})
+    
+    
 
-    // if post data not found, return 404. else, return post data.
+    // if post data not found, return 404. else, return comment data.
     if(!comments)
     {
         response.status(404).json({msg: "post not found!!!"})
@@ -34,6 +36,16 @@ router.get('/:postId', async (request, response) => {
     }
     else
     {
+        // if user exists, append comment array on whether user likes or dislikes.
+        // let postIDsDisliked = [];
+        // let postIDsLiked    = [];
+
+        // if(request.user)
+        // {
+        //     const userLikes = await Likes.findAll({where: {UserId: request.user.id}})
+        //     // find which comment ID's liked by user
+
+        // }
         response.json(comments)
 
     }

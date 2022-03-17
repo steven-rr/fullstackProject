@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           allowNull: true,
           defaultValue: 0
+       },
+       likeCounter:
+       {
+         type: DataTypes.INTEGER,
+         allowNull: true,
+         defaultValue: 0
        }
     });
   

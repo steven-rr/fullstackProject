@@ -3,6 +3,8 @@ import CommentCSS from "./Comment.module.css"
 import {  Link} from 'react-router-dom'
 import axios from   "axios" 
 import ChildComment from "./ChildComment"
+import { BiUpvote, BiDownvote } from "react-icons/bi";
+
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 10;
 
@@ -46,7 +48,89 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                     console.log("error: ", err);
                 });
     }
-    
+     // like a post .
+    //  const handleLike = (e) => {
+    //     console.log("like clicked!" ) 
+    //     axios  
+    //         .post(`/api/likes/likeComment`, {CommentId: comment.id})
+    //         .then( (response)=> {
+    //             setIndividualPostData( (currComment) => {
+    //                 // look for post to modify like array.
+                     
+    //                 // if liked, increment like array size by 1. else , decrement it by 1.
+    //                 if(response.data.liked)
+    //                 {   
+    //                     // if dislike exists, also remove it before adding on the like. 
+    //                     if(response.data.dislikeExists)
+    //                     {
+    //                         const currentPostDislikes = currPost.Dislikes;
+    //                         currentPostDislikes.pop();
+    //                         return { ...currPost, Likes: [...currPost.Likes , 0 ], Dislikes: currentPostDislikes, liked: true, disliked: false}
+    //                     }
+    //                     // no dislike exists, simply like the post. 
+    //                     else
+    //                     {
+    //                         return { ...currPost, Likes: [...currPost.Likes , 0 ], liked:true}
+    //                     }
+
+    //                 }
+    //                 else
+    //                 {
+    //                     const currentPostLikes = currPost.Likes;
+    //                     currentPostLikes.pop();
+    //                     return{...currPost, Likes: currentPostLikes, liked: false}
+    //                 }
+    //                 // if liked, decrement dislikes if necessary.
+
+                    
+                    
+    //             })
+    //         })
+    //         .catch( (err) => {
+    //             console.log(err);
+    //         })
+    //     // prevent post from linking.
+    //     e.stopPropagation()
+    // }
+    // dislike a post .
+    // const handleDislike = (e) => {
+    //     console.log("dislike clicked!" ) 
+    //     axios  
+    //         .post(`/api/likes/dislike`, {PostId: id})
+    //         .then( (response)=> {
+    //             setIndividualPostData((currPost) => {
+                    
+    //                 // if liked, increment like array size by 1. else , decrement it by 1.
+    //                 if(response.data.disliked)
+    //                 {
+    //                     // if like exists, also remove it before adding on the dislike
+    //                     if(response.data.likeExists)
+    //                     {
+    //                         const currentPostLikes = currPost.Likes;
+    //                         currentPostLikes.pop();    
+    //                         return{...currPost, Likes: currentPostLikes,  Dislikes:[...currPost.Dislikes , 0 ], disliked: true, liked: false}          
+    //                     }
+    //                     else
+    //                     {
+    //                         return { ...currPost, Dislikes: [...currPost.Dislikes , 0 ], disliked: true}
+    //                     }
+    //                 }
+    //                 else
+    //                 {
+    //                     const currentPostDislikes = currPost.Dislikes;
+    //                     currentPostDislikes.pop();
+    //                     return{...currPost, Dislikes: currentPostDislikes, disliked: false}
+    //                 }
+                    
+                   
+    //             })
+    //         })
+    //         .catch( (err) => {
+    //             console.log(err);
+    //         })
+    //     e.stopPropagation()
+    // }
+
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild.parentId === comment.id)
@@ -106,7 +190,19 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                     <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
                 </div>
                 <div className ={CommentCSS.commentText}> {comment.contentText} </div>
-                <div>
+                <div className={CommentCSS.commentButtnContainer}>
+
+                    <div className={CommentCSS.mobileLikesContainer}>
+                        <div className={`${CommentCSS.likeBackgroundClass}`} >
+                            <BiUpvote className={CommentCSS.likeClass} size="30px" />
+                        </div>
+                        {/* <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div> */}
+                        <div> 0 </div>
+
+                        <div className={`${CommentCSS.likeBackgroundClass}`}>
+                            <BiDownvote className={CommentCSS.likeClass} size="30px" />
+                        </div>
+                    </div>
                     <button onClick={() => handleReply()}> reply </button>
                    
                     {/* {(authState.UserId === comment.UserId) ? (<><button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)} > delete comment</button></>) : ""} */}
