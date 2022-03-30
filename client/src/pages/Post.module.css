@@ -164,7 +164,7 @@
 .commentBodyContainer
 {
     display:block;
-    border: 1px solid #000;
+    border: 0px;
     padding: 0px;
     margin-bottom: 100px;
     text-align: left;

@@ -58,13 +58,14 @@ router.get('/',peekToken, async (request, response) => {
 
     if(request.user)
     {
-        const userLikes = await Likes.findAll({where: {UserId: request.user.id}})
+        const userLikes = await Likes.findAll({where: {UserId: request.user.id , PostId: {[Op.not]: null}}})
 
         // find which post ID's liked by user. 
         for(let i =0; i< userLikes.length;i ++)
         {
             postIDsLiked.push(userLikes[i].dataValues.PostId)
-            console.log("hi!")
+
+            console.log ("hi!")
         }
         
         // console.log("postdata: ", postData[0].dataValues.title)
@@ -88,7 +89,7 @@ router.get('/',peekToken, async (request, response) => {
         }
 
         // do the same for dislikes:
-        const userDislikes = await Dislikes.findAll({where: {UserId: request.user.id}})
+        const userDislikes = await Dislikes.findAll({where: {UserId: request.user.id, PostId: {[Op.not]: null}}})
 
         for(let i =0; i< userDislikes.length;i ++)
         {
