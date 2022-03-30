@@ -4,6 +4,7 @@ import {  Link} from 'react-router-dom'
 import axios from   "axios" 
 import ChildComment from "./ChildComment"
 import { BiUpvote, BiDownvote } from "react-icons/bi";
+import { BsArrowsAngleExpand } from "react-icons/bs";
 
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 10;
@@ -13,6 +14,7 @@ const REPLY_THREAD_WIDTH = 10;
 const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
     const [newReply, setNewReply] = useState("")
     const [replyFlag, setReplyFlag] = useState(false);
+    const [visible, setVisible] = useState(true);
     const [idx, setIdx] = useState(0);
     useEffect( () => {
         setComments(comments);
@@ -25,7 +27,9 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
     const handleReply = (e) => {
         setReplyFlag(!replyFlag);
     }
-    
+    const handleVisibleToggle = (e) => {
+        setVisible(!visible);
+    }
     // handle onChange
     const commentOnChange= (e) => {
         setNewReply(e.target.value)
@@ -48,88 +52,97 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                     console.log("error: ", err);
                 });
     }
-     // like a post .
-    //  const handleLike = (e) => {
-    //     console.log("like clicked!" ) 
-    //     axios  
-    //         .post(`/api/likes/likeComment`, {CommentId: comment.id})
-    //         .then( (response)=> {
-    //             setIndividualPostData( (currComment) => {
-    //                 // look for post to modify like array.
-                     
-    //                 // if liked, increment like array size by 1. else , decrement it by 1.
-    //                 if(response.data.liked)
-    //                 {   
-    //                     // if dislike exists, also remove it before adding on the like. 
-    //                     if(response.data.dislikeExists)
-    //                     {
-    //                         const currentPostDislikes = currPost.Dislikes;
-    //                         currentPostDislikes.pop();
-    //                         return { ...currPost, Likes: [...currPost.Likes , 0 ], Dislikes: currentPostDislikes, liked: true, disliked: false}
-    //                     }
-    //                     // no dislike exists, simply like the post. 
-    //                     else
-    //                     {
-    //                         return { ...currPost, Likes: [...currPost.Likes , 0 ], liked:true}
-    //                     }
+    // like a post .
+    const handleLike = (e) => {
+        console.log("like clicked!" ) 
+        axios  
+            .post(`/api/likes/likeComment`, {CommentId: comment.id})
+            .then( (response)=> {
+                setComments(comments.map( (currComment) => {
+                    // look for post to modify like array.
+                    if(currComment.id === comment.id) 
+                    {   
+                        // if liked, increment like array size by 1. else , decrement it by 1.
+                        if(response.data.liked)
+                        {   
+                            // if dislike exists, also remove it before adding on the like. 
+                            if(response.data.dislikeExists)
+                            {
+                                const currentCommentDislikes = currComment.Dislikes;
+                                currentCommentDislikes.pop();
+                                return { ...currComment, Likes: [...currComment.Likes , 0 ], Dislikes: currentCommentDislikes, liked: true, disliked: false}
+                            }
+                            // no dislike exists, simply like the post. 
+                            else
+                            {
+                                return { ...currComment, Likes: [...currComment.Likes , 0 ], liked:true}
+                            }
 
-    //                 }
-    //                 else
-    //                 {
-    //                     const currentPostLikes = currPost.Likes;
-    //                     currentPostLikes.pop();
-    //                     return{...currPost, Likes: currentPostLikes, liked: false}
-    //                 }
-    //                 // if liked, decrement dislikes if necessary.
+                        }
+                        else
+                        {
+                            const currentCommentLikes = currComment.Likes;
+                            currentCommentLikes.pop();
+                            return{...currComment, Likes: currentCommentLikes, liked: false}
+                        }
+                        // if liked, decrement dislikes if necessary.
 
-                    
-                    
-    //             })
-    //         })
-    //         .catch( (err) => {
-    //             console.log(err);
-    //         })
-    //     // prevent post from linking.
-    //     e.stopPropagation()
-    // }
+                    }
+                    else
+                    {
+                        return currComment;
+                    }
+                }))
+            })
+            .catch( (err) => {
+                console.log(err);
+            })
+        // prevent post from linking.
+        e.stopPropagation()
+    }
     // dislike a post .
-    // const handleDislike = (e) => {
-    //     console.log("dislike clicked!" ) 
-    //     axios  
-    //         .post(`/api/likes/dislike`, {PostId: id})
-    //         .then( (response)=> {
-    //             setIndividualPostData((currPost) => {
-                    
-    //                 // if liked, increment like array size by 1. else , decrement it by 1.
-    //                 if(response.data.disliked)
-    //                 {
-    //                     // if like exists, also remove it before adding on the dislike
-    //                     if(response.data.likeExists)
-    //                     {
-    //                         const currentPostLikes = currPost.Likes;
-    //                         currentPostLikes.pop();    
-    //                         return{...currPost, Likes: currentPostLikes,  Dislikes:[...currPost.Dislikes , 0 ], disliked: true, liked: false}          
-    //                     }
-    //                     else
-    //                     {
-    //                         return { ...currPost, Dislikes: [...currPost.Dislikes , 0 ], disliked: true}
-    //                     }
-    //                 }
-    //                 else
-    //                 {
-    //                     const currentPostDislikes = currPost.Dislikes;
-    //                     currentPostDislikes.pop();
-    //                     return{...currPost, Dislikes: currentPostDislikes, disliked: false}
-    //                 }
-                    
-                   
-    //             })
-    //         })
-    //         .catch( (err) => {
-    //             console.log(err);
-    //         })
-    //     e.stopPropagation()
-    // }
+    const handleDislike = (e) => {
+        console.log("dislike clicked!" ) 
+        axios  
+            .post(`/api/likes/dislikeComment`, {CommentId: comment.id})
+            .then( (response)=> {
+                setComments(comments.map( (currComment) => {
+                    // look for post to modify like array.
+                    if(currComment.id === comment.id) 
+                    {      
+                        // if liked, increment like array size by 1. else , decrement it by 1.
+                        if(response.data.disliked)
+                        {
+                            // if like exists, also remove it before adding on the dislike
+                            if(response.data.likeExists)
+                            {
+                                const currentCommentLikes = currComment.Likes;
+                                currentCommentLikes.pop();    
+                                return{...currComment, Likes: currentCommentLikes,  Dislikes:[...currComment.Dislikes , 0 ], disliked: true, liked: false}          
+                            }
+                            else
+                            {
+                                return { ...currComment, Dislikes: [...currComment.Dislikes , 0 ], disliked: true}
+                            }
+                        }
+                        else
+                        {
+                            const currentCommentDislikes = currComment.Dislikes;
+                            currentCommentDislikes.pop();
+                            return{...currComment, Dislikes: currentCommentDislikes, disliked: false}
+                        }
+                    }
+                    else
+                    {
+                        return currComment;
+                    }
+                }))
+            })
+            .catch( (err) => {
+                console.log(err);
+            })
+        e.stopPropagation()
+    }
 
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
@@ -184,45 +197,59 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
     });
     
         return (
-            <div className = {CommentCSS.commentBodyContainer} >
-                <div className={CommentCSS.commentAuthorContainer}>
-                    <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
-                    <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
-                </div>
-                <div className ={CommentCSS.commentText}> {comment.contentText} </div>
-                <div className={CommentCSS.commentButtnContainer}>
-
-                    <div className={CommentCSS.mobileLikesContainer}>
-                        <div className={`${CommentCSS.likeBackgroundClass}`} >
-                            <BiUpvote className={CommentCSS.likeClass} size="30px" />
-                        </div>
-                        {/* <div className={`${ (value.liked || value.disliked) ? PostsCSS.likeCounterClass_active: ""}`}> {value.Likes.length - value.Dislikes.length} </div> */}
-                        <div> 0 </div>
-
-                        <div className={`${CommentCSS.likeBackgroundClass}`}>
-                            <BiDownvote className={CommentCSS.likeClass} size="30px" />
-                        </div>
+            <div className={CommentCSS.commentOuterContainer}>
+                <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
+                    <div className={CommentCSS.borderClass}></div>
+                </div> 
+                <div className = {`${visible ? CommentCSS.commentBodyContainer: CommentCSS.deactivate}`}>
+                    <div className={CommentCSS.commentAuthorContainer}>
+                        <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
+                        <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
                     </div>
-                    <button onClick={() => handleReply()}> reply </button>
-                   
-                    {/* {(authState.UserId === comment.UserId) ? (<><button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)} > delete comment</button></>) : ""} */}
+                    <div className ={CommentCSS.commentText}> {comment.contentText} </div>
+                    <div className={CommentCSS.commentButtnContainer}>
 
+                        <div className={CommentCSS.mobileLikesContainer}>
+                            <div className={`${comment.liked ? CommentCSS.likeBackgroundClass_active: ""}  ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e) }>
+                                <BiUpvote className={CommentCSS.likeClass} size="30px" />
+                            </div>
+                            <div className={`${ (comment.liked || comment.disliked) ? CommentCSS.likeCounterClass_active: ""}`}> {comment.Likes.length - comment.Dislikes.length} </div>
+
+                            <div className={`${comment.disliked ? CommentCSS.likeBackgroundClass_active: ""} ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e)}>
+                                <BiDownvote className={CommentCSS.likeClass} size="30px" />
+                            </div>
+                        </div>
+                        <button onClick={() => handleReply()}> reply </button>
+                    
+                        {/* {(authState.UserId === comment.UserId) ? (<><button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)} > delete comment</button></>) : ""} */}
+
+                    </div>
+                    <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
+                        <textarea
+                            className={CommentCSS.createCommentField}
+                            name="body" 
+                            rows="14" 
+                            cols="10" 
+                            wrap="soft" 
+                            placeholder="Enter your thoughts here..." 
+                            onChange={commentOnChange}
+                            value={newReply}
+                        /> 
+                        <button onClick={handleSubmitReply}> submit reply</button>
+                    </div>
+                    {nestedComments}
                 </div>
-                <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
-                    <textarea
-                        className={CommentCSS.createCommentField}
-                        name="body" 
-                        rows="14" 
-                        cols="10" 
-                        wrap="soft" 
-                        placeholder="Enter your thoughts here..." 
-                        onChange={commentOnChange}
-                        value={newReply}
-                    /> 
-                    <button onClick={handleSubmitReply}> submit reply</button>
+                <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>
+                    <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
+                        <BsArrowsAngleExpand color="red"/>
+                    </div>
+
+                    
+                    <div className={CommentCSS.commentAuthorContainer}>
+                        <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
+                        <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
+                    </div>
                 </div>
-                {nestedComments}
-                
             </div>
         )
     

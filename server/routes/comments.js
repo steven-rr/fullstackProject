@@ -1,6 +1,7 @@
 const express= require('express');
 const router = express.Router();
-const {Comments, Posts}= require('../models');
+const {Comments, Posts,Likes, Dislikes}= require('../models');
+const {Op} = require("sequelize")
 const {validateToken, peekToken}=require("../middleware/JWT.js")
 
 // get all comment data for a specific user. send to frontend.
@@ -23,8 +24,10 @@ router.get('/byUserId/:UserId', async (request, response) => {
 
 // get comments of an individual post in database and send to frontend.
 router.get('/:postId', peekToken, async (request, response) => {
+
+    console.log("trying to retrieve comments...." ) 
     const postId = request.params.postId;
-    // const comments = await Comments.findAll( {where: {PostId: postId}, include: [{model: Likes} , {model: Dislikes}]})
+    const comments = await Comments.findAll( {where: {PostId: postId}, include: [{model: Likes} , {model: Dislikes}]})
     
     
 
@@ -37,17 +40,66 @@ router.get('/:postId', peekToken, async (request, response) => {
     else
     {
         // if user exists, append comment array on whether user likes or dislikes.
-        // let postIDsDisliked = [];
-        // let postIDsLiked    = [];
+        let commentIDsDisliked = [];
+        let commentIDsLiked    = [];
 
-        // if(request.user)
-        // {
-        //     const userLikes = await Likes.findAll({where: {UserId: request.user.id}})
-        //     // find which comment ID's liked by user
+        if(request.user)
+        {
+            const userLikes = await Likes.findAll({where: {UserId: request.user.id, CommentId: {[Op.not]: null} }})
+            // find which comment ID's liked by user
+            for(let i =0; i< userLikes.length;i ++)
+            {
+                commentIDsLiked.push(userLikes[i].dataValues.CommentId) 
+                console.log ("hi!")
+            }
+            console.log("commentIDsLiked: ", commentIDsLiked)
+            for(let i=0 ; i < commentIDsLiked.length; i++)
+            {
+                for(let j = 0; j < comments.length; j++)
+                {
+                    
+                    if(commentIDsLiked[i] == comments[j].dataValues.id)
+                    {
+                        comments[j].dataValues.liked = true
+                        
+                    } 
+                    else if(comments[j].dataValues.liked ==null)
+                    {
+                        comments[j].dataValues.liked = false
+                    }
 
-        // }
+                }
+            }
+            // do the same for dislikes:
+            const userDislikes = await Dislikes.findAll({where: {UserId: request.user.id, CommentId: {[Op.not]: null}}})
+
+            for(let i =0; i< userDislikes.length;i ++)
+            {
+                commentIDsDisliked.push(userDislikes[i].dataValues.CommentId)
+            }
+
+            for(let i=0 ; i < commentIDsDisliked.length; i++)
+            {
+                for(let j = 0; j < comments.length; j++)
+                {
+                    
+                    if(commentIDsDisliked[i] == comments[j].dataValues.id)
+                    {
+                        comments[j].dataValues.disliked = true;
+                        break;
+                    } 
+                    else if(comments[j].dataValues.disliked == null)
+                    {
+                        comments[j].dataValues.disliked = false
+                    }
+
+                }
+            }
+
+
+        }
+
         response.json(comments)
-
     }
 })
 
@@ -61,6 +113,10 @@ router.post("/",validateToken, async(request, response) => {
     newComment.UserId = request.user.id; // set userId from validateToken();
     newComment.parentId = null;
     const newCommentCreated = await Comments.create(newComment);
+    newCommentCreated.dataValues.liked = false
+    newCommentCreated.dataValues.disliked = false
+    newCommentCreated.dataValues.Likes= []
+    newCommentCreated.dataValues.Dislikes = []
 
     //increment comment counter.
     await Posts.increment('commentCounter', { where: {id:newComment.PostId}});
@@ -111,6 +167,11 @@ router.post("/reply",validateToken, async(request, response) => {
     newReply.username = request.user.username; //set username from validateToken();
     newReply.UserId = request.user.id; // set userId from validateToken();
     const newReplyCreated = await Comments.create(newReply);
+    newReplyCreated.dataValues.liked = false
+    newReplyCreated.dataValues.disliked = false
+    newReplyCreated.dataValues.Likes= []
+    newReplyCreated.dataValues.Dislikes = []
+
     response.json(newReplyCreated)
 })
 

@@ -3,7 +3,7 @@
 {
     box-sizing: border-box;
     display:block;
-    border: 1px solid white;
+    border: none;
     padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
@@ -76,7 +76,7 @@
     align-items: center;
     background-color: rgb(25, 25, 25);
     color:rgb(80,80,80);
-    border: 0px;
+    border: none;
     cursor:pointer;
 }
 .likeBackgroundClass:hover
@@ -87,6 +87,10 @@
 {
     display: block;
     
+}
+.likeCounterClass_active
+{
+    color: red;
 }
 .replyField
 {
@@ -105,4 +109,51 @@
 .enableLink
 {
     display:block;
+}
+
+.borderOuterClass
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height:auto;
+    cursor: pointer;
+}
+.borderClass
+{   
+    display: block;
+    width:0px;
+    border-right: 2px solid rgb(80,80,80);
+    height: 100%;
+    /* background-color: purple; */
+}
+
+.borderOuterClass:hover .borderClass
+{
+    border-right: 2px solid #fff;
+}
+.commentOuterContainer
+{
+    display: flex;
+    flex-direction: row;
+}
+.invisContainer
+{
+    display: flex;
+    flex-direction: row;
+}
+.iconExpandClass
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    cursor: pointer;
+}
+.deactivate
+{
+    display:none;
 }

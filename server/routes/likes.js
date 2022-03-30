@@ -99,7 +99,6 @@ router.post("/dislike", validateToken, async(request, response) => {
     const dislikeExists = await Dislikes.findOne({where: {PostId: PostId, UserId: UserId} })
     const likeExists = await Likes.findOne({where: {PostId: PostId, UserId: UserId} })
 
-    console.log(dislikeExists)
     // if the dislikelike exists, destroy it (unliking). 
     if(dislikeExists)
     {
@@ -175,7 +174,7 @@ router.post("/likeComment", validateToken, async(request, response) => {
     {
         await Likes.destroy({where:  {UserId: UserId, CommentId: CommentId}})
         // decrement likecounter in comments
-        await Comments.decrement('likeCounter', { where: {id:PostId}});
+        await Comments.decrement('likeCounter', { where: {id:CommentId}});
        
         response.json({liked: false})
     }
@@ -215,7 +214,6 @@ router.post("/dislikeComment", validateToken, async(request, response) => {
     const dislikeExists = await Dislikes.findOne({where: {CommentId: CommentId, UserId: UserId} })
     const likeExists = await Likes.findOne({where: {CommentId: CommentId, UserId: UserId} })
 
-    console.log(dislikeExists)
     // if the dislikelike exists, destroy it (unliking). 
     if(dislikeExists)
     {
