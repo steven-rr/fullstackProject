@@ -123,8 +123,10 @@
 }
 .borderClass
 {   
+    box-sizing: border-box;
     display: block;
     width:0px;
+    margin-top: 20px;
     border-right: 2px solid rgb(80,80,80);
     height: 100%;
     /* background-color: purple; */
@@ -143,6 +145,13 @@
 {
     display: flex;
     flex-direction: row;
+    box-sizing: border-box;
+    border: none;
+    padding-top: 10px;
+    padding-right: 10px;
+    margin-bottom: 0px;
+    text-align: left;
+    width: 100%;
 }
 .iconExpandClass
 {
