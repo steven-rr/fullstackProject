@@ -25,7 +25,6 @@ router.get('/byUserId/:UserId', async (request, response) => {
 // get comments of an individual post in database and send to frontend.
 router.get('/:postId', peekToken, async (request, response) => {
 
-    console.log("trying to retrieve comments...." ) 
     const postId = request.params.postId;
     const comments = await Comments.findAll( {where: {PostId: postId}, include: [{model: Likes} , {model: Dislikes}]})
     
