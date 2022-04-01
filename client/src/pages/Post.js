@@ -288,7 +288,6 @@ const Post = () => {
                             <div className={`${individualPostData.liked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e) }>
                                 <BiUpvote className={PostCSS.likeClass} size="30px" />
                             </div>
-                            {console.log("IN THE WEEDS: ", individualPostData.Dislikes)}
                             <div className={`${ (individualPostData.liked || individualPostData.disliked) ? PostCSS.likeCounterClass_active: ""}`}> {`${(individualPostData.Likes && individualPostData.Dislikes) ? individualPostData.Likes.length - individualPostData.Dislikes.length : ""}`}</div>
                             <div className={`${individualPostData.disliked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e) }>
                                 <BiDownvote className={PostCSS.likeClass} size="30px" />
