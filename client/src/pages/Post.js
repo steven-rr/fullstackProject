@@ -5,7 +5,9 @@ import axios from   "axios"
 import Page404 from "./Page404"
 import Comment from "../components/Comment.js"
 import {AuthContext} from "../App"
-import { BiUpvote, BiDownvote } from "react-icons/bi";
+import { BiUpvote, BiDownvote, BiComment } from "react-icons/bi";
+import { FiEdit2 } from "react-icons/fi";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const Post = () => {
     const [ individualPostData, setIndividualPostData] = useState({})
@@ -311,7 +313,50 @@ const Post = () => {
                         <div className={PostCSS.authorClass}>Posted by {individualPostData.username} {dateStringPosted}  </div>
                         <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
                         <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
-                        {(authState.UserId === individualPostData.UserId) ?   (<div><button className= {PostCSS.buttonClass} onClick={deletePost}> delete me</button><button className= {PostCSS.buttonClass}>  editpost</button></div>) : ""}
+                        {/* Buttons */}
+                        <div className={PostCSS.buttonListClass}> 
+                            {/* upvotes buttons */}
+                            <div className={PostCSS.mobileLikesContainer}>
+                                {/* onClick={(e) => handleLike(e, value.id) } */}
+                                <div className={`${individualPostData.liked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e)} >
+                                    <BiUpvote className={PostCSS.likeClass} size="40px" />
+                                </div>
+                                <div className={`${ (individualPostData.liked || individualPostData.disliked) ? PostCSS.likeCounterClass_active: ""}`}> {`${(individualPostData.Likes && individualPostData.Dislikes) ? individualPostData.Likes.length - individualPostData.Dislikes.length : ""}`}</div>
+                                {/* onClick={(e) => handleDislike(e, value.id) } */}
+                                <div className={`${individualPostData.disliked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e) }>
+                                    <BiDownvote className={PostCSS.likeClass} size="40px" />
+                                </div>
+                            </div>
+
+                            {/* comments button */}
+                            <div className= {PostCSS.buttnElementBackgroundClass} > 
+                                    <BiComment size="30px"/> 
+                                    <div className={PostCSS.buttnDisplayText}> {individualPostData.commentCounter} comments</div>
+                            </div>
+                            {/* delete button */}
+                            {(authState.UserId === individualPostData.UserId) 
+                            ?   
+                            // onClick={(e)=> handleOnClickDelete(e, value.id)}
+                            (<button className= {PostCSS.buttnElementBackgroundClass} >  
+                                    <AiOutlineDelete  size="30px"/>
+                                    <div className={PostCSS.buttnDisplayText}>Delete Post </div>     
+                            </button>) 
+                            : 
+                            ""
+                            }
+                            {/* edit button */}
+                            {(authState.UserId === individualPostData.UserId) 
+                            ?   
+                            //  onClick={(e) => handleEditClick(e)}
+                            (<button className= {PostCSS.buttnElementBackgroundClass} > 
+                                    <FiEdit2 size="30px"/>
+                                    <div className={PostCSS.buttnDisplayText}> Edit Post</div>
+                            </button>) 
+                            : 
+                            ""
+                            }
+                        </div>
+                        {/* {(authState.UserId === individualPostData.UserId) ?   (<div><button className= {PostCSS.buttonClass} onClick={deletePost}> delete me</button><button className= {PostCSS.buttonClass}>  editpost</button></div>) : ""} */}
                     </div>
                     
                 </div>
