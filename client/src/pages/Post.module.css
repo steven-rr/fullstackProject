@@ -13,16 +13,18 @@
     margin-top : 10px;
     display:flex;
     flex-direction: row;
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    border: 1px solid rgb(80, 80,80);
     height: 100%;
     width: 800px;
-    padding-bottom: 50px;
+    padding-bottom: 10px;
     background-color: rgb(25, 25, 25);
     text-align: left;
 }
 .postBodyContentContainer
 {
     display: block;
+    width: 90%;
     margin-top: 6px;
 }
 
@@ -94,12 +96,21 @@
 {
     display: block;
     color: #fff;
-    padding-top: 10px;
+    padding-top: 20px;
     font-size: 15px;
     color: #fff;
 
 
 }
+.buttonListClass
+{
+    padding-top: 20px;
+    padding-left: 0px;
+    padding-right: 10px;
+    display:flex;
+    flex-direction: row;
+}
+
 .createCommentOuterContainer
 {
     background-color: rgb(25, 25, 25);
@@ -107,7 +118,8 @@
     flex-direction: column;
     align-items: center;
     width: 800px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    border: 1px solid rgb(80, 80,80);
     margin-top: 20px;
     padding-bottom: 15px;
 }
@@ -157,7 +169,8 @@
     margin-bottom: 300px;
     width: 800px;
     background-color: rgb(25, 25, 25);
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    border: 1px solid rgb(80, 80,80);
     padding: 10px;
 }
 
@@ -223,6 +236,30 @@
 {
     display: none;
 }
+.mobileLikesContainer
+{
+    display: none;
+}
+/* comment elements */
+.buttnElementBackgroundClass
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    color:rgb(80,80,80);
+    border: 0px;
+    cursor:pointer;
+}
+
+.buttnElementBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
+    color: white;
+}
+
+
 @media screen and (max-width: 1100px)
 {
     .postBodyContainer
@@ -268,6 +305,11 @@
         width: 99vw;
         border-radius: 0;
     }
+    .postBodyContentContainer
+    {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
     .createCommentOuterContainer
     {
         width: 99vw;
@@ -281,8 +323,24 @@
     {
         width: 99vw;
     }
+    .mobileLikesContainer
+    {
+        display: flex;
+        flex-direction: row;
+        color: rgb(80,80,80);
+        align-items: center;
+        justify-content: space-between;
+        width: 110px;
+    }
 }
 
+@media screen and (max-width: 530px)
+{
+    .buttnDisplayText
+    {
+        display: none;
+    }
+}
 .deactivate
 {
     display:none;
