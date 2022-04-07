@@ -71,9 +71,9 @@ const CreatePost = () => {
                     <button className={CreatePostCSS.buttonClass} onClick={createPost}> POST </button>
                 </div>
             </div>
-            <div className={CreatePostCSS.createPostDesktop}>
+            {/* <div className={CreatePostCSS.createPostDesktop}>
                 hi
-            </div>
+            </div> */}
         </div>
     )
 }
