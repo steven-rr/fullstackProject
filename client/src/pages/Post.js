@@ -8,6 +8,7 @@ import {AuthContext} from "../App"
 import { BiUpvote, BiDownvote, BiComment } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
+import { MdOutlineMoreHoriz } from "react-icons/md";
 
 const Post = () => {
     const [ individualPostData, setIndividualPostData] = useState({})
@@ -17,6 +18,7 @@ const Post = () => {
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
     const [todayTime, setTodayTime] = useState(new Date())
+    const [moreDropdownOn, setMoreDropdown]   = useState(false)
 
     // rerender when blur is triggered.
     const rerender = e =>
@@ -212,6 +214,10 @@ const Post = () => {
         })
         e.stopPropagation()
     }
+    const handleMoreClick = () => {
+        setMoreDropdown(currState=>!currState)
+    }
+
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
@@ -319,19 +325,19 @@ const Post = () => {
                             <div className={PostCSS.mobileLikesContainer}>
                                 {/* onClick={(e) => handleLike(e, value.id) } */}
                                 <div className={`${individualPostData.liked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e)} >
-                                    <BiUpvote className={PostCSS.likeClass} size="40px" />
+                                    <BiUpvote className={PostCSS.likeClass} size="30px" />
                                 </div>
                                 <div className={`${ (individualPostData.liked || individualPostData.disliked) ? PostCSS.likeCounterClass_active: ""}`}> {`${(individualPostData.Likes && individualPostData.Dislikes) ? individualPostData.Likes.length - individualPostData.Dislikes.length : ""}`}</div>
                                 {/* onClick={(e) => handleDislike(e, value.id) } */}
                                 <div className={`${individualPostData.disliked ? PostCSS.likeBackgroundClass_active: ""} ${PostCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e) }>
-                                    <BiDownvote className={PostCSS.likeClass} size="40px" />
+                                    <BiDownvote className={PostCSS.likeClass} size="30px" />
                                 </div>
                             </div>
 
                             {/* comments button */}
-                            <div className= {PostCSS.buttnElementBackgroundClass} > 
+                            <div className= {PostCSS.commentButtnElementBackgroundClass} > 
                                     <BiComment size="30px"/> 
-                                    <div className={PostCSS.buttnDisplayText}> {individualPostData.commentCounter} comments</div>
+                                    <div className={`${PostCSS.buttnDisplayText} ${PostCSS.commentButtnText}`} > {individualPostData.commentCounter}</div>
                             </div>
                             {/* delete button */}
                             {(authState.UserId === individualPostData.UserId) 
@@ -339,7 +345,7 @@ const Post = () => {
                             // onClick={(e)=> handleOnClickDelete(e, value.id)}
                             (<button className= {PostCSS.buttnElementBackgroundClass} >  
                                     <AiOutlineDelete  size="30px"/>
-                                    <div className={PostCSS.buttnDisplayText}>Delete Post </div>     
+                                    <div className={PostCSS.buttnDisplayText}>Delete</div>     
                             </button>) 
                             : 
                             ""
@@ -350,11 +356,29 @@ const Post = () => {
                             //  onClick={(e) => handleEditClick(e)}
                             (<button className= {PostCSS.buttnElementBackgroundClass} > 
                                     <FiEdit2 size="30px"/>
-                                    <div className={PostCSS.buttnDisplayText}> Edit Post</div>
+                                    <div className={PostCSS.buttnDisplayText}>Edit</div>
                             </button>) 
                             : 
                             ""
                             }
+                            {/* more button */}
+                            <div className= {PostCSS.barButtnContainer}>
+                                <button className= {PostCSS.moreButtnElementBackgroundClass} onClick={() => handleMoreClick()} > 
+                                    <MdOutlineMoreHoriz size="30px"/>
+                                </button>
+                                <div className={`${moreDropdownOn ? "":PostCSS.deactivate} ${PostCSS.desktopBarDropDownMenu} `} > 
+                                    <button className= {PostCSS.buttnElementBackgroundClass2} >  
+                                            <AiOutlineDelete  size="30px"/>
+                                            <div className={PostCSS.buttnDisplayText}>Delete</div>     
+                                    </button>
+                                    <button className= {PostCSS.buttnElementBackgroundClass2} > 
+                                            <FiEdit2 size="30px"/>
+                                            <div className={PostCSS.buttnDisplayText}>Edit</div>
+                                    </button>
+                                </div>
+                            </div>
+                            
+
                         </div>
                         {/* {(authState.UserId === individualPostData.UserId) ?   (<div><button className= {PostCSS.buttonClass} onClick={deletePost}> delete me</button><button className= {PostCSS.buttonClass}>  editpost</button></div>) : ""} */}
                     </div>

@@ -13,7 +13,7 @@
 
 .createPostMobile
 {
-    display: none;
+    display: block;
 }
 .createPostBodyContainer
 {
@@ -86,12 +86,12 @@
 	transition: all 0.1s ease-out;
 }
 
-/* draft js */
-.createPostDesktop
+/* draft js in the future */
+/* .createPostDesktop
 {
     display: block;
-}
-@media screen and (max-width: 1000px)
+} */
+/* @media screen and (max-width: 1000px)
 {
 
     .createPostMobile
@@ -100,7 +100,7 @@
     }
     .createPostDesktop
     {
-        display: none;
+        display: block;
     }
-}
+} */
 
