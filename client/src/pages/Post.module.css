@@ -265,9 +265,11 @@
     text-decoration: none;
     align-items: center;
     background-color: rgb(25, 25, 25);
-    color:rgb(80,80,80);
     border: 0px;
+    color:rgb(80,80,80);
     cursor:pointer;
+    width: 90px;
+    height: 40px;
 }
 .buttnElementBackgroundClass2:hover
 {
@@ -321,7 +323,9 @@
     background-color: rgb(25, 25, 25);
     z-index: 1000000;
     color: white;
-    width: 90%;
+    width: auto;
+    border: 1px solid rgb(80, 80,80);
+    
 }
 
 @media screen and (max-width: 1100px)

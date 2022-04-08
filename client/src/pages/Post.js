@@ -217,7 +217,9 @@ const Post = () => {
     const handleMoreClick = () => {
         setMoreDropdown(currState=>!currState)
     }
-
+    const handleMoreBlur = () => {
+        setMoreDropdown(false)
+    }
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
@@ -362,7 +364,7 @@ const Post = () => {
                             ""
                             }
                             {/* more button */}
-                            <div className= {PostCSS.barButtnContainer}>
+                            <div className= {PostCSS.barButtnContainer} onBlur={(e)=> handleMoreBlur(e)}>
                                 <button className= {PostCSS.moreButtnElementBackgroundClass} onClick={() => handleMoreClick()} > 
                                     <MdOutlineMoreHoriz size="30px"/>
                                 </button>
