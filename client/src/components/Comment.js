@@ -1,23 +1,27 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useContext} from 'react'
 import CommentCSS from "./Comment.module.css"
 import {  Link} from 'react-router-dom'
 import axios from   "axios" 
 import ChildComment from "./ChildComment"
 import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { BsArrowsAngleExpand } from "react-icons/bs";
+import {AuthContext} from "../App"
 
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 10;
 
 // recursive component. takes in individual comment, and comments array. 
 // basic algo: if not in the max level yet, keep recursively generating comments. when in max level, if children, link to continue thread.
-const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
+const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MIN_LEVEL}) => {
     const [newReply, setNewReply] = useState("")
     const [replyFlag, setReplyFlag] = useState(false);
     const [visible, setVisible] = useState(true);
     const [idx, setIdx] = useState(0);
+    const {authState, setAuthState} = useContext(AuthContext)
+
     useEffect( () => {
         setComments(comments);
+        hasDescendantRefresh();
     }, []);
 
     // console.log("MIN_LEVEL: ", MIN_LEVEL) 
@@ -144,8 +148,79 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
         e.stopPropagation()
     }
 
+    const deleteComment = (commentId) => {
+        console.log("deleteing comment with commentID of:", comment.commentId)
+         // send delete request to backend.
+         axios
+            .delete(`/api/comments/${commentId}`)
+            .then( (response) => {
+                console.log("im in here! yay.")
+                // rerender page by resetting commentData data. 
+                axios.get(`/api/comments/${commentId}`)
+                    .then( (response) =>{
+                        console.log("made it in")
+                        console.log("comments: ", response.data);
+                        setComments(comments.filter( (currComment) => currComment.id != commentId))
+                        console.log("AFTER DLEETING: ", comments)
+                    })
+                    .catch( err => {
+                        console.log("comments dont exist!")
+                    })
+             
+            })
+            .catch ( () => {
+                console.log("delete failed!");
+            })
+
+    } 
+    // iterate thru children and find if at least one has not been deleted. set has descendant flag appropriately.
+    const hasDescendantRefresh = () => {
+        let hasDescendantIsTrue = false
+        for(let i =0; i<comments.length; i ++)
+        {
+            if(comments[i].parentId == comment.id)
+            {
+                if(comments[i].hasBeenDeleted == false || comments[i].hasDescendants == true)
+                {
+                    hasDescendantIsTrue = true
+                }
+            }
+        }
+
+        comment.hasDescendants = hasDescendantIsTrue
+        setComments(comments)
+    }
+    // delete parent if children no longer have ancestors. also check for this comment's parent as well.
+    const onDeleteParent = () => {
+        console.log("handling on delete parent , where parent is  the following:" , comment)
+        if(comment.hasBeenDeleted)
+        {
+            hasDescendantRefresh()
+            // if has no descendants should be deleted! *** CHECK THIS LOGIC****. (should on DeleteFromParent be outside?)
+            if(!comment.hasDescendants)
+            {
+                deleteComment(comment.id)
+                onDeleteFromParent()
+            }
+        }
+    }
+    // handle logic for when user CLICKS "delete comment"
+    const handleDeleteComment = () => {
+        comment.hasBeenDeleted = true
+        // if no descendants, this comment should be deleted!
+        console.log("handling delete comment for the following:" , comment)
+        if(!comment.hasDescendants)
+        {
+            deleteComment(comment.id)
+        }
+        onDeleteFromParent()
+
+    }
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
+        if(commentChild == null) {
+            return 
+        }
         if(commentChild.parentId === comment.id)
         {
             // console.log("commentChildId, commentChildLevel: ", commentChild.id, commentChild.level)
@@ -188,6 +263,7 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                         comment={commentChild} 
                         setComments={setComments}
                         comments={comments}
+                        onDeleteFromParent= {onDeleteParent}
                         MIN_LEVEL={MIN_LEVEL}
                         postID ={postID}
                     />
@@ -221,7 +297,7 @@ const Comment = ({comment, setComments, comments, postID, MIN_LEVEL}) => {
                         </div>
                         <button onClick={() => handleReply()}> reply </button>
                     
-                        {/* {(authState.UserId === comment.UserId) ? (<><button className= {PostCSS.buttonClass} onClick={()=> deleteComment(value.id)} > delete comment</button></>) : ""} */}
+                        {(authState.UserId === comment.UserId) ? (<><button className= {CommentCSS.buttonClass} onClick={()=> handleDeleteComment()} > delete comment</button></>) : ""}
 
                     </div>
                     <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>

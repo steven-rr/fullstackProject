@@ -38,6 +38,13 @@ router.get('/:postId', peekToken, async (request, response) => {
     }
     else
     {
+        // loop through comments:
+        for(let i =0; i< comments.length; i++)
+        {
+            comments[i].dataValues.hasBeenDeleted = false
+            comments[i].dataValues.hasDescendants = false
+        }
+        console.log("here are comments:", comments)
         // if user exists, append comment array on whether user likes or dislikes.
         let commentIDsDisliked = [];
         let commentIDsLiked    = [];
@@ -129,10 +136,11 @@ router.delete("/:commentId", validateToken, async(request,response) => {
     const commentId =request.params.commentId;
     // find comment:
     const individualCommentData = await Comments.findByPk(commentId)
-
+    console.log("im in delete and here's the data: ", individualCommentData)
     // if user ID is the same as userID for comment, proceed. else, return forbidden.
     if(request.user.id === individualCommentData.UserId)
     {
+        console.log("im in userid deleting")
         console.log("DELETEING THE FOLLOWING COMMENT: ", commentId)
         const commentDeleted = await Comments.destroy ({ where: {id: commentId} })
         if(!commentDeleted)
@@ -143,7 +151,7 @@ router.delete("/:commentId", validateToken, async(request,response) => {
         else
         {
             // decrement comment counter after succesfully deleting
-            await Posts.decrement('commentCounter', { where: {postId:individualCommentData.PostId}});
+            await Posts.decrement('commentCounter', { where: {id:individualCommentData.PostId}});
 
             console.log("deleted succesfully.")
             //return response.
