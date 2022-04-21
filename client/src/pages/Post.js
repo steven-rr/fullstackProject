@@ -423,8 +423,14 @@ const Post = () => {
                 }
                 
                 {/* display comments */}
+                {comments.length != 0 
+                ?
                 <div className={PostCSS.commentsBodyContainer}>
                     {comments.map((value) =>{
+                        if(value == null)
+                        {
+                            return 
+                        }
                         if(value.parentId === null)
                         {
                             return (
@@ -434,6 +440,7 @@ const Post = () => {
                                         comment= {value}
                                         comments = {comments} 
                                         setComments={setComments}
+                                        onDeleteFromParent= {() => {}}
                                         MIN_LEVEL= {0}
                                         postID ={id}
                                     />
@@ -443,6 +450,9 @@ const Post = () => {
                         
                     })}
                 </div>
+                : 
+                ""}
+                
                 
             </div>
         )
