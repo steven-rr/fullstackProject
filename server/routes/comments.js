@@ -44,7 +44,6 @@ router.get('/:postId', peekToken, async (request, response) => {
             comments[i].dataValues.hasBeenDeleted = false
             comments[i].dataValues.hasDescendants = false
         }
-        console.log("here are comments:", comments)
         // if user exists, append comment array on whether user likes or dislikes.
         let commentIDsDisliked = [];
         let commentIDsLiked    = [];
@@ -56,9 +55,7 @@ router.get('/:postId', peekToken, async (request, response) => {
             for(let i =0; i< userLikes.length;i ++)
             {
                 commentIDsLiked.push(userLikes[i].dataValues.CommentId) 
-                console.log ("hi!")
             }
-            console.log("commentIDsLiked: ", commentIDsLiked)
             for(let i=0 ; i < commentIDsLiked.length; i++)
             {
                 for(let j = 0; j < comments.length; j++)
@@ -123,7 +120,8 @@ router.post("/",validateToken, async(request, response) => {
     newCommentCreated.dataValues.disliked = false
     newCommentCreated.dataValues.Likes= []
     newCommentCreated.dataValues.Dislikes = []
-
+    newCommentCreated.dataValues.hasBeenDeleted = false
+    newCommentCreated.dataValues.hasDescendants = false
     //increment comment counter.
     await Posts.increment('commentCounter', { where: {id:newComment.PostId}});
 
@@ -151,7 +149,10 @@ router.delete("/:commentId", validateToken, async(request,response) => {
         else
         {
             // decrement comment counter after succesfully deleting
-            await Posts.decrement('commentCounter', { where: {id:individualCommentData.PostId}});
+            if (individualCommentData.dataValues.parentId == null)
+            {
+                await Posts.decrement('commentCounter', { where: {id:individualCommentData.PostId}});
+            }
 
             console.log("deleted succesfully.")
             //return response.
@@ -178,7 +179,8 @@ router.post("/reply",validateToken, async(request, response) => {
     newReplyCreated.dataValues.disliked = false
     newReplyCreated.dataValues.Likes= []
     newReplyCreated.dataValues.Dislikes = []
-
+    newReplyCreated.dataValues.hasBeenDeleted = false
+    newReplyCreated.dataValues.hasDescendants = false
     response.json(newReplyCreated)
 })
 
