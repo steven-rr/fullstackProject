@@ -51,6 +51,8 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
                 setComments([...comments, newReplyCreated])
                 setNewReply("") //after adding a comment, clear the comment.
                 setReplyFlag(false);
+                comment.hasDescendants = true
+                
             })
             .catch( (err) => {
                     console.log("error: ", err);
@@ -193,9 +195,10 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
     // delete parent if children no longer have ancestors. also check for this comment's parent as well.
     const onDeleteParent = () => {
         console.log("handling on delete parent , where parent is  the following:" , comment)
+        hasDescendantRefresh()
         if(comment.hasBeenDeleted)
         {
-            hasDescendantRefresh()
+            
             // if has no descendants should be deleted! *** CHECK THIS LOGIC****. (should on DeleteFromParent be outside?)
             if(!comment.hasDescendants)
             {
@@ -273,60 +276,69 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
     });
     
         return (
-            <div className={CommentCSS.commentOuterContainer}>
-                <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
-                    <div className={CommentCSS.borderClass}></div>
-                </div> 
-                <div className = {`${visible ? CommentCSS.commentBodyContainer: CommentCSS.deactivate}`}>
-                    <div className={CommentCSS.commentAuthorContainer}>
-                        <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
-                        <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
-                    </div>
-                    <div className ={CommentCSS.commentText}> {comment.contentText} </div>
-                    <div className={CommentCSS.commentButtnContainer}>
-
-                        <div className={CommentCSS.mobileLikesContainer}>
-                            <div className={`${comment.liked ? CommentCSS.likeBackgroundClass_active: ""}  ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e) }>
-                                <BiUpvote className={CommentCSS.likeClass} size="30px" />
-                            </div>
-                            <div className={`${ (comment.liked || comment.disliked) ? CommentCSS.likeCounterClass_active: ""}`}> {comment.Likes.length - comment.Dislikes.length} </div>
-
-                            <div className={`${comment.disliked ? CommentCSS.likeBackgroundClass_active: ""} ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e)}>
-                                <BiDownvote className={CommentCSS.likeClass} size="30px" />
-                            </div>
+            <div>
+            {
+                comment.hasBeenDeleted
+                ?
+                <div>hi</div>
+                :
+                <div className={CommentCSS.commentOuterContainer}>
+                    <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
+                        <div className={CommentCSS.borderClass}></div>
+                    </div> 
+                    <div className = {`${visible ? CommentCSS.commentBodyContainer: CommentCSS.deactivate}`}>
+                        <div className={CommentCSS.commentAuthorContainer}>
+                            <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
+                            <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
                         </div>
-                        <button onClick={() => handleReply()}> reply </button>
-                    
-                        {(authState.UserId === comment.UserId) ? (<><button className= {CommentCSS.buttonClass} onClick={()=> handleDeleteComment()} > delete comment</button></>) : ""}
+                        <div className ={CommentCSS.commentText}> {comment.contentText} </div>
+                        <div className={CommentCSS.commentButtnContainer}>
 
-                    </div>
-                    <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
-                        <textarea
-                            className={CommentCSS.createCommentField}
-                            name="body" 
-                            rows="14" 
-                            cols="10" 
-                            wrap="soft" 
-                            placeholder="Enter your thoughts here..." 
-                            onChange={commentOnChange}
-                            value={newReply}
-                        /> 
-                        <button onClick={handleSubmitReply}> submit reply</button>
-                    </div>
-                    {nestedComments}
-                </div>
-                <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>
-                    <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
-                        <BsArrowsAngleExpand color="red"/>
-                    </div>
+                            <div className={CommentCSS.mobileLikesContainer}>
+                                <div className={`${comment.liked ? CommentCSS.likeBackgroundClass_active: ""}  ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e) }>
+                                    <BiUpvote className={CommentCSS.likeClass} size="30px" />
+                                </div>
+                                <div className={`${ (comment.liked || comment.disliked) ? CommentCSS.likeCounterClass_active: ""}`}> {comment.Likes.length - comment.Dislikes.length} </div>
 
-                    
-                    <div className={CommentCSS.commentAuthorContainer}>
-                        <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
-                        <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
+                                <div className={`${comment.disliked ? CommentCSS.likeBackgroundClass_active: ""} ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleDislike(e)}>
+                                    <BiDownvote className={CommentCSS.likeClass} size="30px" />
+                                </div>
+                            </div>
+                            <button onClick={() => handleReply()}> reply </button>
+                        
+                            {(authState.UserId === comment.UserId) ? (<><button className= {CommentCSS.buttonClass} onClick={()=> handleDeleteComment()} > delete comment</button></>) : ""}
+
+                        </div>
+                        <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
+                            <textarea
+                                className={CommentCSS.createCommentField}
+                                name="body" 
+                                rows="14" 
+                                cols="10" 
+                                wrap="soft" 
+                                placeholder="Enter your thoughts here..." 
+                                onChange={commentOnChange}
+                                value={newReply}
+                            /> 
+                            <button onClick={handleSubmitReply}> submit reply</button>
+                        </div>
+                        {nestedComments}
+                    </div>
+                    <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>
+                        <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
+                            <BsArrowsAngleExpand color="red"/>
+                        </div>
+
+                        
+                        <div className={CommentCSS.commentAuthorContainer}>
+                            <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
+                            <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+             </div>
+            
         )
     
     
