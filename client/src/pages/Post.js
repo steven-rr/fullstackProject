@@ -426,7 +426,7 @@ const Post = () => {
                 {comments.length != 0 
                 ?
                 <div className={PostCSS.commentsBodyContainer}>
-                    {comments.map((value) =>{
+                    {comments.map((value, index) =>{
                         if(value == null)
                         {
                             return 
@@ -436,8 +436,9 @@ const Post = () => {
                             return (
                                 <div className={PostCSS.commentBodyContainer}>
                                     <Comment
-                                        key= {value.id}
+                                        key= {index}
                                         comment= {value}
+                                        commentIdx= {index}
                                         comments = {comments} 
                                         setComments={setComments}
                                         onDeleteFromParent= {() => {}}

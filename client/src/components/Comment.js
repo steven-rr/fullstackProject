@@ -12,7 +12,7 @@ const REPLY_THREAD_WIDTH = 10;
 
 // recursive component. takes in individual comment, and comments array. 
 // basic algo: if not in the max level yet, keep recursively generating comments. when in max level, if children, link to continue thread.
-const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MIN_LEVEL}) => {
+const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFromParent, MIN_LEVEL}) => {
     const [newReply, setNewReply] = useState("")
     const [replyFlag, setReplyFlag] = useState(false);
     const [visible, setVisible] = useState(true);
@@ -162,6 +162,7 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
                     .then( (response) =>{
                         console.log("made it in")
                         console.log("comments: ", response.data);
+                        
                         setComments(comments.filter( (currComment) => currComment.id != commentId))
                         console.log("AFTER DLEETING: ", comments)
                     })
@@ -208,14 +209,28 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
         }
     }
     // handle logic for when user CLICKS "delete comment"
-    const handleDeleteComment = () => {
-        comment.hasBeenDeleted = true
+    const handleDeleteComment = async () => {
+         
+         // send hasBeenDeleted request to backend.
+         await axios
+            .post(`/api/comments/hasBeenDeleted/${comment.id}`)
+            .then( res => {
+                comment.hasBeenDeleted = true
+                let newComments = [...comments]
+                newComments[commentIdx] =  comment
+                setComments(newComments)
+            })
+            .catch( (err) => {
+                    console.log("error: ", err);
+                });
+
         // if no descendants, this comment should be deleted!
         console.log("handling delete comment for the following:" , comment)
         if(!comment.hasDescendants)
         {
             deleteComment(comment.id)
         }
+        
         onDeleteFromParent()
 
     }
@@ -264,6 +279,7 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
                     <Comment 
                         key= {key}
                         comment={commentChild} 
+                        commentIdx = {key}
                         setComments={setComments}
                         comments={comments}
                         onDeleteFromParent= {onDeleteParent}
@@ -280,7 +296,10 @@ const Comment = ({comment, setComments, comments, postID, onDeleteFromParent, MI
             {
                 comment.hasBeenDeleted
                 ?
-                <div>hi</div>
+                <div> 
+                    <div> This comment has been deleted by the User! </div>
+                    {nestedComments}
+                </div>
                 :
                 <div className={CommentCSS.commentOuterContainer}>
                     <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
