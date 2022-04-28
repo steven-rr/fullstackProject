@@ -41,7 +41,6 @@ router.get('/:postId', peekToken, async (request, response) => {
         // loop through comments:
         for(let i =0; i< comments.length; i++)
         {
-            comments[i].dataValues.hasBeenDeleted = false
             comments[i].dataValues.hasDescendants = false
         }
         // if user exists, append comment array on whether user likes or dislikes.
@@ -120,7 +119,6 @@ router.post("/",validateToken, async(request, response) => {
     newCommentCreated.dataValues.disliked = false
     newCommentCreated.dataValues.Likes= []
     newCommentCreated.dataValues.Dislikes = []
-    newCommentCreated.dataValues.hasBeenDeleted = false
     newCommentCreated.dataValues.hasDescendants = false
     //increment comment counter.
     await Posts.increment('commentCounter', { where: {id:newComment.PostId}});
@@ -179,10 +177,26 @@ router.post("/reply",validateToken, async(request, response) => {
     newReplyCreated.dataValues.disliked = false
     newReplyCreated.dataValues.Likes= []
     newReplyCreated.dataValues.Dislikes = []
-    newReplyCreated.dataValues.hasBeenDeleted = false
     newReplyCreated.dataValues.hasDescendants = false
     response.json(newReplyCreated)
 })
+
+// append a newreply from front end to backend sql server.
+router.post("/hasBeenDeleted/:commentId",validateToken, async(request, response) => {
+
+    const commentId = request.params.commentId; // set commentId.
+
+    console.log("marking following comment as deleted: ", commentId);
+        
+
+
+    const commentUpdated = await Comments.update({hasBeenDeleted: true } , {where: {id: commentId }})
+    console.log("comment updated:" , commentUpdated)
+
+
+    response.json(commentUpdated)
+})
+
 
 
 module.exports = router;

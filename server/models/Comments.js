@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
          type: DataTypes.INTEGER,
          allowNull: true,
          defaultValue: 0
+       },
+       hasBeenDeleted:
+       {
+         type: DataTypes.BOOLEAN,
+         allowNull: true,
+         defaultValue: false
        }
     });
   
