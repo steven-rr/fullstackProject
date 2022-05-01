@@ -162,7 +162,6 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
                     .then( (response) =>{
                         console.log("made it in")
                         console.log("comments: ", response.data);
-                        
                         setComments(comments.filter( (currComment) => currComment.id != commentId))
                         console.log("AFTER DLEETING: ", comments)
                     })
@@ -329,6 +328,9 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
 
                         </div>
                         <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
+                            {/* <div className={`${ true ? CommentCSS.borderOuterClass: CommentCSS.borderOuterClass}`} >
+                                <div className={CommentCSS.borderClass}></div>
+                            </div>  */}
                             <textarea
                                 className={CommentCSS.createCommentField}
                                 name="body" 
