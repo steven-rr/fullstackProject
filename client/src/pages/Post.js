@@ -14,6 +14,7 @@ const Post = () => {
     const [ individualPostData, setIndividualPostData] = useState({})
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
+    const [editPostContent, setEditPostContent] = useState(individualPostData.contentText)
     const [validFlag, setValidFlag] = useState(true)
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
@@ -66,6 +67,11 @@ const Post = () => {
     const commentOnChange= (e) => {
         setNewComment(e.target.value)
     }
+    // handle onChange
+    const editPostContentOnChange= (e) => {
+        setEditPostContent(e.target.value)
+    }
+    
     // create comment on click with create comment button.
     const createComment = async () => {
         const newCommentToPost = {contentText: newComment, PostId: id}
@@ -220,6 +226,26 @@ const Post = () => {
     const handleMoreBlur = () => {
         setMoreDropdown(false)
     }
+    // // create post on click with create post button.
+    // const createPost = async () => {
+    //     console.log("attempting to submit!!!!", newPost)
+    //     // post the new post on the server.
+    //     await axios
+    //         .post('/api/posts',newPost)
+    //         .then(  (res) => {
+    //             const newPostCreated=  res.data; //get json response and append to state.
+    //             //after adding a comment, clear the post.
+    //             console.log(" looks like i did something right with posts....")
+    //             // set new state to empty.
+    //             setNewPost( prevPost => {
+    //                 return {...prevPost, title: "", contentText: "" , username: "admin"}})
+    //             history.push("/blog");
+
+    //         })
+    //         .catch( (err) => {
+    //                 console.log("error: ", err);
+    //             });
+    // }
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
@@ -321,6 +347,21 @@ const Post = () => {
                         <div className={PostCSS.authorClass}>Posted by {individualPostData.username} {dateStringPosted}  </div>
                         <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
                         <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
+                        <textarea
+                            className={PostCSS.createCommentField}
+                            name="body" 
+                            rows="14" 
+                            cols="10" 
+                            wrap="soft" 
+                            placeholder={"Enter your thoughts here..." }
+                            onChange={editPostContentOnChange}
+                            value={editPostContent}
+                            defaultValue= {individualPostData.contentText}
+                        />
+                        {/* <button onClick={createPost}> CANCEL </button> */}
+                        {/* <button onClick={createPost}> SAVE </button> */}
+
+                            
                         {/* Buttons */}
                         <div className={PostCSS.buttonListClass}> 
                             {/* upvotes buttons */}
