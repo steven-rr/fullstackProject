@@ -226,6 +226,42 @@ const Post = () => {
     const handleMoreBlur = () => {
         setMoreDropdown(false)
     }
+    const handleSaveEditPost = async () => {
+        const editedPost = {contentText: editPostContent, PostId: id}
+        await axios 
+            .post(`/api/posts/editContentText`, editedPost)
+            .then( (res) => {
+                console.log("edit post: ", res.data)
+                setIndividualPostData( currPost => {
+                    return {...currPost, contentText: editPostContent}
+
+                })
+
+            })
+            .catch ( () => {
+                console.log("edit post failed!");
+            })
+    }
+    // setNewPost( currentPost => {
+    //     return {...currentPost, title: e.target.value}})
+    // await axios
+    //         .post('/api/comments',newCommentToPost)
+    //         .then(  (res) => {
+    //             const newCommentCreated=  res.data; //get json response and append to state.
+    //             setComments([...comments, newCommentCreated])
+                
+    //             setNewComment("") //after adding a comment, clear the comment.
+    //             rerender();
+    //             console.log("SUCCESFULLY ENTERED COMMENT!!!");
+    //             console.log(newCommentCreated);
+                
+
+    //         })
+    //         .catch( (err) => {
+    //                 console.log("error: ", err);
+    //             });
+
+
     // // create post on click with create post button.
     // const createPost = async () => {
     //     console.log("attempting to submit!!!!", newPost)
@@ -358,8 +394,8 @@ const Post = () => {
                             value={editPostContent}
                             defaultValue= {individualPostData.contentText}
                         />
-                        {/* <button onClick={createPost}> CANCEL </button> */}
-                        {/* <button onClick={createPost}> SAVE </button> */}
+                        <button> CANCEL </button>
+                        <button onClick={handleSaveEditPost}> SAVE </button>
 
                             
                         {/* Buttons */}
