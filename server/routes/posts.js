@@ -140,6 +140,20 @@ router.post("/", validateToken, async(request, response) => {
     response.json(newPostCreated)
 })
 
+// edit post content text:
+router.post("/editContentText", validateToken, async(request, response) => {
+    // parse out info from body:
+    const {contentText, PostId}  = request.body;
+
+    // find post:
+    const postData = await Posts.update({contentText: contentText}, {where: {id: PostId}})
+    
+    console.log("edit post content text:" , postData)
+    response.json(postData)
+
+})
+
+
 // get individual post data in database and send to frontend.
 router.get('/:id', peekToken, async (request, response) => {
     const id = request.params.id;
