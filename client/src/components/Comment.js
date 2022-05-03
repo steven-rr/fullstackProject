@@ -6,6 +6,7 @@ import ChildComment from "./ChildComment"
 import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import {AuthContext} from "../App"
+import { FiEdit2 } from "react-icons/fi";
 
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 10;
@@ -18,6 +19,8 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
     const [visible, setVisible] = useState(true);
     const [idx, setIdx] = useState(0);
     const {authState, setAuthState} = useContext(AuthContext)
+    const [editFlag, setEditflag] = useState(false)
+    const [editPostContent, setEditPostContent] = useState(comment.contentText)
 
     useEffect( () => {
         setComments(comments);
@@ -233,6 +236,42 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
         onDeleteFromParent()
 
     }
+    // handle onChange
+    const editPostContentOnChange= (e) => {
+        setEditPostContent(e.target.value)
+    }
+    const handleEditClick = () => {
+        console.log("clicked edit click!")
+        setEditflag(true)
+    }
+    const handleEditCancel = () => {
+        setEditPostContent(comment.contentText)
+        setEditflag(false)
+    }
+    const handleSaveEditPost = async () => {
+        const editedPost = {contentText: editPostContent, id: comment.id}
+        await axios 
+            .post(`/api/comments/editContentText`, editedPost)
+            .then( (res) => {
+                console.log("edit post: ", res.data)
+                setComments(comments.map( (currComment) => {
+                    // look for post to modify like array.
+                    console.log("currcommentID: ", currComment.id, "commentID: ", comment.id)
+                    if(currComment.id === comment.id) 
+                    {      
+                        currComment.contentText = editPostContent
+                    }
+                    return currComment;
+                    
+                }))
+                
+                setEditflag(false)
+            })
+            .catch ( () => {
+                console.log("edit post failed!");
+            })
+    }
+
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild == null) {
@@ -309,7 +348,27 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
                             <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
                             <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
                         </div>
-                        <div className ={CommentCSS.commentText}> {comment.contentText} </div>
+                        {/* <div className ={CommentCSS.commentText}> {comment.contentText} </div> */}
+                        {!editFlag 
+                            ? 
+                            <div className={CommentCSS.commentText}> {comment.contentText}</div>
+                            :
+                            <div>
+                                <textarea
+                                    // className={PostCSS.createCommentField}
+                                    name="body" 
+                                    rows="14" 
+                                    cols="10" 
+                                    wrap="soft" 
+                                    placeholder={"Enter your thoughts here..." }
+                                    onChange={editPostContentOnChange}
+                                    value={editPostContent}
+                                    defaultValue= {comment.contentText}
+                                />
+                                <button onClick={handleEditCancel}> CANCEL </button>
+                                <button onClick={handleSaveEditPost}> SAVE </button>
+                            </div>
+                        }
                         <div className={CommentCSS.commentButtnContainer}>
 
                             <div className={CommentCSS.mobileLikesContainer}>
@@ -325,7 +384,18 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
                             <button onClick={() => handleReply()}> reply </button>
                         
                             {(authState.UserId === comment.UserId) ? (<><button className= {CommentCSS.buttonClass} onClick={()=> handleDeleteComment()} > delete comment</button></>) : ""}
-
+                            
+                            {/* edit button */}
+                            {(authState.UserId === comment.UserId) 
+                                ?   
+                                //  onClick={(e) => handleEditClick(e)}
+                                (<button onClick={handleEditClick}> 
+                                        <FiEdit2 size="30px"/>
+                                        <div>Edit</div>
+                                </button>) 
+                                : 
+                                ""
+                            }
                         </div>
                         <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
                             {/* <div className={`${ true ? CommentCSS.borderOuterClass: CommentCSS.borderOuterClass}`} >

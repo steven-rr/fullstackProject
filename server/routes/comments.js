@@ -197,6 +197,18 @@ router.post("/hasBeenDeleted/:commentId",validateToken, async(request, response)
     response.json(commentUpdated)
 })
 
+// edit post content text:
+router.post("/editContentText", validateToken, async(request, response) => {
+    // parse out info from body:
+    const {contentText, id}  = request.body;
+
+    // find post:
+    const commentData = await Comments.update({contentText: contentText}, {where: {id: id}})
+    
+    console.log("edit comment content text:" , commentData)
+    response.json(commentData)
+
+})
 
 
 module.exports = router;
