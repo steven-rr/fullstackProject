@@ -15,6 +15,7 @@ const Post = () => {
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
     const [editPostContent, setEditPostContent] = useState(individualPostData.contentText)
+    const [editFlag, setEditflag] = useState(false)
     const [validFlag, setValidFlag] = useState(true)
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
@@ -236,52 +237,21 @@ const Post = () => {
                     return {...currPost, contentText: editPostContent}
 
                 })
-
+                setEditflag(false)
             })
             .catch ( () => {
                 console.log("edit post failed!");
             })
     }
-    // setNewPost( currentPost => {
-    //     return {...currentPost, title: e.target.value}})
-    // await axios
-    //         .post('/api/comments',newCommentToPost)
-    //         .then(  (res) => {
-    //             const newCommentCreated=  res.data; //get json response and append to state.
-    //             setComments([...comments, newCommentCreated])
-                
-    //             setNewComment("") //after adding a comment, clear the comment.
-    //             rerender();
-    //             console.log("SUCCESFULLY ENTERED COMMENT!!!");
-    //             console.log(newCommentCreated);
-                
+    const handleEditClick = () => {
+        console.log("clicked edit click!")
+        setEditflag(true)
 
-    //         })
-    //         .catch( (err) => {
-    //                 console.log("error: ", err);
-    //             });
-
-
-    // // create post on click with create post button.
-    // const createPost = async () => {
-    //     console.log("attempting to submit!!!!", newPost)
-    //     // post the new post on the server.
-    //     await axios
-    //         .post('/api/posts',newPost)
-    //         .then(  (res) => {
-    //             const newPostCreated=  res.data; //get json response and append to state.
-    //             //after adding a comment, clear the post.
-    //             console.log(" looks like i did something right with posts....")
-    //             // set new state to empty.
-    //             setNewPost( prevPost => {
-    //                 return {...prevPost, title: "", contentText: "" , username: "admin"}})
-    //             history.push("/blog");
-
-    //         })
-    //         .catch( (err) => {
-    //                 console.log("error: ", err);
-    //             });
-    // }
+    }
+    const handleEditCancel = () => {
+        setEditPostContent(individualPostData.contentText)
+        setEditflag(false)
+    }
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
@@ -382,20 +352,29 @@ const Post = () => {
                     <div className={PostCSS.postBodyContentContainer}>
                         <div className={PostCSS.authorClass}>Posted by {individualPostData.username} {dateStringPosted}  </div>
                         <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
-                        <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
-                        <textarea
-                            className={PostCSS.createCommentField}
-                            name="body" 
-                            rows="14" 
-                            cols="10" 
-                            wrap="soft" 
-                            placeholder={"Enter your thoughts here..." }
-                            onChange={editPostContentOnChange}
-                            value={editPostContent}
-                            defaultValue= {individualPostData.contentText}
-                        />
-                        <button> CANCEL </button>
-                        <button onClick={handleSaveEditPost}> SAVE </button>
+                        {!editFlag 
+                            ? 
+                            <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
+                            :
+                            <div>
+                                <textarea
+                                    className={PostCSS.createCommentField}
+                                    name="body" 
+                                    rows="14" 
+                                    cols="10" 
+                                    wrap="soft" 
+                                    placeholder={"Enter your thoughts here..." }
+                                    onChange={editPostContentOnChange}
+                                    value={editPostContent}
+                                    defaultValue= {individualPostData.contentText}
+                                />
+                                <button onClick={handleEditCancel}> CANCEL </button>
+                                <button onClick={handleSaveEditPost}> SAVE </button>
+                            </div>
+                        }
+                        
+                        
+                       
 
                             
                         {/* Buttons */}
@@ -433,7 +412,7 @@ const Post = () => {
                             {(authState.UserId === individualPostData.UserId) 
                             ?   
                             //  onClick={(e) => handleEditClick(e)}
-                            (<button className= {PostCSS.buttnElementBackgroundClass} > 
+                            (<button className= {PostCSS.buttnElementBackgroundClass} onClick={handleEditClick}> 
                                     <FiEdit2 size="30px"/>
                                     <div className={PostCSS.buttnDisplayText}>Edit</div>
                             </button>) 
@@ -450,7 +429,7 @@ const Post = () => {
                                             <AiOutlineDelete  size="30px"/>
                                             <div className={PostCSS.buttnDisplayText}>Delete</div>     
                                     </button>
-                                    <button className= {PostCSS.buttnElementBackgroundClass2} > 
+                                    <button className= {PostCSS.buttnElementBackgroundClass2} onClick={handleEditClick}> 
                                             <FiEdit2 size="30px"/>
                                             <div className={PostCSS.buttnDisplayText}>Edit</div>
                                     </button>
