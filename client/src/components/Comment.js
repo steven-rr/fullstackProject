@@ -13,7 +13,7 @@ const REPLY_THREAD_WIDTH = 10;
 
 // recursive component. takes in individual comment, and comments array. 
 // basic algo: if not in the max level yet, keep recursively generating comments. when in max level, if children, link to continue thread.
-const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFromParent, MIN_LEVEL}) => {
+const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostData, postID, onDeleteFromParent, MIN_LEVEL}) => {
     const [newReply, setNewReply] = useState("")
     const [replyFlag, setReplyFlag] = useState(false);
     const [visible, setVisible] = useState(true);
@@ -205,6 +205,14 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
             // if has no descendants should be deleted! *** CHECK THIS LOGIC****. (should on DeleteFromParent be outside?)
             if(!comment.hasDescendants)
             {
+                // if no parents and going to delete, decrement counter. 
+                if(comment.parentId == null)
+                {
+                    setIndividualPostData( (currPost) => {
+                        return { ...currPost, commentCounter: currPost.commentCounter - 1}
+
+                    })
+                }   
                 deleteComment(comment.id)
                 onDeleteFromParent()
             }
@@ -230,6 +238,14 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
         console.log("handling delete comment for the following:" , comment)
         if(!comment.hasDescendants)
         {
+            // if no parents and going to delete, decrement counter. 
+            if(comment.parentId == null)
+            {
+                setIndividualPostData( (currPost) => {
+                    return { ...currPost, commentCounter: currPost.commentCounter - 1}
+
+                })
+            }
             deleteComment(comment.id)
         }
         
@@ -320,6 +336,7 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
                         commentIdx = {key}
                         setComments={setComments}
                         comments={comments}
+                        setIndividualPostData={setIndividualPostData}
                         onDeleteFromParent= {onDeleteParent}
                         MIN_LEVEL={MIN_LEVEL}
                         postID ={postID}
