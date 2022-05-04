@@ -246,7 +246,6 @@ const Post = () => {
     const handleEditClick = () => {
         console.log("clicked edit click!")
         setEditflag(true)
-
     }
     const handleEditCancel = () => {
         setEditPostContent(individualPostData.contentText)
@@ -401,7 +400,7 @@ const Post = () => {
                             {(authState.UserId === individualPostData.UserId) 
                             ?   
                             // onClick={(e)=> handleOnClickDelete(e, value.id)}
-                            (<button className= {PostCSS.buttnElementBackgroundClass} >  
+                            (<button className= {PostCSS.buttnElementBackgroundClass} onClick={deletePost}>  
                                     <AiOutlineDelete  size="30px"/>
                                     <div className={PostCSS.buttnDisplayText}>Delete</div>     
                             </button>) 
@@ -420,16 +419,16 @@ const Post = () => {
                             ""
                             }
                             {/* more button */}
-                            <div className= {PostCSS.barButtnContainer} onBlur={(e)=> handleMoreBlur(e)}>
+                            <div tabIndex="0" className= {PostCSS.barButtnContainer} onBlur={(e)=> handleMoreBlur(e)}>
                                 <button className= {PostCSS.moreButtnElementBackgroundClass} onClick={() => handleMoreClick()} > 
                                     <MdOutlineMoreHoriz size="30px"/>
                                 </button>
                                 <div className={`${moreDropdownOn ? "":PostCSS.deactivate} ${PostCSS.desktopBarDropDownMenu} `} > 
-                                    <button className= {PostCSS.buttnElementBackgroundClass2} >  
+                                    <button className= {PostCSS.buttnElementBackgroundClass2} onMouseDown={(e)=> deletePost(e)} >  
                                             <AiOutlineDelete  size="30px"/>
                                             <div className={PostCSS.buttnDisplayText}>Delete</div>     
                                     </button>
-                                    <button className= {PostCSS.buttnElementBackgroundClass2} onClick={handleEditClick}> 
+                                    <button className= {PostCSS.buttnElementBackgroundClass2} onMouseDown={(e) => handleEditClick(e)}> 
                                             <FiEdit2 size="30px"/>
                                             <div className={PostCSS.buttnDisplayText}>Edit</div>
                                     </button>
