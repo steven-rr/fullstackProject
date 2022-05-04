@@ -348,14 +348,13 @@ const Comment = ({comment,commentIdx, setComments, comments, postID, onDeleteFro
                             <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
                             <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
                         </div>
-                        {/* <div className ={CommentCSS.commentText}> {comment.contentText} </div> */}
                         {!editFlag 
                             ? 
                             <div className={CommentCSS.commentText}> {comment.contentText}</div>
                             :
                             <div>
                                 <textarea
-                                    // className={PostCSS.createCommentField}
+                                    className={CommentCSS.createCommentField}
                                     name="body" 
                                     rows="14" 
                                     cols="10" 
