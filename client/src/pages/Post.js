@@ -82,7 +82,11 @@ const Post = () => {
             .then(  (res) => {
                 const newCommentCreated=  res.data; //get json response and append to state.
                 setComments([...comments, newCommentCreated])
-                
+                setIndividualPostData( (currPost) => {
+                    return { ...currPost, commentCounter: currPost.commentCounter +1}
+
+                })
+
                 setNewComment("") //after adding a comment, clear the comment.
                 rerender();
                 console.log("SUCCESFULLY ENTERED COMMENT!!!");
@@ -366,9 +370,10 @@ const Post = () => {
                                     onChange={editPostContentOnChange}
                                     value={editPostContent}
                                     defaultValue= {individualPostData.contentText}
+                                    resize="none"
                                 />
-                                <button onClick={handleEditCancel}> CANCEL </button>
-                                <button onClick={handleSaveEditPost}> SAVE </button>
+                                <button className={PostCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
+                                <button className={PostCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
                             </div>
                         }
                         
@@ -496,6 +501,7 @@ const Post = () => {
                                         commentIdx= {index}
                                         comments = {comments} 
                                         setComments={setComments}
+                                        setIndividualPostData={setIndividualPostData}
                                         onDeleteFromParent= {() => {}}
                                         MIN_LEVEL= {0}
                                         postID ={id}
