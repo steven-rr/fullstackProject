@@ -1,4 +1,4 @@
-import {React,useEffect, useState, useContext} from 'react'
+import {React,useEffect, useState, useContext, useRef} from 'react'
 import {useParams, useHistory} from "react-router-dom"
 import PostCSS from "./Post.module.css"
 import axios from   "axios" 
@@ -21,6 +21,10 @@ const Post = () => {
     const [idxx, setIdx] = useState(0)
     const [todayTime, setTodayTime] = useState(new Date())
     const [moreDropdownOn, setMoreDropdown]   = useState(false)
+    const [textAreaHeight, setTextAreaHeight] = useState("100px");
+	const [parentHeight, setParentHeight] = useState("100px");
+	const textAreaRef = useRef();
+
 
     // rerender when blur is triggered.
     const rerender = e =>
@@ -33,7 +37,14 @@ const Post = () => {
 
     // instantiate history.
     const history = useHistory();
-
+    // on render set parent height:
+    useEffect( () => {
+        if(textAreaRef.current)
+        {
+            setParentHeight(`${textAreaRef.current.scrollHeight}px`);
+            setTextAreaHeight(`${textAreaRef.current.scrollHeight}px`);
+        }
+    }, [editPostContent])
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {
         // scroll to top on render.
@@ -70,9 +81,11 @@ const Post = () => {
     }
     // handle onChange
     const editPostContentOnChange= (e) => {
+        setTextAreaHeight("auto");
+		setParentHeight(`${textAreaRef.current.scrollHeight}px`);
         setEditPostContent(e.target.value)
     }
-    
+
     // create comment on click with create comment button.
     const createComment = async () => {
         const newCommentToPost = {contentText: newComment, PostId: id}
@@ -359,18 +372,23 @@ const Post = () => {
                             ? 
                             <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
                             :
-                            <div>
+                            <div className={PostCSS.createCommentFieldContainer} style={{
+                                minHeight: parentHeight,
+                            }}>
                                 <textarea
                                     className={PostCSS.createCommentField}
                                     name="body" 
-                                    rows="14" 
-                                    cols="10" 
+                                    ref={textAreaRef}
+                                    rows={1}
+                                    style= {{
+                                        height:textAreaHeight,
+                                    }}
                                     wrap="soft" 
+                                    cols="10" 
                                     placeholder={"Enter your thoughts here..." }
                                     onChange={editPostContentOnChange}
                                     value={editPostContent}
                                     defaultValue= {individualPostData.contentText}
-                                    resize="none"
                                 />
                                 <button className={PostCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
                                 <button className={PostCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
