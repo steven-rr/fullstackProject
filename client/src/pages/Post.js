@@ -41,10 +41,10 @@ const Post = () => {
     useEffect( () => {
         if(textAreaRef.current)
         {
-            setParentHeight(`${textAreaRef.current.scrollHeight}px`);
-            setTextAreaHeight(`${textAreaRef.current.scrollHeight}px`);
+            setParentHeight(`${textAreaRef.current.scrollHeight + 58}px`);
+            setTextAreaHeight(`${textAreaRef.current.scrollHeight + 58}px`);
         }
-    }, [editPostContent])
+    }, [editFlag, editPostContent])
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {
         // scroll to top on render.
@@ -379,7 +379,6 @@ const Post = () => {
                                     className={PostCSS.createCommentField}
                                     name="body" 
                                     ref={textAreaRef}
-                                    rows={1}
                                     style= {{
                                         height:textAreaHeight,
                                     }}
