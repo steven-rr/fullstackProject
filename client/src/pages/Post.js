@@ -348,7 +348,7 @@ const Post = () => {
             }
             else
             {
-                toDisplay.push(<div>{substrings[i]}</div>)
+                toDisplay.push(<div className={PostCSS.paragraphContent}><p>{substrings[i]}</p></div>)
             }
         }
     }
