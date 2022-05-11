@@ -21,8 +21,8 @@ const Post = () => {
     const [idxx, setIdx] = useState(0)
     const [todayTime, setTodayTime] = useState(new Date())
     const [moreDropdownOn, setMoreDropdown]   = useState(false)
-    const [textAreaHeight, setTextAreaHeight] = useState("100px");
-	const [parentHeight, setParentHeight] = useState("100px");
+    const [textAreaHeight, setTextAreaHeight] = useState("auto");
+	const [parentHeight, setParentHeight] = useState("auto");
 	const textAreaRef = useRef();
 
 
@@ -41,9 +41,14 @@ const Post = () => {
     useEffect( () => {
         if(textAreaRef.current)
         {
+            setParentHeight("auto")
+            setTextAreaHeight("auto")
             setParentHeight(`${textAreaRef.current.scrollHeight + 58}px`);
-            setTextAreaHeight(`${textAreaRef.current.scrollHeight + 58}px`);
+            setTextAreaHeight(`${textAreaRef.current.scrollHeight+ 58}px`);
+            console.log("useEffect for textarea activated. 2", textAreaRef.current.scrollHeight)
+
         }
+        console.log("useEffect for textarea activated. 1")
     }, [editFlag, editPostContent])
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {
@@ -54,6 +59,7 @@ const Post = () => {
         axios.get(`/api/posts/${id}`)
             .then( (response) =>{
                 setIndividualPostData(response.data);
+                setEditPostContent(response.data.contentText)
                 console.log("post data from backend NEWEST: ", response.data)
                 setValidFlag(true)
             })
@@ -82,7 +88,6 @@ const Post = () => {
     // handle onChange
     const editPostContentOnChange= (e) => {
         setTextAreaHeight("auto");
-		setParentHeight(`${textAreaRef.current.scrollHeight}px`);
         setEditPostContent(e.target.value)
     }
 
@@ -262,6 +267,8 @@ const Post = () => {
     }
     const handleEditClick = () => {
         console.log("clicked edit click!")
+        setTextAreaHeight("auto");
+        setParentHeight("auto")
         setEditflag(true)
     }
     const handleEditCancel = () => {
@@ -325,6 +332,27 @@ const Post = () => {
         
         
     }
+    let toDisplay = []
+
+    if(individualPostData.contentText)
+    {
+        console.log("trying to do this:", individualPostData.contentText)
+        let substrings = individualPostData.contentText.split("\n");
+        console.log("trying to do this:", substrings)
+
+        for(let i =0 ; i < substrings.length; i++)
+        {
+            if(substrings[i] == "")
+            {
+                toDisplay.push(<div> <br></br></div>)
+            }
+            else
+            {
+                toDisplay.push(<div>{substrings[i]}</div>)
+            }
+        }
+    }
+    
     // if not a valid ID, render 404. else, render the post! 
     if(!validFlag)
     {
@@ -370,7 +398,9 @@ const Post = () => {
                         <div className={PostCSS.titleStyle}> {individualPostData.title}</div>
                         {!editFlag 
                             ? 
-                            <div className={PostCSS.contentStyle}> {individualPostData.contentText}</div>
+                            <div className={PostCSS.contentStyle}> 
+                                {toDisplay}
+                            </div>
                             :
                             <div className={PostCSS.createCommentFieldContainer} style={{
                                 minHeight: parentHeight,
@@ -387,7 +417,6 @@ const Post = () => {
                                     placeholder={"Enter your thoughts here..." }
                                     onChange={editPostContentOnChange}
                                     value={editPostContent}
-                                    defaultValue= {individualPostData.contentText}
                                 />
                                 <button className={PostCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
                                 <button className={PostCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
@@ -415,7 +444,7 @@ const Post = () => {
 
                             {/* comments button */}
                             <div className= {PostCSS.commentButtnElementBackgroundClass} > 
-                                    <BiComment size="30px"/> 
+                                    <BiComment size="26px"/> 
                                     <div className={`${PostCSS.buttnDisplayText} ${PostCSS.commentButtnText}`} > {individualPostData.commentCounter}</div>
                             </div>
                             {/* delete button */}
