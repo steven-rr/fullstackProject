@@ -312,9 +312,7 @@ const Post = () => {
 
     if(individualPostData.contentText)
     {
-        console.log("trying to do this:", individualPostData.contentText)
         let substrings = individualPostData.contentText.split("\n");
-        console.log("trying to do this:", substrings)
 
         for(let i =0 ; i < substrings.length; i++)
         {
