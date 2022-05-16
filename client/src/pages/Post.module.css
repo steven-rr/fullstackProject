@@ -166,6 +166,10 @@
 {
     overflow-wrap:break-word;
 }
+.paragraphContent_p
+{
+    margin: 0;
+}
 .commentsBodyContainer
 {
     box-sizing: border-box;

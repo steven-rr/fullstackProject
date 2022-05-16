@@ -1,9 +1,10 @@
-import {React,useEffect, useState, useContext, useRef} from 'react'
+import {React,useEffect, useState, useContext} from 'react'
 import {useParams, useHistory} from "react-router-dom"
 import PostCSS from "./Post.module.css"
 import axios from   "axios" 
 import Page404 from "./Page404"
 import Comment from "../components/Comment.js"
+import TextArea from "../components/TextArea.js"
 import {AuthContext} from "../App"
 import { BiUpvote, BiDownvote, BiComment } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
@@ -14,16 +15,12 @@ const Post = () => {
     const [ individualPostData, setIndividualPostData] = useState({})
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
-    const [editPostContent, setEditPostContent] = useState(individualPostData.contentText)
     const [editFlag, setEditflag] = useState(false)
     const [validFlag, setValidFlag] = useState(true)
     const {authState, setAuthState} = useContext(AuthContext)
     const [idxx, setIdx] = useState(0)
     const [todayTime, setTodayTime] = useState(new Date())
     const [moreDropdownOn, setMoreDropdown]   = useState(false)
-    const [textAreaHeight, setTextAreaHeight] = useState("auto");
-	const [parentHeight, setParentHeight] = useState("auto");
-	const textAreaRef = useRef();
 
 
     // rerender when blur is triggered.
@@ -37,19 +34,6 @@ const Post = () => {
 
     // instantiate history.
     const history = useHistory();
-    // on render set parent height:
-    useEffect( () => {
-        if(textAreaRef.current)
-        {
-            setParentHeight("auto")
-            setTextAreaHeight("auto")
-            setParentHeight(`${textAreaRef.current.scrollHeight + 58}px`);
-            setTextAreaHeight(`${textAreaRef.current.scrollHeight+ 58}px`);
-            console.log("useEffect for textarea activated. 2", textAreaRef.current.scrollHeight)
-
-        }
-        console.log("useEffect for textarea activated. 1")
-    }, [editFlag, editPostContent])
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {
         // scroll to top on render.
@@ -59,7 +43,6 @@ const Post = () => {
         axios.get(`/api/posts/${id}`)
             .then( (response) =>{
                 setIndividualPostData(response.data);
-                setEditPostContent(response.data.contentText)
                 console.log("post data from backend NEWEST: ", response.data)
                 setValidFlag(true)
             })
@@ -84,11 +67,6 @@ const Post = () => {
     // handle onChange
     const commentOnChange= (e) => {
         setNewComment(e.target.value)
-    }
-    // handle onChange
-    const editPostContentOnChange= (e) => {
-        setTextAreaHeight("auto");
-        setEditPostContent(e.target.value)
     }
 
     // create comment on click with create comment button.
@@ -249,32 +227,30 @@ const Post = () => {
     const handleMoreBlur = () => {
         setMoreDropdown(false)
     }
-    const handleSaveEditPost = async () => {
-        const editedPost = {contentText: editPostContent, PostId: id}
+    const handleSaveEditPost2 = async (editPostContentIn)=> {
+        const editedPost = {contentText: editPostContentIn, PostId: id}
+        console.log("editedpost from editpost2: ", editedPost)
         await axios 
             .post(`/api/posts/editContentText`, editedPost)
             .then( (res) => {
                 console.log("edit post: ", res.data)
                 setIndividualPostData( currPost => {
-                    return {...currPost, contentText: editPostContent}
+                    return {...currPost, contentText: editPostContentIn}
 
                 })
-                setEditflag(false)
+                return true
             })
             .catch ( () => {
                 console.log("edit post failed!");
+                return false
             })
     }
+
     const handleEditClick = () => {
         console.log("clicked edit click!")
-        setTextAreaHeight("auto");
-        setParentHeight("auto")
         setEditflag(true)
     }
-    const handleEditCancel = () => {
-        setEditPostContent(individualPostData.contentText)
-        setEditflag(false)
-    }
+ 
     // calc time posted to display on post body containers!!!
     const postDateToDisplay = (datePosted) => {
         //output 
@@ -348,7 +324,7 @@ const Post = () => {
             }
             else
             {
-                toDisplay.push(<div className={PostCSS.paragraphContent}><p>{substrings[i]}</p></div>)
+                toDisplay.push(<div className={PostCSS.paragraphContent}><p className={PostCSS.paragraphContent_p}>{substrings[i]}</p></div>)
             }
         }
     }
@@ -402,29 +378,16 @@ const Post = () => {
                                 {toDisplay}
                             </div>
                             :
-                            <div className={PostCSS.createCommentFieldContainer} style={{
-                                minHeight: parentHeight,
-                            }}>
-                                <textarea
-                                    className={PostCSS.createCommentField}
-                                    name="body" 
-                                    ref={textAreaRef}
-                                    style= {{
-                                        height:textAreaHeight,
-                                    }}
-                                    wrap="soft" 
-                                    cols="10" 
-                                    placeholder={"Enter your thoughts here..." }
-                                    onChange={editPostContentOnChange}
-                                    value={editPostContent}
-                                />
-                                <button className={PostCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
-                                <button className={PostCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
-                            </div>
+                            <TextArea
+                                defaultVal={individualPostData.contentText}
+                                handleSave={handleSaveEditPost2}
+                                editFlag={editFlag}
+                                setEditflag={setEditflag}
+                            />
                         }
                         
-                        
                        
+
 
                             
                         {/* Buttons */}
