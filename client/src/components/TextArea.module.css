@@ -1,0 +1,46 @@
+.createCommentFieldContainer
+{
+    margin-top: 20px;
+
+}
+
+.createCommentField
+{
+    box-sizing: border-box;
+    border: none;
+    appearance:none;
+    outline: none;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
+    font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    resize: vertical;
+}
+
+
+.editPostButtonClass
+{
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 8px 23px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+}
+
+.editPostButtonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
+
+
