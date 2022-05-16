@@ -3,6 +3,7 @@ import CommentCSS from "./Comment.module.css"
 import {  Link} from 'react-router-dom'
 import axios from   "axios" 
 import ChildComment from "./ChildComment"
+import TextArea from "../components/TextArea.js"
 import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import {AuthContext} from "../App"
@@ -287,7 +288,50 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                 console.log("edit post failed!");
             })
     }
+    const handleSaveEditPost2 = async (editPostContentIn) => {
+        const editedPost = {contentText: editPostContentIn, id: comment.id}
+        await axios 
+            .post(`/api/comments/editContentText`, editedPost)
+            .then( (res) => {
+                console.log("edit post: ", res.data)
+                setComments(comments.map( (currComment) => {
+                    // look for post to modify like array.
+                    console.log("currcommentID: ", currComment.id, "commentID: ", comment.id)
+                    if(currComment.id === comment.id) 
+                    {      
+                        currComment.contentText = editPostContentIn
+                    }
+                    return currComment;
+                    
+                }))
+                return true                
+            })
+            .catch ( () => {
+                console.log("edit post failed!");
+                return false
+            })
+    }
 
+    let toDisplay = []
+    if(comment.contentText)
+    {
+        console.log("trying to do this:", comment.contentText)
+
+        let substrings = comment.contentText.split("\n")
+        console.log("trying to do this:", substrings)
+
+        for (let i=0; i < substrings.length; i++)
+        {
+            if(substrings[i] == "")
+            {
+                toDisplay.push(<div> <br></br></div>)
+            }
+            else
+            {
+                toDisplay.push(<div className={CommentCSS.paragraphContent}><p className={CommentCSS.paragraphContent_p}>{substrings[i]}</p></div>)
+            }
+        }
+    }
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild == null) {
@@ -367,23 +411,33 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                         </div>
                         {!editFlag 
                             ? 
-                            <div className={CommentCSS.commentText}> {comment.contentText}</div>
-                            :
-                            <div>
-                                <textarea
-                                    className={CommentCSS.createCommentField}
-                                    name="body" 
-                                    rows="14" 
-                                    cols="10" 
-                                    wrap="soft" 
-                                    placeholder={"Enter your thoughts here..." }
-                                    onChange={editPostContentOnChange}
-                                    value={editPostContent}
-                                    defaultValue= {comment.contentText}
-                                />
-                                <button onClick={handleEditCancel}> CANCEL </button>
-                                <button onClick={handleSaveEditPost}> SAVE </button>
+                            // <div className={CommentCSS.commentText}> {comment.contentText}</div>
+                            <div className={CommentCSS.commentText}> 
+                                {toDisplay} 
+                            
                             </div>
+                            :
+                            <TextArea
+                                defaultVal={comment.contentText}
+                                handleSave={handleSaveEditPost2}
+                                editFlag={editFlag}
+                                setEditflag={setEditflag}
+                             />
+                            // <div>
+                            //     <textarea
+                            //         className={CommentCSS.createCommentField}
+                            //         name="body" 
+                            //         rows="14" 
+                            //         cols="10" 
+                            //         wrap="soft" 
+                            //         placeholder={"Enter your thoughts here..." }
+                            //         onChange={editPostContentOnChange}
+                            //         value={editPostContent}
+                            //         defaultValue= {comment.contentText}
+                            //     />
+                            //     <button onClick={handleEditCancel}> CANCEL </button>
+                            //     <button onClick={handleSaveEditPost}> SAVE </button>
+                            // </div>
                         }
                         <div className={CommentCSS.commentButtnContainer}>
 

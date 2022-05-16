@@ -199,6 +199,15 @@
     font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 
 }
+.paragraphContent
+{
+    overflow-wrap:break-word;
+}
+.paragraphContent_p
+{
+    margin: 0;
+}
+
 .deactivate
 {
     display:none;
