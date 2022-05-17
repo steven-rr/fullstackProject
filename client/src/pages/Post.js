@@ -94,6 +94,31 @@ const Post = () => {
                     console.log("error: ", err);
                 });
     }
+    // create comment on click with create comment button.
+    const createComment2 = async (editPostContentIn) => {
+        const newCommentToPost = {contentText: editPostContentIn, PostId: id}
+        // post the new comment on the server.
+        await axios
+            .post('/api/comments',newCommentToPost)
+            .then(  (res) => {
+                const newCommentCreated=  res.data; //get json response and append to state.
+                setComments([...comments, newCommentCreated])
+                setIndividualPostData( (currPost) => {
+                    return { ...currPost, commentCounter: currPost.commentCounter +1}
+
+                })
+
+                setNewComment("") //after adding a comment, clear the comment.
+                rerender();
+                console.log("SUCCESFULLY ENTERED COMMENT!!!");
+                console.log(newCommentCreated);
+                
+
+            })
+            .catch( (err) => {
+                    console.log("error: ", err);
+                });
+    }
 
     const deleteComment = (commentId) => {
         console.log('clicked delete comment')
@@ -458,32 +483,23 @@ const Post = () => {
                     <div className={PostCSS.createCommentOuterContainer}>
                         <div className={PostCSS.createCommentContainer}>
                             <div className={`${authState.authStatus ? PostCSS.commentAuthor: PostCSS.deactivate}`}>Comment as {authState.username}</div> 
-                            <textarea
-                                className={PostCSS.createCommentField}
-                                name="body" 
-                                rows="14" 
-                                cols="10" 
-                                wrap="soft" 
-                                placeholder="Enter your thoughts here..." 
-                                onChange={commentOnChange}
-                                value={newComment}
-                            /> 
-                            <button className={PostCSS.commentButtonClass} onClick ={createComment}> Comment </button>
+                            <TextArea
+                                defaultVal={""}
+                                handleSave={createComment2}
+                                editorMode ={false}
+                            />
                         </div>
                     </div>
                     :
                     <div className={PostCSS.createCommentOuterContainer}>
                         <div className={PostCSS.createCommentContainer}>
-                            <textarea
-                                className={PostCSS.createCommentField}
-                                name="body" 
-                                rows="14" 
-                                cols="10" 
-                                wrap="soft" 
-                                placeholder="Login to Comment..." 
-                                onClick={(e)=> handleLoginFromPosts(e)}
-                                value={newComment}
-                            /> 
+                            <div style= {{ "width":"100%"}} onClick ={(e)=> handleLoginFromPosts(e)}>
+                                <TextArea
+                                    defaultVal={""}
+                                    editorMode ={false}
+                                    useButtons = {false}
+                                />
+                            </div>
                             <button className={PostCSS.buttonClass} onClick ={(e)=> handleLoginFromPosts(e)}> LOG IN!</button>
                         </div>
                     </div>

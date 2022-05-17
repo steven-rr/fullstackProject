@@ -208,6 +208,24 @@
     margin: 0;
 }
 
+.replyClass
+{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    color: rgb(80,80,80);
+    padding: 0;
+    width: 70px;
+}
+.replyClass:hover
+{
+    background-color: rgb(35,35,35);
+    color: white;
+}
+
 .deactivate
 {
     display:none;
