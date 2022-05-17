@@ -4,7 +4,7 @@ import {  Link} from 'react-router-dom'
 import axios from   "axios" 
 import ChildComment from "./ChildComment"
 import TextArea from "../components/TextArea.js"
-import { BiUpvote, BiDownvote } from "react-icons/bi";
+import { BiUpvote, BiDownvote,BiComment } from "react-icons/bi";
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import {AuthContext} from "../App"
 import { FiEdit2 } from "react-icons/fi";
@@ -47,6 +47,25 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     const handleSubmitReply = async () => {
         // increment level plus 1. 
         const newReplyToPost = {contentText: newReply, PostId: postID, parentId: comment.id, level: comment.level +1}
+        // post the new reply on the server.
+        await axios
+            .post('/api/comments/reply',newReplyToPost)
+            .then( res => {
+                const newReplyCreated=  res.data; //get json response and append to state.                
+                setComments([...comments, newReplyCreated])
+                setNewReply("") //after adding a comment, clear the comment.
+                setReplyFlag(false);
+                comment.hasDescendants = true
+                
+            })
+            .catch( (err) => {
+                    console.log("error: ", err);
+                });
+    }
+    // handle submit reply
+    const handleSubmitReply2 = async (editPostContentIn) => {
+        // increment level plus 1. 
+        const newReplyToPost = {contentText: editPostContentIn, PostId: postID, parentId: comment.id, level: comment.level +1}
         // post the new reply on the server.
         await axios
             .post('/api/comments/reply',newReplyToPost)
@@ -332,6 +351,13 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
             }
         }
     }
+    const handleLoginFromPosts = (e) => {
+
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, loginOn: !currentAuthState.loginOn}
+        })
+        e.stopPropagation()
+    }
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild == null) {
@@ -423,21 +449,6 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 editFlag={editFlag}
                                 setEditflag={setEditflag}
                              />
-                            // <div>
-                            //     <textarea
-                            //         className={CommentCSS.createCommentField}
-                            //         name="body" 
-                            //         rows="14" 
-                            //         cols="10" 
-                            //         wrap="soft" 
-                            //         placeholder={"Enter your thoughts here..." }
-                            //         onChange={editPostContentOnChange}
-                            //         value={editPostContent}
-                            //         defaultValue= {comment.contentText}
-                            //     />
-                            //     <button onClick={handleEditCancel}> CANCEL </button>
-                            //     <button onClick={handleSaveEditPost}> SAVE </button>
-                            // </div>
                         }
                         <div className={CommentCSS.commentButtnContainer}>
 
@@ -451,7 +462,18 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                     <BiDownvote className={CommentCSS.likeClass} size="30px" />
                                 </div>
                             </div>
-                            <button onClick={() => handleReply()}> reply </button>
+                            {authState.authStatus
+                            ?
+                            <div className={CommentCSS.replyClass} onClick={() => handleReply()}>
+                                <BiComment size="26px"/> 
+                                <div>Reply</div>
+                            </div>
+                            // <button onClick={() => handleReply()}> reply </button>
+                            :
+                            <button onClick={(e) => handleLoginFromPosts(e)}> reply </button>
+                            }
+
+                            
                         
                             {(authState.UserId === comment.UserId) ? (<><button className= {CommentCSS.buttonClass} onClick={()=> handleDeleteComment()} > delete comment</button></>) : ""}
                             
@@ -471,7 +493,13 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                             {/* <div className={`${ true ? CommentCSS.borderOuterClass: CommentCSS.borderOuterClass}`} >
                                 <div className={CommentCSS.borderClass}></div>
                             </div>  */}
-                            <textarea
+                            <TextArea
+                                defaultVal={""}
+                                handleSave={handleSubmitReply2}
+                                editorMode={false}
+                            />
+
+                            {/* <textarea
                                 className={CommentCSS.createCommentField}
                                 name="body" 
                                 rows="14" 
@@ -481,7 +509,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 onChange={commentOnChange}
                                 value={newReply}
                             /> 
-                            <button onClick={handleSubmitReply}> submit reply</button>
+                            <button onClick={handleSubmitReply}> submit reply</button> */}
                         </div>
                         {nestedComments}
                     </div>

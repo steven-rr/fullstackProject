@@ -2,7 +2,13 @@ import {React,useEffect, useState, useContext, useRef} from 'react'
 import TextAreaCSS from "./TextArea.module.css"
 
 
-const TextArea = ({defaultVal,  handleSave = (contentIn) => true, editFlag, setEditflag}) => {
+const TextArea = ({defaultVal,  
+                   handleSave = (contentIn) => true, 
+                   editFlag = true, 
+                   setEditflag = (val) => val, 
+                   editorMode = true,
+                   useButtons = true
+}) => {
     const [textAreaHeight, setTextAreaHeight] = useState("auto");
     const [parentHeight, setParentHeight] = useState("auto");
     const [editPostContent, setEditPostContent] = useState(defaultVal)
@@ -39,28 +45,65 @@ const TextArea = ({defaultVal,  handleSave = (contentIn) => true, editFlag, setE
     const handleSaveEditPost = async () => {
         let succeded = handleSave(editPostContent)
         succeded ? setEditflag(false) : setEditflag(true)
+        setEditPostContent(defaultVal)
+        setTextAreaHeight("auto")
     }
     console.log("text area current value: ", editPostContent)
     return (
-        
-        <div className={TextAreaCSS.createCommentFieldContainer}>
-            <textarea
-                className={TextAreaCSS.createCommentField}
-                name="body" 
-                ref={textAreaRef}
-                style= {{
-                    height:textAreaHeight,
-                }}
-                wrap="soft" 
-                cols="10" 
-                placeholder={"Enter your thoughts here..." }
-                onChange={editPostContentOnChange}
-                value={editPostContent}
-            />
-            <button className={TextAreaCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
-            <button className={TextAreaCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
-        </div>
-       
+            editorMode 
+            ?
+            <div className={TextAreaCSS.createCommentFieldContainer}>
+                <textarea
+                    className={TextAreaCSS.createCommentField}
+                    name="body" 
+                    ref={textAreaRef}
+                    style= {{
+                        height:textAreaHeight,
+                    }}
+                    wrap="soft" 
+                    cols="10" 
+                    placeholder={"Enter your thoughts here..." }
+                    onChange={editPostContentOnChange}
+                    value={editPostContent}
+                />
+                <button className={TextAreaCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
+                <button className={TextAreaCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
+            </div> 
+            :
+            useButtons
+            ?
+            <div className={TextAreaCSS.createCommentFieldContainer}>
+                <textarea
+                    className={TextAreaCSS.createCommentField}
+                    name="body" 
+                    ref={textAreaRef}
+                    style= {{
+                        height:textAreaHeight,
+                    }}
+                    wrap="soft" 
+                    cols="10" 
+                    placeholder={"Enter your thoughts here..." }
+                    onChange={editPostContentOnChange}
+                    value={editPostContent}
+                />
+                <button className={TextAreaCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
+            </div> 
+            :
+            <div className={TextAreaCSS.createCommentFieldContainer}>
+                <textarea
+                    className={TextAreaCSS.createCommentField}
+                    name="body" 
+                    ref={textAreaRef}
+                    style= {{
+                        height:textAreaHeight,
+                    }}
+                    wrap="soft" 
+                    cols="10" 
+                    placeholder={"Enter your thoughts here..." }
+                    onChange={editPostContentOnChange}
+                    value={editPostContent}
+                />
+            </div> 
     )
 }
 
