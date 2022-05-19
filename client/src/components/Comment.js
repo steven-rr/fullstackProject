@@ -1,4 +1,4 @@
-import React, {useState,useEffect, useContext} from 'react'
+import React, {useState,useEffect, useContext, useRef, useCallback} from 'react'
 import CommentCSS from "./Comment.module.css"
 import {  Link} from 'react-router-dom'
 import axios from   "axios" 
@@ -7,7 +7,9 @@ import TextArea from "../components/TextArea.js"
 import { BiUpvote, BiDownvote,BiComment } from "react-icons/bi";
 import { BsArrowsAngleExpand } from "react-icons/bs";
 import {AuthContext} from "../App"
+import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit2 } from "react-icons/fi";
+import { set } from 'express/lib/application'
 
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 10;
@@ -22,12 +24,74 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     const {authState, setAuthState} = useContext(AuthContext)
     const [editFlag, setEditflag] = useState(false)
     const [editPostContent, setEditPostContent] = useState(comment.contentText)
+    const [todayTime, setTodayTime] = useState(new Date())
+    const [buttonsOverflowing, setButtonsOverflowing] = useState(false)
+    const [overflowWidth, setOverflowWidth] = useState(0)
+    const [buttonsWidth, setButtonsWidth] = useState(0)
+    const commentBarRef = useRef();
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+    // handling resize of button and overflowing capability.
+    function getWindowDimensions() {
+        const { innerWidth: width, innerHeight: height } = window;
+        return {
+          width,
+          height
+        };
+    }   
+    useEffect(() => {
+        function handleResize() {
+          setWindowDimensions(getWindowDimensions());
+        }
+    
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
+    //   set button width whenever windowDimensions change!
+    useEffect( () => {
+        commentBarRef.current ? setButtonsWidth(commentBarRef.current.scrollWidth) : setButtonsWidth(0)
+        setOverflow();
+        console.log("buttonsWidth: ", buttonsWidth)
+
+    }, [windowDimensions.width])
+   
+
+    const setOverflow = () => {
+        if(commentBarRef.current)
+        {
+            let curOverflow = commentBarRef.current.style.overflow;
+            if ( !curOverflow || curOverflow === "visible" )
+                commentBarRef.current.style.overflow = "hidden";
+            
+            let isOverflowing;
+            if(!buttonsOverflowing )
+            {   
+                isOverflowing = false
+                if(commentBarRef.current.clientWidth < commentBarRef.current.scrollWidth)
+                {
+                    setOverflowWidth(windowDimensions.width)
+                    isOverflowing = true
+                }
+            } 
+            else
+            {
+                isOverflowing = true
+                if(windowDimensions.width > overflowWidth)
+                {
+                    isOverflowing = false
+                }
+            }
+            commentBarRef.current.style.overflow = curOverflow;
+            setButtonsOverflowing(isOverflowing)
+        }
+    }
+
 
     useEffect( () => {
         setComments(comments);
         hasDescendantRefresh();
+        
     }, []);
-
     // console.log("MIN_LEVEL: ", MIN_LEVEL) 
     const MAX_LEVEL = MIN_LEVEL + REPLY_THREAD_WIDTH
     // console.log("MAX_LEVEL: ", MAX_LEVEL);
@@ -334,10 +398,8 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     let toDisplay = []
     if(comment.contentText)
     {
-        console.log("trying to do this:", comment.contentText)
 
         let substrings = comment.contentText.split("\n")
-        console.log("trying to do this:", substrings)
 
         for (let i=0; i < substrings.length; i++)
         {
@@ -358,6 +420,62 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
         })
         e.stopPropagation()
     }
+    // calc time posted to display on post body containers!!!
+    const postDateToDisplay = (datePosted) => {
+        //output 
+        let result; 
+        // parameters
+        const secsInYear = 60*60*24*365;
+        const secsInMonth = 60*60*24*30;
+        const secsInDay = 60*60*24
+        const secsInHour = 60*60
+        const secsInMin = 60
+
+        let timeDiff_secs = (todayTime.getTime() - datePosted.getTime()) / 1000.0
+        let yearDiff = Math.floor(timeDiff_secs / secsInYear)
+        let monthDiff = Math.floor(timeDiff_secs / secsInMonth)
+        let daysDiff = Math.floor(timeDiff_secs / secsInDay)
+        let hoursDiff = Math.floor(timeDiff_secs / secsInHour)
+        let minutesDiff = Math.floor(timeDiff_secs / secsInMin)
+        let secondsDiff = Math.floor(timeDiff_secs)
+        
+        if(yearDiff > 0)
+        {
+            result = `${yearDiff} years ago`
+        }
+        else if(monthDiff >0)
+        {
+            result = `${monthDiff} months ago`
+        
+        }
+        else if (daysDiff >0)
+        {
+            result = `${daysDiff} days ago`
+            
+        }
+        else if (hoursDiff >0)
+        {
+            result = `${hoursDiff} hours ago`
+            
+        }
+        else if (minutesDiff >0)
+        {
+            result = `${minutesDiff} minutes ago`
+            
+        }
+        else if(secondsDiff > 0)
+        {
+            result = `${secondsDiff} seconds ago`
+        }
+        else
+        {
+            result = "0 seconds ago"
+        }     
+        return result
+    }
+    var datePosted= new Date(comment.createdAt)
+    var dateStringPosted =postDateToDisplay(datePosted)
+
     // render children recursively until i hit max level. base case is when i hit the max level.
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild == null) {
@@ -376,6 +494,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                     {
                         return (
                             <ChildComment 
+                                key= {key}
                                 comment= {commentChild}
                                 setComments={setComments}
                                 comments = {comments} 
@@ -389,6 +508,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                 // else, children have no more children. no need to continue the thread with a link.
                 return (
                     <ChildComment 
+                        key= {key}
                         comment= {commentChild}
                         setComments={setComments}
                         comments = {comments} 
@@ -421,9 +541,23 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
             {
                 comment.hasBeenDeleted
                 ?
-                <div> 
-                    <div> This comment has been deleted by the User! </div>
-                    {nestedComments}
+                <div className={CommentCSS.commentOuterContainer}> 
+                    <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
+                        <div className={CommentCSS.borderClass}></div>
+                    </div>
+                    <div className = {`${visible ? CommentCSS.commentBodyContainer: CommentCSS.deactivate}`}>
+                        <div className={CommentCSS.commentDeletedText}> Comment deleted by the User &middot; {dateStringPosted}</div>
+                        {nestedComments}
+                    </div>  
+                    <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>
+                        <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
+                            <BsArrowsAngleExpand color="red"/>
+                        </div>                        
+                        <div className={CommentCSS.commentAuthorContainer}>
+                        <div className={CommentCSS.commentDeletedText}> Comment deleted by the User &middot; {dateStringPosted}</div>
+
+                        </div>
+                    </div>
                 </div>
                 :
                 <div className={CommentCSS.commentOuterContainer}>
@@ -433,11 +567,10 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                     <div className = {`${visible ? CommentCSS.commentBodyContainer: CommentCSS.deactivate}`}>
                         <div className={CommentCSS.commentAuthorContainer}>
                             <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
-                            <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
+                            <div className={CommentCSS.commentTime}> &middot; {dateStringPosted}</div>
                         </div>
                         {!editFlag 
                             ? 
-                            // <div className={CommentCSS.commentText}> {comment.contentText}</div>
                             <div className={CommentCSS.commentText}> 
                                 {toDisplay} 
                             
@@ -448,9 +581,10 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 handleSave={handleSaveEditPost2}
                                 editFlag={editFlag}
                                 setEditflag={setEditflag}
+                                key = {commentIdx}
                              />
                         }
-                        <div className={CommentCSS.commentButtnContainer}>
+                        <div className={CommentCSS.commentButtnContainer} ref={commentBarRef}>
 
                             <div className={CommentCSS.mobileLikesContainer}>
                                 <div className={`${comment.liked ? CommentCSS.likeBackgroundClass_active: ""}  ${CommentCSS.likeBackgroundClass}`} onClick={(e) => handleLike(e) }>
@@ -462,54 +596,49 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                     <BiDownvote className={CommentCSS.likeClass} size="30px" />
                                 </div>
                             </div>
+
+                            {/* reply button */}
                             {authState.authStatus
                             ?
-                            <div className={CommentCSS.replyClass} onClick={() => handleReply()}>
+                            <div className={`${CommentCSS.replyClass}`} onClick={() => handleReply()}>
                                 <BiComment size="26px"/> 
                                 <div>Reply</div>
                             </div>
-                            // <button onClick={() => handleReply()}> reply </button>
                             :
                             <button onClick={(e) => handleLoginFromPosts(e)}> reply </button>
                             }
 
                             
-                        
-                            {(authState.UserId === comment.UserId) ? (<><button className= {CommentCSS.buttonClass} onClick={()=> handleDeleteComment()} > delete comment</button></>) : ""}
+                            {/* delete button */}
+                            {(authState.UserId === comment.UserId) 
+                            ? 
+                            (<button className= {`${CommentCSS.buttnElementBackgroundClass}`} onClick={()=> handleDeleteComment()}>  
+                                    <AiOutlineDelete  size="30px"/>
+                                    <div>Delete</div>     
+                            </button>) 
+                            : 
+                            ""}
                             
                             {/* edit button */}
                             {(authState.UserId === comment.UserId) 
                                 ?   
-                                //  onClick={(e) => handleEditClick(e)}
-                                (<button onClick={handleEditClick}> 
+                                (<button className= {`${CommentCSS.buttnElementBackgroundClass}`} onClick={handleEditClick}> 
                                         <FiEdit2 size="30px"/>
                                         <div>Edit</div>
                                 </button>) 
                                 : 
                                 ""
                             }
+                            {/* more button: */}
+                            
                         </div>
                         <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
-                            {/* <div className={`${ true ? CommentCSS.borderOuterClass: CommentCSS.borderOuterClass}`} >
-                                <div className={CommentCSS.borderClass}></div>
-                            </div>  */}
                             <TextArea
                                 defaultVal={""}
                                 handleSave={handleSubmitReply2}
                                 editorMode={false}
+                                key = {commentIdx}
                             />
-
-                            {/* <textarea
-                                className={CommentCSS.createCommentField}
-                                name="body" 
-                                rows="14" 
-                                cols="10" 
-                                wrap="soft" 
-                                placeholder="Enter your thoughts here..." 
-                                onChange={commentOnChange}
-                                value={newReply}
-                            /> 
-                            <button onClick={handleSubmitReply}> submit reply</button> */}
                         </div>
                         {nestedComments}
                     </div>
@@ -517,8 +646,6 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                         <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
                             <BsArrowsAngleExpand color="red"/>
                         </div>
-
-                        
                         <div className={CommentCSS.commentAuthorContainer}>
                             <div className={CommentCSS.commentAuthor}> {comment.username}</div>   
                             <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>

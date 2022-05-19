@@ -24,15 +24,13 @@ const TextArea = ({defaultVal,
             setTextAreaHeight("auto")
             setParentHeight(`${textAreaRef.current.scrollHeight + 58}px`);
             setTextAreaHeight(`${textAreaRef.current.scrollHeight+ 58}px`);
-            console.log("useEffect for textarea activated. 2", textAreaRef.current.scrollHeight)
 
         }
-        console.log("useEffect for textarea activated. 1")
     }, [editFlag, editPostContent])
 
     useEffect( ()=> {
         setEditPostContent(defaultVal)
-    }, defaultVal)
+    }, defaultVal.split())
 
     const editPostContentOnChange= (e) => {
         setTextAreaHeight("auto");
@@ -48,7 +46,6 @@ const TextArea = ({defaultVal,
         setEditPostContent(defaultVal)
         setTextAreaHeight("auto")
     }
-    console.log("text area current value: ", editPostContent)
     return (
             editorMode 
             ?
