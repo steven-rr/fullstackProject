@@ -326,12 +326,8 @@ const Post = () => {
         else
         {
             result = "0 seconds ago"
-        }
-        
-        
+        }     
         return result
-        
-        
     }
     let toDisplay = []
 
@@ -510,27 +506,26 @@ const Post = () => {
                 ?
                 <div className={PostCSS.commentsBodyContainer}>
                     {comments.map((value, index) =>{
-                        if(value == null)
+                        if(value)
                         {
-                            return 
-                        }
-                        if(value.parentId === null)
-                        {
-                            return (
-                                <div className={PostCSS.commentBodyContainer}>
-                                    <Comment
-                                        key= {index}
-                                        comment= {value}
-                                        commentIdx= {index}
-                                        comments = {comments} 
-                                        setComments={setComments}
-                                        setIndividualPostData={setIndividualPostData}
-                                        onDeleteFromParent= {() => {}}
-                                        MIN_LEVEL= {0}
-                                        postID ={id}
-                                    />
-                                </div>
-                            )
+                            if(value.parentId === null)
+                            {
+                                return (
+                                    <div className={PostCSS.commentBodyContainer} key= {index}>
+                                        <Comment
+                                            comment= {value}
+                                            commentIdx= {index}
+                                            comments = {comments} 
+                                            setComments={setComments}
+                                            setIndividualPostData={setIndividualPostData}
+                                            onDeleteFromParent= {() => {}}
+                                            MIN_LEVEL= {0}
+                                            postID ={id}
+                                        />
+                                    </div>
+                                )
+                            }
+                            
                         }
                         
                     })}
