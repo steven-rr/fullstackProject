@@ -477,6 +477,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     var dateStringPosted =postDateToDisplay(datePosted)
 
     // render children recursively until i hit max level. base case is when i hit the max level.
+    // const hasSiblings = false; 
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild == null) {
             return 
@@ -632,11 +633,15 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                             {/* more button: */}
                             
                         </div>
-                        <div className={`${replyFlag ? CommentCSS.enableCommentField: "" } ${CommentCSS.replyField}`}>
+                        <div className={`${replyFlag ? CommentCSS.replyEnableCommentField: "" } ${CommentCSS.replyField}`}>
+                            <div className={`${ CommentCSS.replyBorderOuterClass}`} >
+                                <div className={CommentCSS.replyBorderClass}></div>
+                            </div> 
                             <TextArea
                                 defaultVal={""}
                                 handleSave={handleSubmitReply2}
-                                editorMode={false}
+                                editFlag={replyFlag}
+                                setEditflag={setReplyFlag}
                                 key = {commentIdx}
                             />
                         </div>
