@@ -7,7 +7,7 @@ const TextArea = ({defaultVal,
                    editFlag = true, 
                    setEditflag = (val) => val, 
                    editorMode = true,
-                   useButtons = true
+                   useButtons = true,
 }) => {
     const [textAreaHeight, setTextAreaHeight] = useState("auto");
     const [parentHeight, setParentHeight] = useState("auto");
