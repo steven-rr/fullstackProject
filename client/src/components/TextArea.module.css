@@ -21,6 +21,7 @@
 }
 
 
+
 .editPostButtonClass
 {
 	background-color: Transparent;
@@ -38,6 +39,56 @@
 }
 
 .editPostButtonClass:hover
+{
+	background-color: rgb(117,35,35);
+	transition: all 0.1s ease-out;
+}
+
+.buttonContainersClass
+{
+	display:block;
+	text-align: right;
+}
+.cancelButtonClass
+{
+	background-color: Transparent;
+	border:0px;
+	color: white;
+	padding: 8px 23px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin: 4px 10px;
+	cursor: pointer;
+	
+}
+.cancelButtonClass:hover
+{
+	background-color: rgb(40,40,40);
+	transition: all 0.1s ease-out;
+}
+
+.saveButtonClass
+{
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 8px 23px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin-top: 4px;
+	margin-bottom: 4px; 
+	margin-left: 10px;
+	cursor: pointer;
+}
+.saveButtonClass:hover
 {
 	background-color: rgb(117,35,35);
 	transition: all 0.1s ease-out;
