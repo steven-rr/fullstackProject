@@ -582,7 +582,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 handleSave={handleSaveEditPost2}
                                 editFlag={editFlag}
                                 setEditflag={setEditflag}
-                                key = {commentIdx}
+                                key = {1}
                              />
                         }
                         <div className={CommentCSS.commentButtnContainer} ref={commentBarRef}>
@@ -633,18 +633,23 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                             {/* more button: */}
                             
                         </div>
-                        <div className={`${replyFlag ? CommentCSS.replyEnableCommentField: "" } ${CommentCSS.replyField}`}>
-                            <div className={`${ CommentCSS.replyBorderOuterClass}`} >
-                                <div className={CommentCSS.replyBorderClass}></div>
-                            </div> 
-                            <TextArea
-                                defaultVal={""}
-                                handleSave={handleSubmitReply2}
-                                editFlag={replyFlag}
-                                setEditflag={setReplyFlag}
-                                key = {commentIdx}
-                            />
-                        </div>
+                        {replyFlag
+                            ?
+                            <div className={CommentCSS.replyEnableCommentField}>
+                                <div className={`${ CommentCSS.replyBorderOuterClass}`} >
+                                    <div className={CommentCSS.replyBorderClass}></div>
+                                </div> 
+                                <TextArea
+                                    defaultVal={""}
+                                    handleSave={handleSubmitReply2}
+                                    editFlag={replyFlag}
+                                    setEditflag={setReplyFlag}
+                                    key = {2}
+                                />
+                            </div>
+                            :
+                            ""
+                        }
                         {nestedComments}
                     </div>
                     <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>

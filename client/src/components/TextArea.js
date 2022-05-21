@@ -22,6 +22,7 @@ const TextArea = ({defaultVal,
         {
             setParentHeight("auto")
             setTextAreaHeight("auto")
+            console.log("scroll height: ", textAreaRef.current.scrollHeight)
             setParentHeight(`${textAreaRef.current.scrollHeight + 58}px`);
             setTextAreaHeight(`${textAreaRef.current.scrollHeight+ 58}px`);
 
