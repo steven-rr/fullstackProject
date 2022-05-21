@@ -8,13 +8,20 @@ const TextArea = ({defaultVal,
                    setEditflag = (val) => val, 
                    editorMode = true,
                    useButtons = true,
+                   initHeightIn = 58,
 }) => {
     const [textAreaHeight, setTextAreaHeight] = useState("auto");
     const [parentHeight, setParentHeight] = useState("auto");
     const [editPostContent, setEditPostContent] = useState(defaultVal)
+    const [initHeight, setInitHeight] = useState(58)
     // const [editFlag, setEditflag] = useState(true)
 
 	const textAreaRef = useRef();
+
+    // on render, set initHeight if its given.
+    useEffect( () => {
+        setInitHeight(initHeightIn)
+    }, [])
 
     // on render set parent height:
     useEffect( () => {
@@ -23,12 +30,13 @@ const TextArea = ({defaultVal,
             setParentHeight("auto")
             setTextAreaHeight("auto")
             console.log("scroll height: ", textAreaRef.current.scrollHeight)
-            setParentHeight(`${textAreaRef.current.scrollHeight + 58}px`);
-            setTextAreaHeight(`${textAreaRef.current.scrollHeight+ 58}px`);
+            setParentHeight(`${textAreaRef.current.scrollHeight + initHeight}px`);
+            setTextAreaHeight(`${textAreaRef.current.scrollHeight+ initHeight}px`);
 
         }
     }, [editFlag, editPostContent])
 
+    // when defaultVal changes, update the content. 
     useEffect( ()=> {
         setEditPostContent(defaultVal)
     }, defaultVal.split())
@@ -64,8 +72,10 @@ const TextArea = ({defaultVal,
                     onChange={editPostContentOnChange}
                     value={editPostContent}
                 />
-                <button className={TextAreaCSS.editPostButtonClass} onClick={handleEditCancel}> CANCEL </button>
-                <button className={TextAreaCSS.editPostButtonClass} onClick={handleSaveEditPost}> SAVE </button>
+                <div className={TextAreaCSS.buttonContainersClass}>
+                    <button className={TextAreaCSS.cancelButtonClass} onClick={handleEditCancel}> CANCEL </button>
+                    <button className={TextAreaCSS.saveButtonClass} onClick={handleSaveEditPost}> SAVE </button>
+                </div>
             </div> 
             :
             useButtons

@@ -397,12 +397,14 @@ const Post = () => {
                                 {toDisplay}
                             </div>
                             :
-                            <TextArea
-                                defaultVal={individualPostData.contentText}
-                                handleSave={handleSaveEditPost2}
-                                editFlag={editFlag}
-                                setEditflag={setEditflag}
-                            />
+                            <div className={PostCSS.createCommentFieldContainer}>
+                                <TextArea
+                                    defaultVal={individualPostData.contentText}
+                                    handleSave={handleSaveEditPost2}
+                                    editFlag={editFlag}
+                                    setEditflag={setEditflag}
+                                />
+                            </div>
                         }
                         
                        

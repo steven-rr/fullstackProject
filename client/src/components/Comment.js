@@ -9,10 +9,11 @@ import { BsArrowsAngleExpand } from "react-icons/bs";
 import {AuthContext} from "../App"
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit2 } from "react-icons/fi";
+import { MdOutlineMoreHoriz } from "react-icons/md";
 import { set } from 'express/lib/application'
 
 // specifies max level to iterate over.
-const REPLY_THREAD_WIDTH = 10;
+const REPLY_THREAD_WIDTH = 9;
 
 // recursive component. takes in individual comment, and comments array. 
 // basic algo: if not in the max level yet, keep recursively generating comments. when in max level, if children, link to continue thread.
@@ -30,6 +31,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     const [buttonsWidth, setButtonsWidth] = useState(0)
     const commentBarRef = useRef();
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [moreDropdownOn, setMoreDropdown]   = useState(false)
 
     // handling resize of button and overflowing capability.
     function getWindowDimensions() {
@@ -476,6 +478,12 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     var datePosted= new Date(comment.createdAt)
     var dateStringPosted =postDateToDisplay(datePosted)
 
+    const handleMoreClick = () => {
+        setMoreDropdown(currState=>!currState)
+    }
+    const handleMoreBlur = () => {
+        setMoreDropdown(false)
+    }
     // render children recursively until i hit max level. base case is when i hit the max level.
     // const hasSiblings = false; 
     const nestedComments =  comments.map((commentChild, key) =>{ 
@@ -631,6 +639,21 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 ""
                             }
                             {/* more button: */}
+                            <div tabIndex="0" className= {CommentCSS.barButtnContainer} onBlur={(e)=> handleMoreBlur(e)}>
+                                <button className= {CommentCSS.moreButtnElementBackgroundClass} onClick={() => handleMoreClick()} > 
+                                    <MdOutlineMoreHoriz size="30px"/>
+                                </button>
+                                <div className={`${moreDropdownOn ? "":CommentCSS.deactivate} ${CommentCSS.desktopBarDropDownMenu} `} > 
+                                    <button className= {CommentCSS.buttnElementBackgroundClass2} onMouseDown={()=> handleDeleteComment()} >  
+                                            <AiOutlineDelete  size="30px"/>
+                                            <div>Delete</div>     
+                                    </button>
+                                    <button className= {CommentCSS.buttnElementBackgroundClass2} onMouseDown={handleEditClick}> 
+                                            <FiEdit2 size="30px"/>
+                                            <div >Edit</div>
+                                    </button>
+                                </div>
+                            </div>
                             
                         </div>
                         {replyFlag

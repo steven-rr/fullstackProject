@@ -290,6 +290,56 @@
     font-size: 13px;
     margin-left: 3px;
 }
+.barButtnContainer
+{
+    display: none;
+}
+.moreButtnElementBackgroundClass
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    color:rgb(80,80,80);
+    border: 0px;
+    cursor:pointer;
+}
+.moreButtnElementBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
+    color: white;
+}
+.desktopBarDropDownMenu
+{
+    position: absolute;
+    top: 90%;
+    left: 0%;
+    background-color: rgb(25, 25, 25);
+    z-index: 1000000;
+    color: white;
+    width: auto;
+    border: 1px solid rgb(80, 80,80);
+    
+}
+.buttnElementBackgroundClass2
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    border: 0px;
+    color:rgb(80,80,80);
+    cursor:pointer;
+    width: 90px;
+    height: 40px ;
+}
+.buttnElementBackgroundClass2:hover
+{
+    background-color: rgb(35,35,35);
+    color: white;
+}
 .deactivate
 {
     display:none;
@@ -299,5 +349,21 @@
     .buttnElementBackgroundClass
     {
         display: none;
+    }
+    .barButtnContainer
+    {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* The rest */
+        outline: none;
+        display: block;
+        position: relative;
+        background-color: rgb(25, 25, 25);
+        color:rgb(80,80,80);
+        border: 0px;
+        cursor: pointer;
     }
 }
