@@ -340,6 +340,16 @@
     background-color: rgb(35,35,35);
     color: white;
 }
+
+.textAreaOuterContainer
+{
+    margin-top: 8px;
+}
+.replyTextAreaOuterContainer
+{
+    margin-left: 10px;
+    width: 100%;
+}
 .deactivate
 {
     display:none;

@@ -585,13 +585,15 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                             
                             </div>
                             :
-                            <TextArea
-                                defaultVal={comment.contentText}
-                                handleSave={handleSaveEditPost2}
-                                editFlag={editFlag}
-                                setEditflag={setEditflag}
-                                key = {1}
-                             />
+                            <div className={CommentCSS.textAreaOuterContainer}>
+                                <TextArea
+                                    defaultVal={comment.contentText}
+                                    handleSave={handleSaveEditPost2}
+                                    editFlag={editFlag}
+                                    setEditflag={setEditflag}
+                                    key = {1}
+                                />
+                            </div>
                         }
                         <div className={CommentCSS.commentButtnContainer} ref={commentBarRef}>
 
@@ -662,13 +664,15 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 <div className={`${ CommentCSS.replyBorderOuterClass}`} >
                                     <div className={CommentCSS.replyBorderClass}></div>
                                 </div> 
-                                <TextArea
-                                    defaultVal={""}
-                                    handleSave={handleSubmitReply2}
-                                    editFlag={replyFlag}
-                                    setEditflag={setReplyFlag}
-                                    key = {2}
-                                />
+                                <div className={CommentCSS.replyTextAreaOuterContainer}>
+                                    <TextArea
+                                        defaultVal={""}
+                                        handleSave={handleSubmitReply2}
+                                        editFlag={replyFlag}
+                                        setEditflag={setReplyFlag}
+                                        key = {2}
+                                    />
+                                </div>
                             </div>
                             :
                             ""
