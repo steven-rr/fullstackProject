@@ -7,7 +7,10 @@
 .createCommentField
 {
     box-sizing: border-box;
-    border: none;
+    /* border: none; */
+	border: 1px solid rgb(60, 60,60);
+	background-color: rgb(25, 25, 25);
+	color: white;
     appearance:none;
     outline: none;
     width: 100%;
@@ -20,7 +23,10 @@
     resize: vertical;
 }
 
-
+.createCommentField:focus
+{
+	border: 1px solid white;
+}
 
 .editPostButtonClass
 {
