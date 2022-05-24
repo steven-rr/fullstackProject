@@ -616,7 +616,10 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 <div>Reply</div>
                             </div>
                             :
-                            <button onClick={(e) => handleLoginFromPosts(e)}> reply </button>
+                            <div className={`${CommentCSS.replyClass}`} onClick={(e) => handleLoginFromPosts(e)}>
+                                <BiComment size="26px"/> 
+                                <div>Reply</div>
+                            </div>
                             }
 
                             
