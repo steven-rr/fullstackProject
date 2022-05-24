@@ -644,21 +644,28 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                                 ""
                             }
                             {/* more button: */}
-                            <div tabIndex="0" className= {CommentCSS.barButtnContainer} onBlur={(e)=> handleMoreBlur(e)}>
-                                <button className= {CommentCSS.moreButtnElementBackgroundClass} onClick={() => handleMoreClick()} > 
-                                    <MdOutlineMoreHoriz size="30px"/>
-                                </button>
-                                <div className={`${moreDropdownOn ? "":CommentCSS.deactivate} ${CommentCSS.desktopBarDropDownMenu} `} > 
-                                    <button className= {CommentCSS.buttnElementBackgroundClass2} onMouseDown={()=> handleDeleteComment()} >  
-                                            <AiOutlineDelete  size="30px"/>
-                                            <div>Delete</div>     
+
+                            {(authState.UserId === comment.UserId) 
+                                ?   
+                                (<div tabIndex="0" className= {CommentCSS.barButtnContainer} onBlur={(e)=> handleMoreBlur(e)}>
+                                    <button className= {CommentCSS.moreButtnElementBackgroundClass} onClick={() => handleMoreClick()} > 
+                                        <MdOutlineMoreHoriz size="30px"/>
                                     </button>
-                                    <button className= {CommentCSS.buttnElementBackgroundClass2} onMouseDown={handleEditClick}> 
-                                            <FiEdit2 size="30px"/>
-                                            <div >Edit</div>
-                                    </button>
-                                </div>
-                            </div>
+                                    <div className={`${moreDropdownOn ? "":CommentCSS.deactivate} ${CommentCSS.desktopBarDropDownMenu} `} > 
+                                        <button className= {CommentCSS.buttnElementBackgroundClass2} onMouseDown={()=> handleDeleteComment()} >  
+                                                <AiOutlineDelete  size="30px"/>
+                                                <div>Delete</div>     
+                                        </button>
+                                        <button className= {CommentCSS.buttnElementBackgroundClass2} onMouseDown={handleEditClick}> 
+                                                <FiEdit2 size="30px"/>
+                                                <div >Edit</div>
+                                        </button>
+                                    </div>
+                                </div>) 
+                                : 
+                                ""
+                            }
+                            
                             
                         </div>
                         {replyFlag

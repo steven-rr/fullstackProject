@@ -187,10 +187,12 @@
 
 .commentBodyContainer
 {
+    box-sizing: border-box;
     display:block;
     border: 0px;
     padding: 0px;
     margin-bottom: 30px;
+    padding-right: 10px;
     text-align: left;
     width: 100%;
 }
