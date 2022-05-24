@@ -13,7 +13,7 @@ import { MdOutlineMoreHoriz } from "react-icons/md";
 import { set } from 'express/lib/application'
 
 // specifies max level to iterate over.
-const REPLY_THREAD_WIDTH = 9;
+const REPLY_THREAD_WIDTH = 5;
 
 // recursive component. takes in individual comment, and comments array. 
 // basic algo: if not in the max level yet, keep recursively generating comments. when in max level, if children, link to continue thread.
@@ -505,23 +505,30 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                             <ChildComment 
                                 key= {key}
                                 comment= {commentChild}
+                                commentIdx={key}
                                 setComments={setComments}
                                 comments = {comments} 
+                                setIndividualPostData={setIndividualPostData}
                                 postID ={postID}
+                                onDeleteFromParent={onDeleteParent}
                                 MAX_LEVEL ={MAX_LEVEL}
                                 includeLink={true}
                             />
                         )
                     }
+
                 }
                 // else, children have no more children. no need to continue the thread with a link.
                 return (
                     <ChildComment 
                         key= {key}
                         comment= {commentChild}
+                        commentIdx={key}
                         setComments={setComments}
+                        setIndividualPostData={setIndividualPostData}
                         comments = {comments} 
                         postID ={postID}
+                        onDeleteFromParent={onDeleteParent}
                         MAX_LEVEL ={MAX_LEVEL}
                     />
                 )     
