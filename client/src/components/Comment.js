@@ -553,7 +553,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     });
     
         return (
-            <div>
+            <div className={CommentCSS.recursionContainer}>
             {
                 comment.hasBeenDeleted
                 ?
@@ -570,7 +570,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                             <BsArrowsAngleExpand color="red"/>
                         </div>                        
                         <div className={CommentCSS.commentAuthorContainer}>
-                        <div className={CommentCSS.commentDeletedText}> Comment deleted by the User &middot; {dateStringPosted}</div>
+                        <div className={CommentCSS.commentDeletedClosedText}> Comment deleted by the User &middot; {dateStringPosted}</div>
 
                         </div>
                     </div>

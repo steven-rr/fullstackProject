@@ -183,6 +183,7 @@
     /* border-radius: 5px; */
     border: 1px solid rgb(50, 50,50);
     padding: 10px;
+    padding-top: 0px;
 }
 
 .commentBodyContainer

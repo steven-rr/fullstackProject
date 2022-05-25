@@ -23,7 +23,11 @@ const ChildComment = ({comment, commentIdx,setComments, comments, setIndividualP
     const [moreDropdownOn, setMoreDropdown]   = useState(false)
 
     const [todayTime, setTodayTime] = useState(new Date())
-
+    useEffect( () => {
+        setComments(comments);
+        hasDescendantRefresh();
+        
+    }, []);
     const handleChildReply = (e) => {
         setChildReplyFlag(!childReplyFlag);
     }
@@ -264,7 +268,7 @@ const ChildComment = ({comment, commentIdx,setComments, comments, setIndividualP
                 }
             }
         }
-
+        console.log("the curr comment:",comment,  "has descendent: ", hasDescendantIsTrue)
         comment.hasDescendants = hasDescendantIsTrue
         setComments(comments)
     }
@@ -388,7 +392,27 @@ const ChildComment = ({comment, commentIdx,setComments, comments, setIndividualP
       {
           comment.hasBeenDeleted 
           ?
-            ""
+          <div className={CommentCSS.commentOuterContainer}> 
+            <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
+                <div className={CommentCSS.borderClass}></div>
+            </div>
+            <div className = {`${visible ? CommentCSS.commentBodyContainer: CommentCSS.deactivate}`}>
+                <div className={CommentCSS.commentDeletedContinueText}> Comment deleted by the User &middot; {dateStringPosted}</div>
+                <Link className={`${CommentCSS.linkClass} ${includeLink ? CommentCSS.enableLink: ""} `}to={`/blog/${postID}/${comment.id}/${MAX_LEVEL}`}> continue this thread...</Link>            
+
+            </div>  
+            <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>
+                <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
+                    <BsArrowsAngleExpand color="red"/>
+                </div>                        
+                <div className={CommentCSS.commentAuthorContainer}>
+                <div className={CommentCSS.commentDeletedClosedText}> Comment deleted by the User &middot; {dateStringPosted}</div>
+
+                </div>
+
+            </div>
+
+        </div>
           :
           <div className={CommentCSS.commentOuterContainer}>
           <div className={`${ visible ? CommentCSS.borderOuterClass: CommentCSS.deactivate}`} onClick={() =>handleVisibleToggle()}>
@@ -507,6 +531,8 @@ const ChildComment = ({comment, commentIdx,setComments, comments, setIndividualP
                   :
                   ""
               }
+             <Link className={`${CommentCSS.linkClass} ${includeLink ? CommentCSS.enableLink: ""} `}to={`/blog/${postID}/${comment.id}/${MAX_LEVEL}`}> continue this thread...</Link>            
+
           </div>
           <div className = {`${visible ? CommentCSS.deactivate: CommentCSS.invisContainer}`}>
               <div className={CommentCSS.iconExpandClass} onClick={() =>handleVisibleToggle()} >
@@ -517,7 +543,6 @@ const ChildComment = ({comment, commentIdx,setComments, comments, setIndividualP
                   <div className={CommentCSS.commentTime}> &middot; 12 hr ago</div>
               </div>
           </div>
-          <Link className={`${CommentCSS.linkClass} ${includeLink ? CommentCSS.enableLink: ""} `}to={`/blog/${postID}/${comment.id}/${MAX_LEVEL}`}> continue this thread...</Link>            
       </div>
       }
 
