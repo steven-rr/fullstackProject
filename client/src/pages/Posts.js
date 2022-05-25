@@ -8,6 +8,7 @@ import { BiUpvote, BiDownvote,BiComment } from "react-icons/bi";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { MdArrowForwardIos } from "react-icons/md";
+import { MdOutlineMoreHoriz } from "react-icons/md";
 import Footer from "../components/Footer"
 
 
@@ -30,6 +31,7 @@ const Posts = () => {
     const [timeDropdownOn, setTimeDropdown]           = useState(false)
     const [timingElementActive, setTimingElementActive] = useState("1")
     const [currentTimingName, setCurrentTimingName]   = useState("All Time")
+    const [moreDropdownOn, setMoreDropdown]   = useState([])
 
 
     // on render, get posts from backend and display for the user.
@@ -55,7 +57,17 @@ const Posts = () => {
                 return stateSorted;
             });
             console.log(response.data)
+            // set more dropdown:
+            let moredropdownOut = []
+            for (let i=0; i < response.data.length; i++)
+            {
+                moredropdownOut.push(false)
+            }
+            setMoreDropdown(moredropdownOut)
+
         })
+        
+
     }, []);
 
     const handleLoginFromPosts = (e) => {
@@ -428,9 +440,36 @@ const Posts = () => {
         
     }
 
-    const handleEditClick = (e) => {
+    const handleEditClick = (e, postID) => {
         console.log("edit clicked!")
+        history.push(`/blog/${postID}/true`)
         e.stopPropagation();
+    }
+    const handleMoreBlur = (e,idx) => {
+        setMoreDropdown(moreDropdownOn.map( (currMoreDropDown, key) => {
+            // look for post to modify like array.
+            if(key === idx) 
+            {     
+                currMoreDropDown = false
+            }
+            return currMoreDropDown;
+        }))
+        e.stopPropagation();
+
+    }
+    const handleMoreClick = (e, idx) => {
+        // setMoreDropdown(currState=>!currState)
+        console.log("moreDropDown:",moreDropdownOn, idx)
+        setMoreDropdown(moreDropdownOn.map( (currMoreDropDown, key) => {
+            // look for post to modify like array.
+            if(key === idx) 
+            {     
+                currMoreDropDown = !currMoreDropDown
+            }
+            return currMoreDropDown;
+        }))
+        e.stopPropagation();
+
     }
     return (
         <div className={PostsCSS.postsPageContainer}>
@@ -566,16 +605,17 @@ const Posts = () => {
                                         </div>
 
                                         {/* comments button */}
-                                        <Link to = {`/blog/${value.id}`} className= {PostsCSS.buttnElementBackgroundClass} > 
+                                        <Link to = {`/blog/${value.id}`} className= {PostsCSS.commentButtnElementBackgroundClass} > 
                                                 <BiComment size="30px"/> 
-                                                <div className={PostsCSS.buttnDisplayText}> {value.commentCounter} comments</div>
+                                                <div className={PostsCSS.buttnDisplayTextShort}> {value.commentCounter} </div>
+                                                <div className={PostsCSS.buttnDisplayTextLong}> {value.commentCounter} comments</div>
                                         </Link>
                                         {/* delete button */}
                                         {(authState.UserId === value.UserId) 
                                         ?   
                                         (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={(e)=> handleOnClickDelete(e, value.id)}>  
                                                 <AiOutlineDelete  size="30px"/>
-                                                <div className={PostsCSS.buttnDisplayText}>Delete Post </div>     
+                                                <div className={PostsCSS.buttnDisplayTextLong}>Delete Post </div>     
                                         </button>) 
                                         : 
                                         ""
@@ -583,13 +623,36 @@ const Posts = () => {
                                         {/* edit button */}
                                         {(authState.UserId === value.UserId) 
                                         ?   
-                                        (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={(e) => handleEditClick(e)} > 
+                                        (<button className= {PostsCSS.buttnElementBackgroundClass} onClick={(e) => handleEditClick(e, value.id)} > 
                                                 <FiEdit2 size="30px"/>
-                                                <div className={PostsCSS.buttnDisplayText}> Edit Post</div>
+                                                <div className={PostsCSS.buttnDisplayTextLong}> Edit Post</div>
                                         </button>) 
                                         : 
                                         ""
                                         }
+                                        {/* more button: */}
+                                        {(authState.UserId === value.UserId) 
+                                        ?
+                                        (<div tabIndex="0" className= {PostsCSS.moreBarButtnContainer} onBlur={(e)=> handleMoreBlur(e, key)}>
+                                            <button className= {PostsCSS.moreButtnElementBackgroundClass} onClick={(e) => handleMoreClick(e, key)} > 
+                                                <MdOutlineMoreHoriz size="30px"/>
+                                            </button>
+                                            <div className={`${moreDropdownOn[key] ? "":PostsCSS.deactivate} ${PostsCSS.desktopMoreBarDropDownMenu} `} > 
+                                                <button className= {PostsCSS.buttnElementBackgroundClass2} onMouseDown={(e)=> handleOnClickDelete(e, value.id)} >  
+                                                        <AiOutlineDelete  size="30px"/>
+                                                        <div className={PostsCSS.buttnDisplayTextShort}>Delete</div>     
+                                                </button>
+                                                
+                                                <button className= {PostsCSS.buttnElementBackgroundClass2} onMouseDown={(e) => handleEditClick(e, value.id)}> 
+                                                        <FiEdit2 size="30px"/>
+                                                        <div className={PostsCSS.buttnDisplayTextShort}>Edit</div>
+                                                </button>
+                                            </div>
+                                        </div>)
+                                        :
+                                        ""
+                                        }
+                                        
                                         
                                     </div>
                                 </div>

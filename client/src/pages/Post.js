@@ -30,7 +30,7 @@ const Post = () => {
     }
 
     // use params allows me to fetch params 
-    let {id } = useParams();
+    let {id, edittingFlag } = useParams();
 
     // instantiate history.
     const history = useHistory();
@@ -38,7 +38,12 @@ const Post = () => {
     useEffect( () => {
         // scroll to top on render.
         window.scrollTo(0, 0)
-
+        console.log("INITIAL POST:", id, edittingFlag)
+        if(edittingFlag)
+        {
+            setEditflag(true)
+            setIndividualPostData({contentText: "init"})
+        }
         // gets the post information from the server.
         axios.get(`/api/posts/${id}`)
             .then( (response) =>{
