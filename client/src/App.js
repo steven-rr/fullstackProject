@@ -63,6 +63,7 @@ function App() {
               <Route path="/form" exact component = {Form} />
               <Route path="/blog" exact component = {Posts} />
               <Route path="/blog/:id" exact component = {Post} />
+              <Route path="/blog/:id/:edittingFlag" exact component = {Post} />
               <Route path="/blog/:id/:CommentId/:startPoint" exact component = {PostWithReplyThread} />
               <Route path="/user/:UserId" exact component = {UserPublicProfile} />
               <Route path="/user/:UserId/comments" exact component = {UserPublicProfileComments} />

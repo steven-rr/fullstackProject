@@ -34,6 +34,7 @@
     display:flex;
     flex-direction: column;
     justify-content: center;
+
 }
 
 .linkCreatePostField
@@ -98,6 +99,45 @@
     margin-right: 25px;
     margin-left: 25px;
 }
+.moreBarButtnContainer
+{
+    display: none;
+
+}
+.moreButtnElementBackgroundClass
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    color:rgb(80,80,80);
+    border: 0px;
+    cursor:pointer;
+}
+.moreButtnElementBackgroundClass:hover
+{
+    background-color: rgb(35,35,35);
+    color: white;
+}
+.buttnElementBackgroundClass2
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    border: 0px;
+    color:rgb(80,80,80);
+    cursor:pointer;
+    width: 90px;
+    height: 40px ;
+}
+.buttnElementBackgroundClass2:hover
+{
+    background-color: rgb(35,35,35);
+    color: white;
+}
 .buttnBarButtn
 {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -160,6 +200,17 @@
     color: white;
     width: 93%;
 }
+.desktopMoreBarDropDownMenu
+{
+    position: absolute;
+    top: 90%;
+    left: 0%;
+    background-color: rgb(25, 25, 25);
+    z-index: 1000000;
+    color: white;
+    width: auto;
+    border: 1px solid rgb(80, 80,80);
+}
 .barDropDownMenuElement
 {
     color: rgb(80, 80, 80);
@@ -193,7 +244,7 @@
 
 .postContainer
 {
-    position: relative;
+    /* position: relative; */
     display: flex;
     flex-direction: row;
     margin-top: 20px;
@@ -216,7 +267,6 @@
     display:flex;
     flex-direction: column;
     width: 100%;
-    overflow: auto;
     margin: 0;
 
 }
@@ -287,9 +337,26 @@
     background-color: rgb(35,35,35);
     color: white;
 }
-.buttnDisplayText
+.commentButtnElementBackgroundClass
+{
+    display:flex; 
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+    background-color: rgb(25, 25, 25);
+    color:rgb(80,80,80);
+    border: 0px;
+    cursor:pointer;
+}
+
+
+.buttnDisplayTextLong
 {
 
+}
+.buttnDisplayTextShort
+{
+    display: none;
 }
 /* post main text styling. */
 .postMainTextClass
@@ -491,14 +558,38 @@
         padding-right: 10px;
 
     }
-    .buttnDisplayText
+    .buttnDisplayTextLong
     {
         display: none;
     }
-    .buttnElementBackgroundClass
+    .buttnDisplayTextShort
+    {
+        display: block;
+    }
+    .commentButtnElementBackgroundClass
     {
         margin-left:    30px;
-        margin-right: 0px;
+        margin-right: 10px;
+    }
+    .moreBarButtnContainer
+    {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* The rest */
+        outline: none;
+        display: block;
+        position: relative;
+        background-color: rgb(25, 25, 25);
+        color:rgb(80,80,80);
+        border: 0px;
+        cursor: pointer;
+    }
+    .buttnElementBackgroundClass
+    {
+        display: none;
     }
 }
 
