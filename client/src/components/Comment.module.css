@@ -10,6 +10,10 @@
     text-align: left;
     width: 100%;
 }
+.recursionContainer
+{
+    margin-top:10px;
+}
 .commentAuthorContainer
 {
     display: flex;
@@ -288,7 +292,22 @@
     color: rgb(80,80,80);
     font-size: 13px;
     margin-left: 3px;
+    margin-bottom: 20px;
 }
+.commentDeletedClosedText
+{
+    color: rgb(80,80,80);
+    font-size: 13px;
+    margin-left: 3px;
+}
+.commentDeletedContinueText
+{
+    color: rgb(80,80,80);
+    font-size: 13px;
+    margin-left: 3px;
+    margin-bottom: 5px;
+}
+
 .barButtnContainer
 {
     display: none;
