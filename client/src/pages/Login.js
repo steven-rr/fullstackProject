@@ -4,6 +4,8 @@ import LoginCSS from "./Login.module.css"
 import {useHistory, Link} from "react-router-dom"
 import {AuthContext} from "../App"
 import {GoogleLogin} from "react-google-login"
+import rocketWallpaper from '../rocketWallpaper.png'
+
 require('dotenv').config()
 
 const Login = () => {
@@ -65,11 +67,11 @@ const Login = () => {
         // check if username and password are filled out.
         if(values.username === "")
         {
-            internalErrors.usernameErr = "please enter a username."
+            internalErrors.usernameErr = "Please enter a username."
         }
         if(values.password === "")
         {
-            internalErrors.passwordErr = "please enter a password."
+            internalErrors.passwordErr = "Please enter a password."
         }
 
         // display errors 
@@ -191,50 +193,61 @@ const Login = () => {
     }
     return (
         <div className={LoginCSS.loginContainer}>
-            <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> X </button>
-            <div className={LoginCSS.textStyle}> Login to post! </div>
-            <form className= {LoginCSS.formClass}>
-                <div className={LoginCSS.inputsClass}>
-                    <label>Username</label>
-                    <input
-                        type= "text"
-                        name= "username"
-                        onBlur={handleBlur}
-                        onChange={handleUsername}
-                        placeholder="Username..."
-                        value= {values.username}
-                    />
-                    <div className={LoginCSS.errMsgClass}> {displayErrors.usernameErr} </div>
-
-                    <label>Password</label>
-                    <input
-                        type= "password"
-                        name= "password"
-                        onBlur={handleBlur}
-                        onChange={handlePassword}
-                        placeholder="Password..."
-                        value= {values.password}
-                    />
-                    <div className={LoginCSS.errMsgClass}> {displayErrors.passwordErr} </div>
-                </div>
-                <div className={LoginCSS.buttonContainer}>
-                    <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Login</button>
-                    <div className= {LoginCSS.forgotUserinfoClass}> 
-                        <Link to ="/reset"> forgot password?</Link>
-                        <div className={LoginCSS.middleTxt}> or</div>
-                        <Link to ="/resetUsername"> username?</Link>
-                    </div>
-                    <div> no account?  <Link to ="/form"> sign up</Link></div>
-                    {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
+            <div className={LoginCSS.rocketWallpaperOuterContainer}>
+                <img className={LoginCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
+            </div>
+            <div className={LoginCSS.loginContentContainer}>
+                <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> X </button>
+                <div className= {LoginCSS.loginWritingContainer}>
+                    <div className={LoginCSS.textStyle}> Login</div>
                     <GoogleLogin 
-                        clientId={process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID}
-                        buttonText="Log in with Google"
-                        onSuccess={handleGoogleLoginSuccess}
-                        onFailure={handleGoogleLoginFailure}
-                        cookiePolicy={'single_host_origin'}
-                    />
+                                clientId={process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID}
+                                buttonText="Log in with Google"
+                                onSuccess={handleGoogleLoginSuccess}
+                                onFailure={handleGoogleLoginFailure}
+                                cookiePolicy={'single_host_origin'}
+                            />
+                    <div className={LoginCSS.orClass}>OR </div>
+                    <form className= {LoginCSS.formClass}>
+                        <div className={LoginCSS.inputsClass}>
+                            <label>Username</label>
+                            <input
+                                type= "text"
+                                name= "username"
+                                onBlur={handleBlur}
+                                onChange={handleUsername}
+                                placeholder="Username..."
+                                value= {values.username}
+                                className={LoginCSS.textareaStyle}
+                            />
+                            <div className={LoginCSS.errMsgClass}> {displayErrors.usernameErr} </div>
+
+                            <label>Password</label>
+                            <input
+                                type= "password"
+                                name= "password"
+                                onBlur={handleBlur}
+                                onChange={handlePassword}
+                                placeholder="Password..."
+                                value= {values.password}
+                                className={LoginCSS.textareaStyle}
+                            />
+                            <div className={LoginCSS.errMsgClass}> {displayErrors.passwordErr} </div>
+                        </div>
+                        <div className={LoginCSS.buttonContainer}>
+                            <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Log In</button>
+                            <div className= {LoginCSS.forgotUserinfoClass}> 
+                                <Link to ="/reset"> forgot password?</Link>
+                                <div className={LoginCSS.middleTxt}> or</div>
+                                <Link to ="/resetUsername"> username?</Link>
+                            </div>
+                            <div> no account?  <Link to ="/form"> sign up</Link></div>
+                            {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
+                            
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     )
 }
