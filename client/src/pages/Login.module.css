@@ -2,16 +2,42 @@
 .loginContainer
 {
     position: relative;
+	display:flex;
+	flex-direction: row;
     background-color: rgb(29, 29, 29);
 }
+.rocketWallpaperOuterContainer
+{
+	width: 200px;
+	height: 100%;
+	overflow:hidden;
+}
+.rocketWallpaperStyle
+{
+	width: 900px;
+	height: 600px;
 
+	z-index: 999;
+}
+.loginContentContainer
+{	
+	position: relative;
+	width: 100%;
+	height: 600px;
+}
+.loginWritingContainer
+{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
 .textStyle
 {   
     display: block;
     padding-top: 50px;
     color: #fff;
-    font-size: 50px;
-    
+    font-size: 20px;
+	margin-bottom: 50px;
 }
 
 .formClass
@@ -19,30 +45,59 @@
     display:flex;
     flex-direction: column;
     align-items: center;
+	width: 100%; 
+	height: 100%;
 }
-
+.orClass
+{
+	color: rgb(80,80,80);
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
 .inputsClass
 {
-    width: 10px;
+    width: 280px;
     display:flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+	
+}
+.textareaStyle
+{
+	box-sizing: border-box;
+    /* border: none; */
+	border: 1px solid rgb(80, 80,80);
+	border-radius: 0px;
+	background-color: rgb(25, 25, 25) !important;
+	color: white !important;
+    appearance:none;
+    outline: none;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
+    font-family:'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    resize: vertical;
 }
 
+.textareaStyle:focus
+{
+	border: 1px solid white;
+}
 .errMsgClass
 {
 	color: red;
-	
+	font-size: 13px;
 }
 
 .buttonContainer
 {
-    position: fixed;
 	display: flex;
     flex-direction: column;
-    top: 320px;
-    left: 350px;
+ 
 
 }
 .XButtonClass
@@ -62,6 +117,7 @@
 	font-weight: 400;
 	margin: 4px 10px;
 	cursor: pointer;
+	z-index: 900000;
 }
 .XButtonClass:hover
 {
@@ -71,7 +127,7 @@
 
 .buttonClass
 {
-	background-color: Transparent;
+	/* background-color: Transparent;
 	border: 2px solid rgb(117, 35, 35);
 	color: white;
 	padding: 18px 40px;
@@ -83,7 +139,25 @@
 	letter-spacing: .10rem;
 	font-weight: 400;
 	margin: 4px 10px;
+	cursor: pointer; */
+
+	background-color: Transparent;
+	border: 2px solid rgb(117, 35, 35);
+	color: white;
+	padding: 10px 18px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	letter-spacing: .10rem;
+	font-weight: 400;
+	margin-top: 10px;
+	margin-bottom: 10px; 
+	margin-left: 8px;
+	margin-right: 8px;
 	cursor: pointer;
+	width: 250px;
+	
 }
 .buttonClass:hover
 {
