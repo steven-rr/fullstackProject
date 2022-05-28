@@ -5,6 +5,7 @@ import {useHistory, Link} from "react-router-dom"
 import {AuthContext} from "../App"
 import {GoogleLogin} from "react-google-login"
 import rocketWallpaper from '../rocketWallpaper.png'
+import { MdClose,MdOutlineClose } from "react-icons/md";
 
 require('dotenv').config()
 
@@ -197,7 +198,7 @@ const Login = () => {
                 <img className={LoginCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
             </div>
             <div className={LoginCSS.loginContentContainer}>
-                <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> X </button>
+                <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> <MdClose size="30px"/></button>
                 <div className= {LoginCSS.loginWritingContainer}>
                     <div className={LoginCSS.textStyle}> Login</div>
                     <GoogleLogin 
@@ -237,11 +238,12 @@ const Login = () => {
                         <div className={LoginCSS.buttonContainer}>
                             <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Log In</button>
                             <div className= {LoginCSS.forgotUserinfoClass}> 
-                                <Link to ="/reset"> forgot password?</Link>
+                                <div className={LoginCSS.leftTxt}> forgot </div>
+                                <Link to ="/reset" className={LoginCSS.anchorForgotInfoClass}> password? </Link>
                                 <div className={LoginCSS.middleTxt}> or</div>
-                                <Link to ="/resetUsername"> username?</Link>
+                                <Link to ="/resetUsername" className={LoginCSS.anchorForgotInfoClass}> username?</Link>
                             </div>
-                            <div> no account?  <Link to ="/form"> sign up</Link></div>
+                            <div> no account?  <Link to ="/form" className={LoginCSS.anchorForgotInfoClass}> sign up</Link></div>
                             {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
                             
                         </div>
