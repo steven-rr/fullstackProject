@@ -4,7 +4,6 @@
     flex-direction: column; 
     align-items: center;
     justify-content: center;
-    overflow: visible !important;
 }
   
 .App-logo {

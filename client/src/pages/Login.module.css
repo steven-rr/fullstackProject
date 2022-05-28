@@ -6,6 +6,10 @@
 	flex-direction: row;
     background-color: rgb(29, 29, 29);
 }
+.overFlowDeactivate
+{
+	overflow: hidden;
+}
 .rocketWallpaperOuterContainer
 {
 	width: 200px;

@@ -62,6 +62,7 @@ const Navbar = ({onClick}) => {
     };
     // handle clicking login, enable the hover for login screen.
     const handleLoginOn = () => {
+        document.documentElement.style.overflow = "hidden";
         setAuthState( currentAuthState=> {
             return { ...currentAuthState, loginOn: !currentAuthState.loginOn}
         })
