@@ -16,7 +16,7 @@ import UserSettingsPrivate from "./pages/UserSettingsPrivate"
 import CreatePost from "./pages/CreatePost"
 import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
-import React, {useState, useEffect, createContext} from 'react'
+import React, {useState, useEffect, useRef, createContext} from 'react'
 import axios from   "axios" 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 
@@ -29,10 +29,20 @@ function App() {
   {
     setValue(currentValue=> currentValue+1);
   }
+  const loginRef = useRef();
 
   // keep track of auth state in the app.
-  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false});
-
+  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false});
+  const handleLoginClick = (e) => {
+    if(e.target == loginRef.current)
+    {
+      setAuthState( currentAuthState=> {
+        return { ...currentAuthState, loginOn: false}
+      }) 
+    }
+ 
+    
+  }
   // check if the token is valid, if so, true. else. false.
   useEffect( async () => {
       await axios
@@ -75,9 +85,13 @@ function App() {
               <Route path="/login" exact component = {Login} />
               <Route component={Page404} />
             </Switch>
-            <div className={`${AppCSS.translucentLayer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}></div>
-            <div className={`${AppCSS.loginOuterContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}>
+            <div className={`${AppCSS.translucentLayer} ${authState.loginOn || authState.signUp ? '': AppCSS.loginDeactivate}`}></div>
+            <div className={`${AppCSS.loginOuterContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}  onClick={(e) => handleLoginClick(e)} ref={loginRef}>
               <div className={`${AppCSS.loginContainer} `}> <Login/> </div>
+            </div>
+
+            <div className={`${AppCSS.loginOuterContainer} ${authState.signUp ? '': AppCSS.loginDeactivate}`}>
+              <div className={`${AppCSS.loginContainer} `}> <Form/> </div>
             </div>
           </div>
         </Router>

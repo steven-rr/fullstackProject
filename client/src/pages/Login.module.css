@@ -171,9 +171,29 @@
     flex-direction: row;
 }
 
+.anchorForgotInfoClass
+{
+	color: blue;
+	text-decoration: none;
 
+}
+
+.leftTxt
+{
+	margin-right: 4px;
+}
 .middleTxt
 {
     margin-left: 4px;
     margin-right: 4px;
+}
+
+
+
+@media screen and (max-width: 530px)
+{
+	.rocketWallpaperOuterContainer
+	{
+		display: none;
+	}
 }
