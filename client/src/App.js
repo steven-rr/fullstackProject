@@ -25,7 +25,6 @@ export const AuthContext = createContext()
 function App() {
   // reset any relevant state when clicking a link in nav bar.
   const [value, setValue]=  useState(0);
-  const [overFlowDeactivate, setOverflowDeactivate] = useState(false)
   const submitHandler = e =>
   {
     setValue(currentValue=> currentValue+1);
@@ -40,8 +39,9 @@ function App() {
       setAuthState( currentAuthState=> {
         return { ...currentAuthState, loginOn: false}
       }) 
+      document.documentElement.style.overflow = "visible";
     }
-    
+
     
   }
   // check if the token is valid, if so, true. else. false.
@@ -64,10 +64,10 @@ function App() {
       console.log("AUTHSTATE:" ,authState);
   }, [])
   return (
-    <div className={`${overFlowDeactivate ? AppCSS.overFlowDeactivate:AppCSS.overFlowDeactivate}`}>
+    <div>
       <AuthContext.Provider value={{authState, setAuthState}}>
         <Router>
-          <div className={`App ${overFlowDeactivate ? AppCSS.overFlowDeactivate:AppCSS.overFlowDeactivate}` }>
+          <div className="App">
 
               <Navbar onClick ={submitHandler}></Navbar>
               <Switch>

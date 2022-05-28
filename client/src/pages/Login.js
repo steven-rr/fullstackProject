@@ -23,7 +23,6 @@ const Login = () => {
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
 
 
-
     // rerender when blur is triggered.
     const handleKeydown = (e) => {
         if(e.keyCode === 13)
@@ -173,6 +172,8 @@ const Login = () => {
         setAuthState( currentAuthState => {
             return { ...currentAuthState, loginOn: false}
         })
+        document.documentElement.style.overflow = "visible";
+
     }
     // google oath:
     const handleGoogleLoginFailure = () => {
