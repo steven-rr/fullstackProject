@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import axios from   "axios" 
 import LoginCSS from "./Login.module.css"
 import {useHistory, Link} from "react-router-dom"
@@ -22,7 +22,16 @@ const Login = () => {
     const [displayErrors, setDisplayErrors] = useState({ usernameErr: '', passwordErr: ''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
 
+
+
     // rerender when blur is triggered.
+    const handleKeydown = (e) => {
+        if(e.keyCode === 13)
+        {
+
+            handleSubmit();
+        }
+    }
     const rerender = e =>
     {
         setIndex(currentIndex=> currentIndex+1);
@@ -64,7 +73,6 @@ const Login = () => {
 
     // on submit, check fields are nonempty. display any error present.
     const handleSubmitErrors = async () => {
-
         // check if username and password are filled out.
         if(values.username === "")
         {
@@ -217,6 +225,7 @@ const Login = () => {
                                 name= "username"
                                 onBlur={handleBlur}
                                 onChange={handleUsername}
+                                onKeyDown = {(e) => handleKeydown(e)}
                                 placeholder="Username..."
                                 value= {values.username}
                                 className={LoginCSS.textareaStyle}
@@ -229,6 +238,7 @@ const Login = () => {
                                 name= "password"
                                 onBlur={handleBlur}
                                 onChange={handlePassword}
+                                onKeyDown = {(e) => handleKeydown(e)}
                                 placeholder="Password..."
                                 value= {values.password}
                                 className={LoginCSS.textareaStyle}
@@ -243,7 +253,7 @@ const Login = () => {
                                 <div className={LoginCSS.middleTxt}> or</div>
                                 <Link to ="/resetUsername" className={LoginCSS.anchorForgotInfoClass}> username?</Link>
                             </div>
-                            <div> no account?  <Link to ="/form" className={LoginCSS.anchorForgotInfoClass}> sign up</Link></div>
+                            <div> no account?  <Link to ="/form" className={LoginCSS.anchorForgotInfoClass} > sign up</Link></div>
                             {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
                             
                         </div>

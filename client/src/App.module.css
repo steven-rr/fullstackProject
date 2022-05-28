@@ -1,4 +1,7 @@
-
+.overFlowDeactivate
+{
+    overflow: visible !important;
+}
 .translucentLayer
 {
     position: fixed;

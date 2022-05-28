@@ -25,6 +25,7 @@ export const AuthContext = createContext()
 function App() {
   // reset any relevant state when clicking a link in nav bar.
   const [value, setValue]=  useState(0);
+  const [overFlowDeactivate, setOverflowDeactivate] = useState(false)
   const submitHandler = e =>
   {
     setValue(currentValue=> currentValue+1);
@@ -40,7 +41,7 @@ function App() {
         return { ...currentAuthState, loginOn: false}
       }) 
     }
- 
+    
     
   }
   // check if the token is valid, if so, true. else. false.
@@ -63,36 +64,37 @@ function App() {
       console.log("AUTHSTATE:" ,authState);
   }, [])
   return (
-    <div>
+    <div className={`${overFlowDeactivate ? AppCSS.overFlowDeactivate:AppCSS.overFlowDeactivate}`}>
       <AuthContext.Provider value={{authState, setAuthState}}>
         <Router>
-          <div className="App">
-            <Navbar onClick ={submitHandler}></Navbar>
-            <Switch>
-              <Route path="/" exact component = {Home} />
-              <Route path="/form" exact component = {Form} />
-              <Route path="/blog" exact component = {Posts} />
-              <Route path="/blog/:id" exact component = {Post} />
-              <Route path="/blog/:id/:edittingFlag" exact component = {Post} />
-              <Route path="/blog/:id/:CommentId/:startPoint" exact component = {PostWithReplyThread} />
-              <Route path="/user/:UserId" exact component = {UserPublicProfile} />
-              <Route path="/user/:UserId/comments" exact component = {UserPublicProfileComments} />
-              <Route path="/user/:UserId/settings" exact component = {UserSettingsPrivate} />
-              <Route path="/createpost" component = {CreatePost} />
-              <Route path="/reset" exact component={ForgotPassword}/>
-              <Route path="/resetUsername" exact component={ForgotUsername}/>
-              <Route path="/reset/:token" component={NewPassword}/>
-              <Route path="/login" exact component = {Login} />
-              <Route component={Page404} />
-            </Switch>
-            <div className={`${AppCSS.translucentLayer} ${authState.loginOn || authState.signUp ? '': AppCSS.loginDeactivate}`}></div>
-            <div className={`${AppCSS.loginOuterContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}  onClick={(e) => handleLoginClick(e)} ref={loginRef}>
-              <div className={`${AppCSS.loginContainer} `}> <Login/> </div>
-            </div>
+          <div className={`App ${overFlowDeactivate ? AppCSS.overFlowDeactivate:AppCSS.overFlowDeactivate}` }>
 
-            <div className={`${AppCSS.loginOuterContainer} ${authState.signUp ? '': AppCSS.loginDeactivate}`}>
-              <div className={`${AppCSS.loginContainer} `}> <Form/> </div>
-            </div>
+              <Navbar onClick ={submitHandler}></Navbar>
+              <Switch>
+                <Route path="/" exact component = {Home} />
+                <Route path="/form" exact component = {Form} />
+                <Route path="/blog" exact component = {Posts} />
+                <Route path="/blog/:id" exact component = {Post} />
+                <Route path="/blog/:id/:edittingFlag" exact component = {Post} />
+                <Route path="/blog/:id/:CommentId/:startPoint" exact component = {PostWithReplyThread} />
+                <Route path="/user/:UserId" exact component = {UserPublicProfile} />
+                <Route path="/user/:UserId/comments" exact component = {UserPublicProfileComments} />
+                <Route path="/user/:UserId/settings" exact component = {UserSettingsPrivate} />
+                <Route path="/createpost" component = {CreatePost} />
+                <Route path="/reset" exact component={ForgotPassword}/>
+                <Route path="/resetUsername" exact component={ForgotUsername}/>
+                <Route path="/reset/:token" component={NewPassword}/>
+                <Route path="/login" exact component = {Login} />
+                <Route component={Page404} />
+              </Switch>
+              <div className={`${AppCSS.translucentLayer} ${authState.loginOn || authState.signUp ? '': AppCSS.loginDeactivate}`}></div>
+              <div className={`${AppCSS.loginOuterContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}  onClick={(e) => handleLoginClick(e)} ref={loginRef}>
+                <div className={`${AppCSS.loginContainer} `}> <Login/> </div>
+              </div>
+
+              <div className={`${AppCSS.loginOuterContainer} ${authState.signUp ? '': AppCSS.loginDeactivate}`}>
+                <div className={`${AppCSS.loginContainer} `}> <Form/> </div>
+              </div>
           </div>
         </Router>
       </AuthContext.Provider>
