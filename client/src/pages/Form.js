@@ -7,6 +7,8 @@ import {handleSubmit} from "./Login"
 import FormTextFieldCSS from "../components/FormTextField.module.css"
 import {useHistory} from "react-router-dom"
 import {AuthContext} from "../App"
+import rocketWallpaper from '../rocketWallpaper.png'
+import { MdClose,MdOutlineClose } from "react-icons/md";
 
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
@@ -187,44 +189,79 @@ const Form = () => {
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("email", e.target.value);
     }
+    // rerender when blur is triggered.
+    const handleKeydown = (e) => {
+        if(e.keyCode === 13)
+        {
+
+            handleSubmit();
+        }
+    }
+    // handle clicking on the X button in login page
+    const handleSignUpOff = () => {
+        console.log("click signup OFF")
+        setAuthState( currentAuthState => {
+            return { ...currentAuthState, signUp: false}
+        })
+        document.documentElement.style.overflow = "visible";
+
+    }
 
     return (
         <div className={FormCSS.formContainer}>
-            <div className= {FormCSS.textStyle}>Create an Account to post! </div>
-            <form className= {FormCSS.formClass}>
-                <div className={FormCSS.inputsClass}>
-                    <label>Username</label>
-                    <input
-                        type= "text"
-                        name= "username"
-                        onBlur={handleBlur}
-                        onChange={handleUsername}
-                        placeholder="Username..."
-                    />
-                    <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.usernameErr} </div>
-                    <label>Password</label>
-                    <input
-                        type= "password"
-                        name= "password"
-                        onBlur={handleBlur}
-                        onChange={handlePassword}
-                        placeholder="Password..."
-                    />
-                    <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.passwordErr} </div>
-                    <label>Email</label>
-                    <input
-                        type= "text"
-                        name= "email"
-                        onBlur={handleBlur}
-                        onChange={handleEmail}
-                        placeholder="Email..."
-                    />
-                    <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.emailErr} </div>
+            <div className={FormCSS.rocketWallpaperOuterContainer}>
+                <img className={FormCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
+            </div>
+            <div className={FormCSS.loginContentContainer}>
+                <button className={FormCSS.XButtonClass} onClick={() => handleSignUpOff()} type = "button"> <MdClose size="30px"/></button>
+                <div className={FormCSS.loginWritingContainer}>
+                    <div className= {FormCSS.textStyle}>Create an Account to post! </div>
+                    <form className= {FormCSS.formClass}>
+                        <div className={FormCSS.inputsClass}>
+                            <label>Username</label>
+                            <input
+                                type= "text"
+                                name= "username"
+                                onBlur={handleBlur}
+                                onChange={handleUsername}
+                                onKeyDown = {(e) => handleKeydown(e)}
+                                placeholder="Username..."
+                                value= {values.username}
+                                className={FormCSS.textareaStyle}
+
+                            />
+                            <div className={FormCSS.errMsgClass}> {displayErrors.usernameErr} </div>
+                            <label>Password</label>
+                            <input
+                                type= "password"
+                                name= "password"
+                                onBlur={handleBlur}
+                                onChange={handlePassword}
+                                onKeyDown = {(e) => handleKeydown(e)}
+                                placeholder="Password..."
+                                value= {values.password}
+                                className={FormCSS.textareaStyle}
+                            />
+                            <div className={FormCSS.errMsgClass}> {displayErrors.passwordErr} </div>
+                            <label>Email</label>
+                            <input
+                                type= "text"
+                                name= "email"
+                                onBlur={handleBlur}
+                                onChange={handleEmail}
+                                onKeyDown = {(e) => handleKeydown(e)}
+                                placeholder="Email..."
+                                value= {values.email}
+                                className={FormCSS.textareaStyle}
+                            />
+                            <div className={FormTextFieldCSS.errMsgClass}> {displayErrors.emailErr} </div>
+                        </div>
+                        <div>
+                            <button className={FormCSS.buttonClass} onClick={() => handleSubmit()} type="button" >Create Account</button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <button className={FormCSS.buttonClass} onClick={() => handleSubmit()} type="button" >Create Account</button>
-                </div>
-            </form>
+            </div>
         </div>
     )
 }

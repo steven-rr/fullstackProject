@@ -18,7 +18,7 @@ import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
 import React, {useState, useEffect, useRef, createContext} from 'react'
 import axios from   "axios" 
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-dom'
 
 export const AuthContext = createContext()
 
@@ -32,7 +32,7 @@ function App() {
   const loginRef = useRef();
 
   // keep track of auth state in the app.
-  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false});
+  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false, forgotPass: false, forgotUser: false});
   const handleLoginClick = (e) => {
     if(e.target == loginRef.current)
     {
@@ -44,6 +44,56 @@ function App() {
 
     
   }
+    // recent add 
+    const history = useHistory();
+
+    const [ locationKeys, setLocationKeys ] = useState([])
+    useEffect(() => {
+        return history.listen(location => {
+            console.log("APP LOCATION, LISTEN: ", location, location.pathname)
+            console.log("auth state:", authState)
+        if (history.action === 'PUSH') {
+            console.log("APP LOCATION, PUSH!!")
+
+            setLocationKeys([ location.key ])
+        }
+    
+        if (history.action === 'POP') {
+            if (locationKeys[1] === location.key) {
+            setLocationKeys(([ _, ...keys ]) => keys)
+
+            // Handle forward event
+              console.log("APP LOCATION, FORWARD!!")
+            } 
+            else {
+            setLocationKeys((keys) => [ location.key, ...keys ])
+
+                // Handle back event
+                console.log("APP LOCATION, BACK!!")
+
+                if (authState.signUp == true)
+                {
+                    console.log("APP LOCATION, SIGN UP WAS TRUE, NOW SETTING LOGIN TO TRUE.")
+                    setAuthState( currentAuthState=> {
+                        return { ...currentAuthState, loginOn: true, signUp: false}
+                        }) 
+                        
+                }
+                else
+                {
+                    console.log("APP LOCATION, SIGN UP WAS FALSE, NOW SETTING LOGIN TO FALSE.")
+
+                    setAuthState( currentAuthState=> {
+                        return { ...currentAuthState, loginOn: false}
+                        }) 
+                }
+            }
+            
+        }
+        })
+    }, [ locationKeys, ])
+  
+
   // check if the token is valid, if so, true. else. false.
   useEffect( async () => {
       await axios
@@ -66,7 +116,6 @@ function App() {
   return (
     <div>
       <AuthContext.Provider value={{authState, setAuthState}}>
-        <Router>
           <div className="App">
 
               <Navbar onClick ={submitHandler}></Navbar>
@@ -95,8 +144,15 @@ function App() {
               <div className={`${AppCSS.loginOuterContainer} ${authState.signUp ? '': AppCSS.loginDeactivate}`}>
                 <div className={`${AppCSS.loginContainer} `}> <Form/> </div>
               </div>
+
+              <div className={`${AppCSS.loginOuterContainer} ${authState.forgotPass ? '': AppCSS.loginDeactivate}`}>
+                <div className={`${AppCSS.loginContainer} `}> <ForgotPassword/> </div>
+              </div>
+
+              <div className={`${AppCSS.loginOuterContainer} ${authState.forgotUser ? '': AppCSS.loginDeactivate}`}>
+                <div className={`${AppCSS.loginContainer} `}> <ForgotUsername/> </div>
+              </div>
           </div>
-        </Router>
       </AuthContext.Provider>
     </div>
   );
