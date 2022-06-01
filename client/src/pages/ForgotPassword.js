@@ -1,12 +1,17 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
+import {AuthContext} from "../App"
 import ForgotPasswordCSS from "./ForgotPassword.module.css"
 import axios from "axios"
+import rocketWallpaper from '../rocketWallpaper.png'
+import { MdClose,MdOutlineClose } from "react-icons/md";
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
 
 
 const ForgotPassword = () => {
+    // grabbing setAuthState.
+    const {authState, setAuthState} = useContext(AuthContext)
     const [values, setValues] = useState({email: ''})
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
@@ -87,27 +92,53 @@ const ForgotPassword = () => {
         };
 
     }
+    // handle clicking on the X button in login page
+    const handlePageOff = () => {
+        console.log("click login OFF")
+        setAuthState( currentAuthState => {
+            return { ...currentAuthState, forgotPass: false}
+        })
+        document.documentElement.style.overflow = "visible";
+
+    }
+    // rerender when blur is triggered.
+    const handleKeydown = (e) => {
+        if(e.keyCode === 13)
+        {
+
+            handleSubmit();
+        }
+    }
     return (
         <div className={ForgotPasswordCSS.pageContainer}>
-            <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
-                <div className={ForgotPasswordCSS.headerStyle}> Reset your Password </div>
+            <div className={ForgotPasswordCSS.rocketWallpaperOuterContainer}>
+                <img className={ForgotPasswordCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
             </div>
-            <form className= {ForgotPasswordCSS.formClass}>
-                <div className={ForgotPasswordCSS.inputsClass}>
-                    <label>Email</label>
-                    <input
-                        type= "text"
-                        name= "email"
-                        onBlur={handleBlur}
-                        onChange={handleEmail}
-                        placeholder="Email..."
-                    />
-                    <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.emailErr} </div>
+            <div className={ForgotPasswordCSS.loginContentContainer}>
+                <button className={ForgotPasswordCSS.XButtonClass} onClick={() => handlePageOff()} type = "button"> <MdClose size="30px"/></button>
+                <div className= {ForgotPasswordCSS.loginWritingContainer}>
+                    <div className={ForgotPasswordCSS.textStyle}> Reset your Password </div>
+                    <form className= {ForgotPasswordCSS.formClass}>
+                        <div className={ForgotPasswordCSS.inputsClass}>
+                            <label>Email</label>
+                            <input
+                                type= "text"
+                                name= "email"
+                                onBlur={handleBlur}
+                                onChange={handleEmail}
+                                placeholder="Email..."
+                                onKeyDown = {(e) => handleKeydown(e)}
+                                value= {values.email}
+                                className={ForgotPasswordCSS.textareaStyle}
+                            />
+                            <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.emailErr} </div>
+                        </div>
+                        <div>
+                            <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Reset Password Link</button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Reset Password Link</button>
-                </div>
-            </form>
+            </div>
         </div>
     )
 }

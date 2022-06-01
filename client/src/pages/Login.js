@@ -22,6 +22,10 @@ const Login = () => {
     const [displayErrors, setDisplayErrors] = useState({ usernameErr: '', passwordErr: ''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
 
+    useEffect( () => {
+        console.log("login AUTHstate changed: ", authState)
+    }, [authState.signUp])
+
 
     // rerender when blur is triggered.
     const handleKeydown = (e) => {
@@ -201,6 +205,22 @@ const Login = () => {
                                 console.log(" failured..." , err);
                             });
     }
+    const handleForgotPass = async () => {
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, forgotPass: true}
+        })
+    }
+    const handleForgotUser = async () => {
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, forgotUser: true}
+        })
+    }
+    const handleSignUp = async () => {
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, signUp: true}
+        } )
+        
+    }
     return (
         <div className={LoginCSS.loginContainer}>
             <div className={LoginCSS.rocketWallpaperOuterContainer}>
@@ -249,12 +269,18 @@ const Login = () => {
                         <div className={LoginCSS.buttonContainer}>
                             <button className={LoginCSS.buttonClass} onClick={() => handleSubmit()} type = "button">Log In</button>
                             <div className= {LoginCSS.forgotUserinfoClass}> 
-                                <div className={LoginCSS.leftTxt}> forgot </div>
-                                <Link to ="/reset" className={LoginCSS.anchorForgotInfoClass}> password? </Link>
+                                <div className={LoginCSS.leftTxt}> 
+                                    forgot 
+                                </div>
+                                <div className={LoginCSS.anchorForgotInfoClass} onClick={handleForgotPass}> password</div>
+
+                                {/* <Link to ="/reset" className={LoginCSS.anchorForgotInfoClass}> password? </Link> */}
                                 <div className={LoginCSS.middleTxt}> or</div>
-                                <Link to ="/resetUsername" className={LoginCSS.anchorForgotInfoClass}> username?</Link>
+                                <div className={LoginCSS.anchorForgotInfoClass} onClick={handleForgotUser}> username?</div>
+
+                                {/* <Link to ="/resetUsername" className={LoginCSS.anchorForgotInfoClass}> username?</Link> */}
                             </div>
-                            <div> no account?  <Link to ="/form" className={LoginCSS.anchorForgotInfoClass} > sign up</Link></div>
+                            <div> no account?  <div className={LoginCSS.anchorForgotInfoClass} onClick={() => handleSignUp()}> sign up</div></div>
                             {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
                             
                         </div>

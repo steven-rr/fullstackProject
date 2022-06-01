@@ -1,12 +1,20 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
+import {AuthContext} from "../App"
 import ForgotUsernameCSS from "./ForgotUsername.module.css"
 import axios from "axios"
+import rocketWallpaper from '../rocketWallpaper.png'
+import { MdClose,MdOutlineClose } from "react-icons/md";
+
+
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
 
 
 const ForgotUsername = () => {
+    // grabbing setAuthState.
+    const {authState, setAuthState} = useContext(AuthContext)
+    
     const [values, setValues] = useState({email: ''})
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
@@ -87,27 +95,55 @@ const ForgotUsername = () => {
         };
 
     }
+    // handle clicking on the X button in login page
+    const handlePageOff = () => {
+        console.log("click login OFF")
+        setAuthState( currentAuthState => {
+            return { ...currentAuthState, forgotUser: false}
+        })
+        document.documentElement.style.overflow = "visible";
+
+    }
+    // rerender when blur is triggered.
+    const handleKeydown = (e) => {
+        if(e.keyCode === 13)
+        {
+
+            handleSubmit();
+        }
+    }
     return (
         <div className={ForgotUsernameCSS.pageContainer}>
-            <div className={ForgotUsernameCSS.createPostHeaderContainer}> 
-                <div className={ForgotUsernameCSS.headerStyle}> Recover your Username </div>
+            <div className={ForgotUsernameCSS.rocketWallpaperOuterContainer}>
+                <img className={ForgotUsernameCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
             </div>
-            <form className= {ForgotUsernameCSS.formClass}>
-                <div className={ForgotUsernameCSS.inputsClass}>
-                    <label>Email</label>
-                    <input
-                        type= "text"
-                        name= "email"
-                        onBlur={handleBlur}
-                        onChange={handleEmail}
-                        placeholder="Email..."
-                    />
-                    <div className={ForgotUsernameCSS.errMsgClass}> {displayErrors.emailErr} </div>
+            <div className={ForgotUsernameCSS.loginContentContainer}>
+                <button className={ForgotUsernameCSS.XButtonClass} onClick={() => handlePageOff()} type = "button"> <MdClose size="30px"/></button>
+                <div className= {ForgotUsernameCSS.loginWritingContainer}>
+
+                    <div className={ForgotUsernameCSS.textStyle}> Recover your Username </div>
+                    <form className= {ForgotUsernameCSS.formClass}>
+                        <div className={ForgotUsernameCSS.inputsClass}>
+                            <label>Email</label>
+                            <input
+                                type= "text"
+                                name= "email"
+                                onBlur={handleBlur}
+                                onChange={handleEmail}
+                                placeholder="Email..."
+                                onKeyDown = {(e) => handleKeydown(e)}
+                                value= {values.email}
+                                className={ForgotUsernameCSS.textareaStyle}
+                            />
+                            <div className={ForgotUsernameCSS.errMsgClass}> {displayErrors.emailErr} </div>
+                        </div>
+                        <div>
+                            <button className={ForgotUsernameCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Username </button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <button className={ForgotUsernameCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Username </button>
-                </div>
-            </form>
+            </div>
+
         </div>
     )
 }
