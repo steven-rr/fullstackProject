@@ -32,7 +32,7 @@ function App() {
   const loginRef = useRef();
 
   // keep track of auth state in the app.
-  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false, forgotPass: false, forgotUser: false});
+  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false, forgotPass: false, forgotUser: false, flag1: true});
   const handleLoginClick = (e) => {
     if(e.target == loginRef.current)
     {
@@ -44,55 +44,90 @@ function App() {
 
     
   }
-    // recent add 
-    const history = useHistory();
+  // recent add 
+  const history = useHistory()
 
-    const [ locationKeys, setLocationKeys ] = useState([])
-    useEffect(() => {
-        return history.listen(location => {
-            console.log("APP LOCATION, LISTEN: ", location, location.pathname)
-            console.log("auth state:", authState)
-        if (history.action === 'PUSH') {
-            console.log("APP LOCATION, PUSH!!")
+  const [ locationKeys, setLocationKeys ] = useState([])
+  const [ pathKeys, setPathKeys ] = useState([])
 
-            setLocationKeys([ location.key ])
-        }
-    
-        if (history.action === 'POP') {
-            if (locationKeys[1] === location.key) {
-            setLocationKeys(([ _, ...keys ]) => keys)
+  // useEffect(() => {
+  //     history.block((location,action)=>!authState.forgotPass && !authState.forgotUser && !authState.signUp)
+  //     console.log("blocking is happneing: ", !authState.forgotPass || !authState.forgotUser || !authState.signUp)
+  // },[authState])
+  // useEffect(() => {
+  //     console.log("running listening useEffect!")
+  //     return history.listen(location => {
+  //             console.log("APP LOCATION, LISTEN: ", location, location.pathname)
+  //             console.log("auth state:", authState)
+  //             let authStateCurr = authState;
+  //             console.log("auth state:", authStateCurr)
+              
 
-            // Handle forward event
-              console.log("APP LOCATION, FORWARD!!")
-            } 
-            else {
-            setLocationKeys((keys) => [ location.key, ...keys ])
+  //         if (history.action === 'PUSH') 
+  //         {
+  //             console.log("APP LOCATION, PUSH!!", location, "paths: ", pathKeys)
 
-                // Handle back event
-                console.log("APP LOCATION, BACK!!")
+  //             setLocationKeys([ location.key ])
+  //             setPathKeys([location.pathname])
+  //             if (authState.forgotPass == true || authState.forgotUser == true || authState.signUp)
+  //             {
+  //                 setAuthState( currentAuthState=> {
+  //                     return { ...currentAuthState, forgotPass: false, forgotUser: false, signUp: false}
+  //                     }) 
+  //                 history.block((location,action)=> true)
+  //                 setAuthState( currentAuthState=> {
+  //                     return { ...currentAuthState, loginOn: true}
+  //                     }) 
+  //             }
+              
+  //         }
+      
+  //         if (history.action === 'POP') 
+  //         {
+  //             if (locationKeys[1] === location.key) 
+  //             {
+  //                 setLocationKeys(([ _, ...keys ]) => keys)
+  //                 setPathKeys(([ _, ...paths ]) => paths)
 
-                if (authState.signUp == true)
-                {
-                    console.log("APP LOCATION, SIGN UP WAS TRUE, NOW SETTING LOGIN TO TRUE.")
-                    setAuthState( currentAuthState=> {
-                        return { ...currentAuthState, loginOn: true, signUp: false}
-                        }) 
-                        
-                }
-                else
-                {
-                    console.log("APP LOCATION, SIGN UP WAS FALSE, NOW SETTING LOGIN TO FALSE.")
+  //                 // Handle forward event
+  //                 console.log("APP LOCATION, FORWARD!!", location,"paths: ", pathKeys)
+  //                 setAuthState( currentAuthState=> {
+  //                     return { ...currentAuthState, loginOn: false}
+  //                     }) 
+  //             } 
+  //             else 
+  //             {
+                  
 
-                    setAuthState( currentAuthState=> {
-                        return { ...currentAuthState, loginOn: false}
-                        }) 
-                }
-            }
-            
-        }
-        })
-    }, [ locationKeys, ])
-  
+  //                 // Handle back event
+  //                 console.log("APP LOCATION, BACK!!" , location, "paths: ",pathKeys)
+
+  //                 if (authState.forgotPass == true)
+  //                 {
+  //                     console.log("APP LOCATION, SIGN UP WAS TRUE, NOW SETTING LOGIN TO TRUE.")
+  //                     setAuthState( currentAuthState=> {
+  //                         return { ...currentAuthState, forgotPass: false, forgotUser: false, signUp: false}
+  //                         }) 
+  //                     history.block((location,action)=> true)
+  //                     setAuthState( currentAuthState=> {
+  //                         return { ...currentAuthState, loginOn: true}
+  //                         }) 
+  //                 }
+  //                 else 
+  //                 {
+  //                     console.log("APP LOCATION, SIGN UP WAS FALSE, NOW SETTING LOGIN TO FALSE.")
+
+  //                     setAuthState( currentAuthState=> {
+  //                         return { ...currentAuthState, loginOn: false}
+  //                         }) 
+  //                     setLocationKeys((keys) => [ location.key, ...keys ])
+  //                     setPathKeys((paths) => [ location.pathname, ...paths ])
+  //                 }   
+  //             }   
+  //         }
+  //     })
+  // }, [ locationKeys, authState])
+
 
   // check if the token is valid, if so, true. else. false.
   useEffect( async () => {

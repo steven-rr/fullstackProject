@@ -1,4 +1,5 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import {AuthContext} from "../App"
 import ForgotUsernameCSS from "./ForgotUsername.module.css"
 import axios from "axios"
@@ -20,7 +21,7 @@ const ForgotUsername = () => {
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ emailErr:''})
     const [invalidFlags, setInvalidFlags] = useState({submitEmailInvalid: true, submitInvalid: true})
-
+    
     // rerender when blur is triggered.
     const rerender = e =>
     {

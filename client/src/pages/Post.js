@@ -35,44 +35,44 @@ const Post = () => {
     // instantiate history.
     const history = useHistory();
 
-    // recent add 
-    const [ locationKeys, setLocationKeys ] = useState([])
-    useEffect(() => {
-        return history.listen(location => {
-            console.log("LOCATION, LISTEN: ", location, location.pathname)
-        if (history.action === 'PUSH') {
-            setLocationKeys([ location.key ])
-        }
+    // // recent add 
+    // const [ locationKeys, setLocationKeys ] = useState([])
+    // useEffect(() => {
+    //     return history.listen(location => {
+    //         console.log("LOCATION, LISTEN: ", location, location.pathname)
+    //     if (history.action === 'PUSH') {
+    //         setLocationKeys([ location.key ])
+    //     }
     
-        if (history.action === 'POP') {
-            if (locationKeys[1] === location.key) {
-            setLocationKeys(([ _, ...keys ]) => keys)
+    //     if (history.action === 'POP') {
+    //         if (locationKeys[1] === location.key) {
+    //         setLocationKeys(([ _, ...keys ]) => keys)
     
-            // Handle forward event
+    //         // Handle forward event
     
-            } 
-            else {
-            setLocationKeys((keys) => [ location.key, ...keys ])
+    //         } 
+    //         else {
+    //         setLocationKeys((keys) => [ location.key, ...keys ])
     
-                // Handle back event
-                if (authState.signUp == true)
-                {
+    //             // Handle back event
+    //             if (authState.signUp == true)
+    //             {
                     
-                    setAuthState( currentAuthState=> {
-                        return { ...currentAuthState, loginOn: true, signUp: false}
-                        }) 
+    //                 setAuthState( currentAuthState=> {
+    //                     return { ...currentAuthState, loginOn: true, signUp: false}
+    //                     }) 
                         
-                }
-                else
-                {
-                    setAuthState( currentAuthState=> {
-                        return { ...currentAuthState, loginOn: false}
-                        }) 
-                }
-            }
-        }
-        })
-    }, [ locationKeys, ])
+    //             }
+    //             else
+    //             {
+    //                 setAuthState( currentAuthState=> {
+    //                     return { ...currentAuthState, loginOn: false}
+    //                     }) 
+    //             }
+    //         }
+    //     }
+    //     })
+    // }, [ locationKeys, ])
 
     // on render, get individual post data from backend and display for the user.
     useEffect( () => {

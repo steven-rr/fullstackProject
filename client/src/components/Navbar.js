@@ -64,8 +64,13 @@ const Navbar = ({onClick}) => {
     const handleLoginOn = () => {
         document.documentElement.style.overflow = "hidden";
         setAuthState( currentAuthState=> {
-            return { ...currentAuthState, loginOn: !currentAuthState.loginOn}
+            return { ...currentAuthState, loginOn: !currentAuthState.loginOn, flag1: true}
         })
+        history.block((location,action)=> false)
+        console.log("this is history: ", history)
+        history.push("/login")
+        console.log("this is history: ", history)
+
     };
     // useEffect for navbar scrolling. Only rerun when opening or closing menu.    
     useEffect(()=> {

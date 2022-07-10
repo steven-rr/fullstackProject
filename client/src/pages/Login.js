@@ -209,16 +209,22 @@ const Login = () => {
         setAuthState( currentAuthState=> {
             return { ...currentAuthState, forgotPass: true}
         })
+
+        console.log("handling forgot password click, authState now: ", authState)
     }
     const handleForgotUser = async () => {
         setAuthState( currentAuthState=> {
             return { ...currentAuthState, forgotUser: true}
         })
+        console.log("handling forgot user click, authState now: ", authState)
+
     }
     const handleSignUp = async () => {
         setAuthState( currentAuthState=> {
             return { ...currentAuthState, signUp: true}
         } )
+        console.log("handling signup click, authState now: ", authState)
+
         
     }
     return (
