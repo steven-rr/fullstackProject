@@ -1,4 +1,5 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import {AuthContext} from "../App"
 import ForgotPasswordCSS from "./ForgotPassword.module.css"
 import axios from "axios"
