@@ -4,30 +4,15 @@ require('dotenv').config();
 const crypto =require('crypto')
 const bcrypt = require("bcryptjs")
 const cookieParser = require("cookie-parser");
-const nodemailer =require("nodemailer");
 const haiku = require('../helpers/haiku')
 const {Users}= require('../models');
 const {Op} = require("sequelize")
 const {createTokens, validateToken}=require("../middleware/JWT.js")
-const { OAuth2Client } = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library') 
+const sgMail = require("@sendgrid/mail")
 const client = new OAuth2Client(process.env.CLIENT_ID)
 
-const options = {
-    host: process.env.EMAIL_HOST,
-    secureConnection: false,
-    port:  process.env.EMAIL_PORT,
-    tls: {
-        ciphers:  process.env.EMAIL_CIPHERS
-    },
-    auth: {
-        user:  process.env.EMAIL_USERNAME,
-        pass:  process.env.EMAIL_PASSWORD
-    },
-    from: process.env.EMAIL_USERNAME
-
-}
-const transporter = nodemailer.createTransport(options);
-
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
@@ -94,6 +79,30 @@ router.get('/register', async (request, response) => {
     }
     else
     {
+        // in this case, we want to send an email back saying welcome to space launches.
+        console.log("trying to welcome the following user email: ", request.query.email)
+        const emailToSend= {
+            from: '"Space Launches" <spacelaunches@outlook.com>',
+            to: `${request.query.email}`,
+            subject: "SPACE LAUNCHES -- WELCOME",
+            text: `
+            <p>Hello! Welcome to SPACE LAUNCHES!  The website where you can track upcoming space launches and discuss launches with friends or strangers worldwide. </p>
+            <h5> Please feel free to browse the website at: </h5>
+            <a href=${process.env.DOMAIN}> ${process.env.DOMAIN} </a> 
+            ` ,
+            html:  `
+            <p>Hello! Welcome to SPACE LAUNCHES!  The website where you can track upcoming space launches and discuss launches with friends or strangers worldwide. </p>
+            <h5> Please feel free to browse the website at: </h5>
+            <a href=${process.env.DOMAIN}> ${process.env.DOMAIN} </a> 
+            ` 
+            // Let's verify your single sender so you can start sending email.
+            // < email here> 
+            // Your link is active for 48 hours. After that, you will need to resend the verification email.
+
+
+        }
+        sgMail.send(emailToSend)
+
         response.json({msg: "no backend register errors!"});
     }
 })
@@ -311,7 +320,7 @@ router.post("/forgotpassword", async (request, response) => {
                 const token = buffer.toString("hex")
                 const expireToken = Date.now() + 3600000;
                 await Users.update({resetToken: token, expireToken: expireToken}, {where: {email:  request.body.email}})
-                const redirectLink =  process.env.DOMAIN   + `/reset/${token}` ;
+                const redirectLink =  process.env.DOMAIN   + `reset/${token}` ;
                 console.log("redirect to:",redirectLink)
                 const emailToSend= {
                     from: '"Space Launches" <spacelaunches@outlook.com>',
@@ -333,7 +342,7 @@ router.post("/forgotpassword", async (request, response) => {
 
 
                 }
-                await transporter.sendMail(emailToSend)
+                sgMail.send(emailToSend)
                 response.json("success!");
             }
         }
@@ -400,9 +409,9 @@ router.post("/forgotusername", async (request, response) => {
                     to: `${request.body.email}`,
                     subject: "SPACE LAUNCHES -- USERNAME INFO",
                     text: `
-                    <p>Hey, it seems you forgot your username. : </p>
-                    <h5> Don't worry, according to our records your username is:
-                    <h2> ${username} </h2>
+                    Hey, it seems you forgot your username. :
+                    Don't worry, according to our records your username is:
+                    ${username}
                     ` ,
                     html: `
                     <p>Hey, it seems you forgot your username. : </p>
@@ -410,7 +419,7 @@ router.post("/forgotusername", async (request, response) => {
                     <h2> ${username} </h2>
                     ` 
                 }
-                await transporter.sendMail(emailToSend)
+                sgMail.send(emailToSend)
                 response.json("success!");
             }
         }
