@@ -10,6 +10,18 @@
     z-index: 200;
     opacity: 0.5;
 }
+.darkerTranslucentLayer
+{
+    position: fixed;
+    display: block;
+    background-color: rgb(5, 5, 5);
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    z-index: 200;
+    opacity: 0.7;
+    transition: background-color 5s ease-out;
+}
 .loginOuterContainer
 {
     position: fixed;
@@ -31,6 +43,16 @@
     background-color: rgb(29, 29, 29);
     height: 600px;
     width: 900px;    
+}
+.popOutContainer
+{   
+    opacity: 1.0;
+    display: block;
+    color: white;
+    font-family: Poppins;
+    background-color: rgb(29, 29, 29);
+    height: 700px;
+    width: 1000px;    
 }
 .loginDeactivate
 {
