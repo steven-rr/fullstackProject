@@ -44,91 +44,6 @@ function App() {
 
     
   }
-  // recent add 
-  const history = useHistory()
-
-  const [ locationKeys, setLocationKeys ] = useState([])
-  const [ pathKeys, setPathKeys ] = useState([])
-
-  // useEffect(() => {
-  //     history.block((location,action)=>!authState.forgotPass && !authState.forgotUser && !authState.signUp)
-  //     console.log("blocking is happneing: ", !authState.forgotPass || !authState.forgotUser || !authState.signUp)
-  // },[authState])
-  // useEffect(() => {
-  //     console.log("running listening useEffect!")
-  //     return history.listen(location => {
-  //             console.log("APP LOCATION, LISTEN: ", location, location.pathname)
-  //             console.log("auth state:", authState)
-  //             let authStateCurr = authState;
-  //             console.log("auth state:", authStateCurr)
-              
-
-  //         if (history.action === 'PUSH') 
-  //         {
-  //             console.log("APP LOCATION, PUSH!!", location, "paths: ", pathKeys)
-
-  //             setLocationKeys([ location.key ])
-  //             setPathKeys([location.pathname])
-  //             if (authState.forgotPass == true || authState.forgotUser == true || authState.signUp)
-  //             {
-  //                 setAuthState( currentAuthState=> {
-  //                     return { ...currentAuthState, forgotPass: false, forgotUser: false, signUp: false}
-  //                     }) 
-  //                 history.block((location,action)=> true)
-  //                 setAuthState( currentAuthState=> {
-  //                     return { ...currentAuthState, loginOn: true}
-  //                     }) 
-  //             }
-              
-  //         }
-      
-  //         if (history.action === 'POP') 
-  //         {
-  //             if (locationKeys[1] === location.key) 
-  //             {
-  //                 setLocationKeys(([ _, ...keys ]) => keys)
-  //                 setPathKeys(([ _, ...paths ]) => paths)
-
-  //                 // Handle forward event
-  //                 console.log("APP LOCATION, FORWARD!!", location,"paths: ", pathKeys)
-  //                 setAuthState( currentAuthState=> {
-  //                     return { ...currentAuthState, loginOn: false}
-  //                     }) 
-  //             } 
-  //             else 
-  //             {
-                  
-
-  //                 // Handle back event
-  //                 console.log("APP LOCATION, BACK!!" , location, "paths: ",pathKeys)
-
-  //                 if (authState.forgotPass == true)
-  //                 {
-  //                     console.log("APP LOCATION, SIGN UP WAS TRUE, NOW SETTING LOGIN TO TRUE.")
-  //                     setAuthState( currentAuthState=> {
-  //                         return { ...currentAuthState, forgotPass: false, forgotUser: false, signUp: false}
-  //                         }) 
-  //                     history.block((location,action)=> true)
-  //                     setAuthState( currentAuthState=> {
-  //                         return { ...currentAuthState, loginOn: true}
-  //                         }) 
-  //                 }
-  //                 else 
-  //                 {
-  //                     console.log("APP LOCATION, SIGN UP WAS FALSE, NOW SETTING LOGIN TO FALSE.")
-
-  //                     setAuthState( currentAuthState=> {
-  //                         return { ...currentAuthState, loginOn: false}
-  //                         }) 
-  //                     setLocationKeys((keys) => [ location.key, ...keys ])
-  //                     setPathKeys((paths) => [ location.pathname, ...paths ])
-  //                 }   
-  //             }   
-  //         }
-  //     })
-  // }, [ locationKeys, authState])
-
-
   // check if the token is valid, if so, true. else. false.
   useEffect( async () => {
       await axios
@@ -171,21 +86,22 @@ function App() {
                 <Route path="/login" exact component = {Login} />
                 <Route component={Page404} />
               </Switch>
-              <div className={`${AppCSS.translucentLayer} ${authState.loginOn || authState.signUp ? '': AppCSS.loginDeactivate}`}></div>
+              <div className={`${AppCSS.translucentLayer} ${authState.loginOn  ? '': AppCSS.loginDeactivate}`}></div>
+              <div className={`${AppCSS.darkerTranslucentLayer} ${authState.signUp ? '': AppCSS.loginDeactivate}`}></div>
               <div className={`${AppCSS.loginOuterContainer} ${authState.loginOn ? '': AppCSS.loginDeactivate}`}  onClick={(e) => handleLoginClick(e)} ref={loginRef}>
                 <div className={`${AppCSS.loginContainer} `}> <Login/> </div>
               </div>
 
               <div className={`${AppCSS.loginOuterContainer} ${authState.signUp ? '': AppCSS.loginDeactivate}`}>
-                <div className={`${AppCSS.loginContainer} `}> <Form/> </div>
+                <div className={`${AppCSS.popOutContainer} `}> <Form/> </div>
               </div>
 
               <div className={`${AppCSS.loginOuterContainer} ${authState.forgotPass ? '': AppCSS.loginDeactivate}`}>
-                <div className={`${AppCSS.loginContainer} `}> <ForgotPassword/> </div>
+                <div className={`${AppCSS.popOutContainer} `}> <ForgotPassword/> </div>
               </div>
 
               <div className={`${AppCSS.loginOuterContainer} ${authState.forgotUser ? '': AppCSS.loginDeactivate}`}>
-                <div className={`${AppCSS.loginContainer} `}> <ForgotUsername/> </div>
+                <div className={`${AppCSS.popOutContainer} `}> <ForgotUsername/> </div>
               </div>
           </div>
       </AuthContext.Provider>
