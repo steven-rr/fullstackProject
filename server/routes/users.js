@@ -28,6 +28,29 @@ router.post('/register', async (request, response) => {
             email: email
         };
         Users.create(newUser);
+        // in this case, we want to send an email back saying welcome to space launches.
+        console.log("trying to welcome the following user email: ", email)
+        const emailToSend= {
+            from: '"Space Launches" <spacelaunches@outlook.com>',
+            to: `${email}`,
+            subject: "SPACE LAUNCHES -- WELCOME",
+            text: `
+            <p>Hello! Welcome to SPACE LAUNCHES!  The website where you can track upcoming space launches and discuss launches with friends or strangers worldwide. </p>
+            <h5> Please feel free to browse the website at: </h5>
+            <a href=${process.env.DOMAIN}> ${process.env.DOMAIN} </a> 
+            ` ,
+            html:  `
+            <p>Hello! Welcome to SPACE LAUNCHES!  The website where you can track upcoming space launches and discuss launches with friends or strangers worldwide. </p>
+            <h5> Please feel free to browse the website at: </h5>
+            <a href=${process.env.DOMAIN}> ${process.env.DOMAIN} </a> 
+            ` 
+            // Let's verify your single sender so you can start sending email.
+            // < email here> 
+            // Your link is active for 48 hours. After that, you will need to resend the verification email.
+
+
+        }
+        sgMail.send(emailToSend)
         response.json(newUser)
     })
     
@@ -79,30 +102,6 @@ router.get('/register', async (request, response) => {
     }
     else
     {
-        // in this case, we want to send an email back saying welcome to space launches.
-        console.log("trying to welcome the following user email: ", request.query.email)
-        const emailToSend= {
-            from: '"Space Launches" <spacelaunches@outlook.com>',
-            to: `${request.query.email}`,
-            subject: "SPACE LAUNCHES -- WELCOME",
-            text: `
-            <p>Hello! Welcome to SPACE LAUNCHES!  The website where you can track upcoming space launches and discuss launches with friends or strangers worldwide. </p>
-            <h5> Please feel free to browse the website at: </h5>
-            <a href=${process.env.DOMAIN}> ${process.env.DOMAIN} </a> 
-            ` ,
-            html:  `
-            <p>Hello! Welcome to SPACE LAUNCHES!  The website where you can track upcoming space launches and discuss launches with friends or strangers worldwide. </p>
-            <h5> Please feel free to browse the website at: </h5>
-            <a href=${process.env.DOMAIN}> ${process.env.DOMAIN} </a> 
-            ` 
-            // Let's verify your single sender so you can start sending email.
-            // < email here> 
-            // Your link is active for 48 hours. After that, you will need to resend the verification email.
-
-
-        }
-        sgMail.send(emailToSend)
-
         response.json({msg: "no backend register errors!"});
     }
 })
