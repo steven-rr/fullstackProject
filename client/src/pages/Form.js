@@ -27,7 +27,13 @@ const Form = () => {
     const [internalErrors, setInternalErrors] = useState({ usernameErr: '', passwordErr: '', emailErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ usernameErr: '', passwordErr: '', emailErr:''})
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true, submitInvalid: true})
-   
+
+    useEffect( () => {
+        setValues( currentVals => {
+            return {...currentVals, username: "", password: "", email: ""}})
+        setInternalErrors()
+    }, [authState.signUp])
+
     // rerender when blur is triggered.
     const rerender = e =>
     {

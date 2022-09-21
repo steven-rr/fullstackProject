@@ -18,13 +18,14 @@ import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
 import React, {useState, useEffect, useRef, createContext} from 'react'
 import axios from   "axios" 
-import {BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Route, useHistory, useLocation} from 'react-router-dom'
 
 export const AuthContext = createContext()
 
 function App() {
   // reset any relevant state when clicking a link in nav bar.
   const [value, setValue]=  useState(0);
+  const location = useLocation();
   const submitHandler = e =>
   {
     setValue(currentValue=> currentValue+1);
@@ -63,6 +64,22 @@ function App() {
               })
       console.log("AUTHSTATE:" ,authState);
   }, [])
+
+  // check if location changes, if so, remove all modals
+  useEffect(() => {
+    if(authState.loginOn) 
+    {
+      setAuthState( currentAuthState=> {
+        return { ...currentAuthState, loginOn: false}
+      }) 
+    }
+    if(authState.signUp)
+    {
+      setAuthState( currentAuthState=> {
+        return { ...currentAuthState, signUp: false}
+      }) 
+    }
+},[location]);
   return (
     <div>
       <AuthContext.Provider value={{authState, setAuthState}}>
