@@ -90,7 +90,7 @@ const Navbar = ({onClick}) => {
                     return {...currentAuthState, username: "", UserId: "", authStatus: false}
                   });
                 console.log("updated auth state: " , authState)
-                history.push("/")
+                window.location.reload();
             })
             .catch( (err) => {
                 console.log("logout failed..")

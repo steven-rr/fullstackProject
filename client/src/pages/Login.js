@@ -6,6 +6,7 @@ import {AuthContext} from "../App"
 import {GoogleLogin} from "react-google-login"
 import rocketWallpaper from '../rocketWallpaper.png'
 import { MdClose,MdOutlineClose } from "react-icons/md";
+import { set } from 'express/lib/application'
 
 require('dotenv').config()
 
@@ -23,8 +24,9 @@ const Login = () => {
     const [invalidFlags, setInvalidFlags] = useState({submitUsernameInvalid: true , submitPWInvalid: true,submitInvalid: true})
 
     useEffect( () => {
-        console.log("login AUTHstate changed: ", authState)
-    }, [authState.signUp])
+        setValues( currentVals => {
+            return {...currentVals, username: "", password: ""}})
+    }, [authState.loginOn])
 
 
     // rerender when blur is triggered.
