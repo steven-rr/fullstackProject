@@ -26,6 +26,15 @@ const Login = () => {
     useEffect( () => {
         setValues( currentVals => {
             return {...currentVals, username: "", password: ""}})
+
+        setInternalErrors( currentVals => {
+            return {...currentVals, usernameErr: "", passwordErr: ""}})
+
+        setDisplayErrors( currentVals => {
+            return {...currentVals, usernameErr: "", passwordErr: ""}})
+
+        setInvalidFlags( currentVals => {
+            return {...currentVals, submitUsernameInvalid: true, submitPWInvalid: true, submitInvalid: true}})
     }, [authState.loginOn])
 
 

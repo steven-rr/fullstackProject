@@ -79,6 +79,19 @@ function App() {
         return { ...currentAuthState, signUp: false}
       }) 
     }
+    if(authState.forgotPass)
+    {
+      setAuthState( currentAuthState=> {
+        return { ...currentAuthState, forgotPass: false}
+      })
+    }
+    if(authState.forgotUser)
+    {
+      setAuthState( currentAuthState=> {
+        return { ...currentAuthState, forgotUser: false}
+      })
+    }
+
 },[location]);
   return (
     <div>

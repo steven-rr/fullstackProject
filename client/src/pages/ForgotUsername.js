@@ -20,6 +20,8 @@ const ForgotUsername = () => {
     const [index, setIndex]=  useState(0); // used to rerender when necessary
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ emailErr:''})
+    const [displayMsg, setDisplayMsg] = useState("")
+
     const [invalidFlags, setInvalidFlags] = useState({submitEmailInvalid: true, submitInvalid: true})
     
     // rerender when blur is triggered.
@@ -32,7 +34,7 @@ const ForgotUsername = () => {
     const handleBlur = async (e) => {
         // only set these displayerrors on blur!
         displayErrors.emailErr = internalErrors.emailErr;
-    
+
         // rerender the errors.
         rerender();
     }
@@ -80,18 +82,23 @@ const ForgotUsername = () => {
         handleSubmitErrors();
         // submitting invalid:
         if(!invalidFlags.submitInvalid){
+
+            
             const response = await axios
                                 .post('/api/users/forgotusername',values)
                                 .then( res => {
                                     setValues( currentVals => {
                                         return {...currentVals, email: ""}})
 
+                                    setDisplayMsg(currentVal => currentVal = "An email with the username has been sent to the email address provided." ) 
                                     console.log("email sent succesfully! " )
 
                                 })
                                 .catch( (err) => {
                                     console.log("failed reset username.");
                                     console.log("error: ", err);
+                                    setDisplayMsg(currentVal => currentVal = "The email provided does not exist." ) 
+
                                 })
         };
 
@@ -137,6 +144,8 @@ const ForgotUsername = () => {
                                 className={ForgotUsernameCSS.textareaStyle}
                             />
                             <div className={ForgotUsernameCSS.errMsgClass}> {displayErrors.emailErr} </div>
+                            <div className={ForgotUsernameCSS.errMsgClass}> {displayMsg} </div>
+
                         </div>
                         <div>
                             <button className={ForgotUsernameCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Username </button>
