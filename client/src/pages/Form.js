@@ -31,7 +31,15 @@ const Form = () => {
     useEffect( () => {
         setValues( currentVals => {
             return {...currentVals, username: "", password: "", email: ""}})
-        setInternalErrors()
+
+        setInternalErrors( currentErrs => {
+            return {...currentErrs, usernameErr: "", passwordErr: "", emailErr: ""}}) 
+        
+        setDisplayErrors( currentErrs => {
+            return {...currentErrs, usernameErr: "", passwordErr: "", emailErr: ""}}) 
+        
+        setInvalidFlags( currentInvalidFlags => {
+            return {...currentInvalidFlags, submitUsernameInvalid: true, submitPWInvalid: true, submitEmailInvalid: true,submitInvalid: true}}) 
     }, [authState.signUp])
 
     // rerender when blur is triggered.
@@ -199,7 +207,6 @@ const Form = () => {
     const handleKeydown = (e) => {
         if(e.keyCode === 13)
         {
-
             handleSubmit();
         }
     }
