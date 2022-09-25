@@ -89,3 +89,30 @@ input:-webkit-autofill:focus
 {
     border: 1px solid white;
 }
+
+/* mobile version begins. */
+@media screen and (max-width: 1000px)
+{
+	.loginContainer
+    {   
+        position: absolute;
+        opacity: 1.0;
+        display: block;
+        color: white;
+        font-family: Poppins;
+        background-color: rgb(29, 29, 29);
+        height: 100%;
+        width: 100%;    
+        overflow: visible;
+    } 
+    .popOutContainer
+    {   
+        opacity: 1.0;
+        display: block;
+        color: white;
+        font-family: Poppins;
+        background-color: rgb(29, 29, 29);
+        height: 100%;
+        width: 100%;    
+    }
+}

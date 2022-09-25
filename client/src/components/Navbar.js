@@ -152,8 +152,7 @@ const Navbar = ({onClick}) => {
                         <ul className={NavbarCSS.navMainUl}>
                             <li className={`${NavbarCSS.navMainLiPosts}`}><NavLink className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `} to="/blog"   > POSTS </NavLink> </li>
                             {!authState.authStatus ? 
-                                (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass} `}>LOGIN</div>  </li>
-                                <li className={NavbarCSS.navMainLi} onClick={handleSignUp}><div className={`${NavbarCSS.signupClass} ${NavbarCSS.specialButtn}`}    >  SIGNUP</div> </li> </>) 
+                                (<><li className={` ${NavbarCSS.navMainLi}`} onClick={handleLoginOn}>  <div className={`${NavbarCSS.loginClass} ${NavbarCSS.specialButtn} `}>LOGIN</div>  </li></>) 
                                 : 
                                 (<><li className={NavbarCSS.navMainLi}> <Link className={`${NavbarCSS.navMainAnchor} ${NavbarCSS.specialUnderlineClass}`} to ={`/user/${authState.UserId}`}> PROFILE </Link></li>
                                 <li className={`${NavbarCSS.navMainLi} `}><div className={`${NavbarCSS.logoutButton} ${NavbarCSS.navMainAnchor}`} onClick={() => logout()} type = "button"> LOGOUT </div> </li></>)}

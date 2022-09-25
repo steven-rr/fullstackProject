@@ -5,6 +5,11 @@
 	display:flex;
 	flex-direction: row;
     background-color: rgb(29, 29, 29);
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	overflow: visible;
+	
 }
 .overFlowDeactivate
 {
@@ -19,7 +24,7 @@
 .rocketWallpaperStyle
 {
 	width: 900px;
-	height: 600px;
+	height: 100%;
 
 	z-index: 999;
 }
@@ -27,7 +32,7 @@
 {	
 	position: relative;
 	width: 100%;
-	height: 600px;
+	height: 100%;
 }
 .loginWritingContainer
 {
@@ -194,10 +199,38 @@
 
 
 
-@media screen and (max-width: 530px)
+
+/* close out */
+@media screen and (max-width: 1000px)
 {
 	.rocketWallpaperOuterContainer
 	{
 		display: none;
+		height: 100%;
 	}
+	.formClass
+	{
+		display:flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%; 
+		height: auto;
+		padding-bottom: 50px;
+	}
+
+	.loginContentContainer
+	{	
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.loginWritingContainer
+	{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	
 }
