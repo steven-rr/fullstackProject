@@ -133,7 +133,7 @@
 }
 
 	/* styling for signup button only. */
-.signupClass
+.loginClass
 {
 	display: flex;
 	flex-direction: row;
@@ -555,7 +555,7 @@
 		left: -20px;
 
 	}
-	.signupClass
+	.loginClass
 	{
 		position: absolute;
 		height: auto;
