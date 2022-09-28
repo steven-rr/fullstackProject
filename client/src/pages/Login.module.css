@@ -8,7 +8,7 @@
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-	overflow: visible;
+	overflow: auto;
 	
 }
 .overFlowDeactivate
@@ -24,8 +24,8 @@
 .rocketWallpaperStyle
 {
 	width: 900px;
-	height: 100%;
-
+	height: 900px;
+	overflow: hidden;
 	z-index: 999;
 }
 .loginContentContainer
@@ -55,7 +55,7 @@
     flex-direction: column;
     align-items: center;
 	width: 100%; 
-	height: 100%;
+	height: auto;
 }
 .orClass
 {
@@ -233,4 +233,12 @@
 		justify-content: center;
 	}
 	
+}
+@media screen and (max-height: 900px)
+{
+	.loginContainer
+	{
+		height: 100vh;
+		overflow: auto;
+	}
 }

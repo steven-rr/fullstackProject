@@ -41,7 +41,7 @@
     color: white;
     font-family: Poppins;
     background-color: rgb(29, 29, 29);
-    height: 600px;
+    height: 900px;
     width: 900px;    
 }
 .popOutContainer
@@ -114,5 +114,13 @@ input:-webkit-autofill:focus
         background-color: rgb(29, 29, 29);
         height: 100%;
         width: 100%;    
+    }
+}
+
+@media screen and (max-height: 900px)
+{
+    .loginContainer
+    {
+        height: 100vh;
     }
 }
