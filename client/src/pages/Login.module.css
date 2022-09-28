@@ -24,7 +24,7 @@
 .rocketWallpaperStyle
 {
 	width: 900px;
-	height: 900px;
+	height: 1500px;
 	overflow: hidden;
 	z-index: 999;
 }
@@ -199,6 +199,14 @@
 
 
 
+@media screen and (max-height: 1200px)
+{
+	.loginContainer
+	{
+		height: 100vh;
+		overflow: auto;
+	}
+}
 
 /* close out */
 @media screen and (max-width: 1000px)
@@ -233,12 +241,4 @@
 		justify-content: center;
 	}
 	
-}
-@media screen and (max-height: 900px)
-{
-	.loginContainer
-	{
-		height: 100vh;
-		overflow: auto;
-	}
 }
