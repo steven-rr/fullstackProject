@@ -34,7 +34,8 @@
 .loginContentContainer
 {	
 	position: relative;
-	width: 100%;
+	width: 700px;
+	margin-left: 200px;
 	height: 100%;
 }
 .loginWritingContainer
@@ -202,18 +203,7 @@
 
 
 
-@media screen and (max-height: 630px)
-{
-	.loginContainer
-	{
-		height: 100vh;
-		overflow: auto;
-	}
-	.rocketWallpaperOuterContainer
-	{
-		height: 630px;
-	}
-}
+
 
 /* close out */
 @media screen and (max-width: 1000px)
@@ -235,10 +225,12 @@
 
 	.loginContentContainer
 	{	
-		display: flex;
+		margin-left: 0px;
+		width: 100%;
+		/* display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		justify-content: center; */
 	}
 	.loginWritingContainer
 	{
@@ -248,4 +240,26 @@
 		justify-content: center;
 	}
 	
+}
+
+@media screen and (max-height: 630px)
+{
+	.loginContainer
+	{
+		height: 100vh;
+		overflow: auto;
+	}
+	.rocketWallpaperOuterContainer
+	{
+		height: 630px;
+	}
+	.loginWritingContainer
+	{
+		position: absolute;
+		top: 0px;
+	}
+	.loginWritingContainer
+	{
+		display: block;
+	}
 }
