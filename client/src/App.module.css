@@ -95,7 +95,6 @@ input:-webkit-autofill:focus
 {
 	.loginContainer
     {   
-        position: absolute;
         opacity: 1.0;
         display: block;
         color: white;
@@ -103,7 +102,6 @@ input:-webkit-autofill:focus
         background-color: rgb(29, 29, 29);
         height: 100%;
         width: 100%;    
-        overflow: visible;
     } 
     .popOutContainer
     {   
