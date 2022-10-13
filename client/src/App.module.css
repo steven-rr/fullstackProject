@@ -121,4 +121,8 @@ input:-webkit-autofill:focus
     {
         height: 100vh;
     }
+    .popOutContainer
+    {
+        height: 100vh;
+    }
 }
