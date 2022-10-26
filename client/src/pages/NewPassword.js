@@ -118,6 +118,7 @@ const NewPassword = () => {
                             onBlur={handleBlur}
                             onChange={handlePassword}
                             placeholder="Password..."
+                            className={NewPasswordCSS.textareaStyle}
                         />
                         <div className={NewPasswordCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                     </div>

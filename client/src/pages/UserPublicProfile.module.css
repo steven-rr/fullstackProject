@@ -19,16 +19,16 @@
 
 .postContainer
 {
-    position: relative;
-    display:block;
+    display: flex;
+    flex-direction: row;
     margin-top: 20px;
-    border: 1px solid #000;
-    width: 70%;
-    height: 150px;
+    border:  2px solid rgb(80,80,80);
+    width: 1050px;
     cursor: pointer;
     text-decoration: none;
     color: #fff;
-
+    background-color: rgb(25, 25, 25);
+    border-radius: 5px;
 
 }
 .postLinkClass

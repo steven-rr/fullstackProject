@@ -5,7 +5,8 @@ import Form from "./pages/Form"
 import Login from "./pages/Login"
 import ForgotPassword from "./pages/ForgotPassword"
 import ForgotUsername from "./pages/ForgotUsername"
-
+import ChangeEmail from "./pages/ChangeEmail"
+import ChangePassword from "./pages/ChangePassword"
 import NewPassword from "./pages/NewPassword"
 import Posts from "./pages/Posts"
 import Post from "./pages/Post"
@@ -33,7 +34,7 @@ function App() {
   const loginRef = useRef();
 
   // keep track of auth state in the app.
-  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false, forgotPass: false, forgotUser: false, flag1: true});
+  const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false, forgotPass: false, forgotUser: false, flag1: true, changeEmail: false, changePassword: false});
   const handleLoginClick = (e) => {
     if(e.target == loginRef.current)
     {
@@ -132,6 +133,13 @@ function App() {
 
               <div className={`${AppCSS.loginOuterContainer} ${authState.forgotUser ? '': AppCSS.loginDeactivate}`}>
                 <div className={`${AppCSS.popOutContainer} `}> <ForgotUsername/> </div>
+              </div>
+
+              <div className={`${AppCSS.loginOuterContainer} ${authState.changeEmail ? '': AppCSS.loginDeactivate}`}>
+                <div className={`${AppCSS.popOutContainer} `}> <ChangeEmail/> </div>
+              </div>
+              <div className={`${AppCSS.loginOuterContainer} ${authState.changePassword ? '': AppCSS.loginDeactivate}`}>
+                <div className={`${AppCSS.popOutContainer} `}> <ChangePassword/> </div>
               </div>
           </div>
       </AuthContext.Provider>
