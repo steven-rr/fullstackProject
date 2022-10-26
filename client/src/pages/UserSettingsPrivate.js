@@ -46,6 +46,9 @@ const UserSettingsPrivate = () => {
 
     // on toggle, display window.
     const toggleChangePW = () => {
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, changePassword: !currentAuthState.changePassword}
+        })
         console.log("changing password")
         setChangePW(!changePW)
         setValues( currentVals => {
@@ -59,6 +62,9 @@ const UserSettingsPrivate = () => {
     }
     // on toggle, display window.
     const toggleChangeEmail = () => {
+        setAuthState( currentAuthState=> {
+            return { ...currentAuthState, changeEmail: !currentAuthState.changeEmail}
+        })
         console.log("changing email")
         setChangeEmail(!changeEmail)
         setValues( currentVals => {
@@ -198,82 +204,99 @@ const UserSettingsPrivate = () => {
     }
     return (
         <div className={UserSettingsPrivateCSS.pageContainer}>
-            <div> 
-                <div className={UserSettingsPrivateCSS.textStyle}> {authState.username} </div>
-                <div>  
-                    <div> Email:</div> 
-                    <div> {currentEmail} </div> <button onClick={ () => toggleChangeEmail()}> change </button>
-                </div>
-                <div>  
-                    <div> password:  </div> 
-                    <div> password must be at least 6 characters </div> <button onClick={ () => toggleChangePW()}> change</button> 
-                </div>
-            </div>
-            
+            {
+            UserId == authState.UserId
+            ? 
+            <div>
+                <div> 
+                    <div className={UserSettingsPrivateCSS.textStyle}> {authState.username} </div>
+                    <div>
+                        <Link className= {UserSettingsPrivateCSS.buttonClass}  to = {`/user/${UserId}`} >posts</Link>
+                        <Link className= {UserSettingsPrivateCSS.buttonClass}  to = {`/user/${UserId}/comments`}>comments</Link>
+                        {(authState.UserId == UserId) ? (<><Link className= {UserSettingsPrivateCSS.buttonClass} to = {`/user/${UserId}/settings`}>user settings</Link></>) : ""}
+                    </div>
 
-            <div className={`${UserSettingsPrivateCSS.changePasswordContainer}  ${changePW ? '' : UserSettingsPrivateCSS.deactivate } `}> 
-                <div className= {UserSettingsPrivateCSS.changePasswordWindow}> 
-                    <div className ={UserSettingsPrivateCSS.changePasswordHeader}>
-                        <div className={UserSettingsPrivateCSS.textStyle}>change Password</div>
-                        <button className={UserSettingsPrivateCSS.buttonClass} onClick={ () => toggleChangePW()}>X</button>
-                    </div>
-                    <div className={UserSettingsPrivateCSS.changePasswordBody}> 
-                        <label>Old Password</label>
-                        <input
-                            type= "password"
-                            name= "oldpassword"
-                            onBlur={handleBlur}
-                            onChange={handleOldPassword}
-                            placeholder="Old Password..."
-                            value= {values.oldPassword}
-                        />
-                        <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.oldPasswordErr} </div>
-                        <label>New Password</label>
-                        <input
-                            type= "password"
-                            name= "newpassword"
-                            onBlur={handleBlur}
-                            onChange={handleNewPassword}
-                            placeholder="New Password..."
-                            value= {values.newPassword}
-                        />
-                        <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.newPasswordErr} </div>
-                        <button onClick={() => submitChangePW()} type = "button">Change Password</button>
+                    <div className={UserSettingsPrivateCSS.formContainer}>
+                        <div>  
+                            <div> Email:</div> 
+                            <div> {currentEmail} </div> <button className={UserSettingsPrivateCSS.smallButtonClass} onClick={ () => toggleChangeEmail()}> change </button>
+                        </div>
+                        <div>  
+                            <div> password:  </div> 
+                            <div> password must be at least 6 characters </div> <button className={UserSettingsPrivateCSS.smallButtonClass} onClick={ () => toggleChangePW()}> change</button> 
+                        </div>
                     </div>
                 </div>
-            </div>
+                
 
-            <div className={`${UserSettingsPrivateCSS.changePasswordContainer}  ${changeEmail ? '' : UserSettingsPrivateCSS.deactivate } `}> 
-                <div className= {UserSettingsPrivateCSS.changePasswordWindow}> 
-                    <div className ={UserSettingsPrivateCSS.changePasswordHeader}>
-                        <div className={UserSettingsPrivateCSS.textStyle}>change Email</div>
-                        <button className={UserSettingsPrivateCSS.buttonClass} onClick={ () => toggleChangeEmail()}>X</button>
+                <div className={`${UserSettingsPrivateCSS.changePasswordContainer}  ${changePW ? '' : UserSettingsPrivateCSS.deactivate } `}> 
+                    <div className= {UserSettingsPrivateCSS.changePasswordWindow}> 
+                        <div className ={UserSettingsPrivateCSS.changePasswordHeader}>
+                            <div className={UserSettingsPrivateCSS.textStyle}>change Password</div>
+                            <button className={UserSettingsPrivateCSS.buttonClass} onClick={ () => toggleChangePW()}>X</button>
+                        </div>
+                        <div className={UserSettingsPrivateCSS.changePasswordBody}> 
+                            <label>Old Password</label>
+                            <input
+                                type= "password"
+                                name= "oldpassword"
+                                onBlur={handleBlur}
+                                onChange={handleOldPassword}
+                                placeholder="Old Password..."
+                                value= {values.oldPassword}
+                            />
+                            <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.oldPasswordErr} </div>
+                            <label>New Password</label>
+                            <input
+                                type= "password"
+                                name= "newpassword"
+                                   onBlur={handleBlur}
+                                onChange={handleNewPassword}
+                                placeholder="New Password..."
+                                value= {values.newPassword}
+                            />
+                            <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.newPasswordErr} </div>
+                            <button onClick={() => submitChangePW()} type = "button">Change Password</button>
+                        </div>
                     </div>
-                    <div className={UserSettingsPrivateCSS.changePasswordBody}> 
-                        <label>Old Password</label>
-                        <input
-                            type= "password"
-                            name= "oldpassword"
-                            onBlur={handleBlur}
-                            onChange={handleOldPassword}
-                            placeholder="Old Password..."
-                            value= {values.oldPassword}
-                        />
-                        <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.oldPasswordErr} </div>
-                        <label>New Email</label>
-                        <input
-                            type= "text"
-                            name= "email"
-                            onBlur={handleBlur}
-                            onChange={handleNewEmail}
-                            placeholder="New Email..."
-                            value= {values.newEmail}
-                        />
-                        <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.newEmailErr} </div>
-                        <button onClick={() => submitChangeEmail()} type = "button">Change Email</button>
+                </div>
+
+                <div className={`${UserSettingsPrivateCSS.changePasswordContainer}  ${changeEmail ? '' : UserSettingsPrivateCSS.deactivate } `}> 
+                    <div className= {UserSettingsPrivateCSS.changePasswordWindow}> 
+                        <div className ={UserSettingsPrivateCSS.changePasswordHeader}>
+                            <div className={UserSettingsPrivateCSS.textStyle}>change Email</div>
+                            <button className={UserSettingsPrivateCSS.buttonClass} onClick={ () => toggleChangeEmail()}>X</button>
+                        </div>
+                        <div className={UserSettingsPrivateCSS.changePasswordBody}> 
+                            <label>Old Password</label>
+                            <input
+                                type= "password"
+                                name= "oldpassword"
+                                onBlur={handleBlur}
+                                onChange={handleOldPassword}
+                                placeholder="Old Password..."
+                                value= {values.oldPassword}
+                            />
+                            <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.oldPasswordErr} </div>
+                            <label>New Email</label>
+                            <input
+                                type= "text"
+                                name= "email"
+                                onBlur={handleBlur}
+                                onChange={handleNewEmail}
+                                placeholder="New Email..."
+                                value= {values.newEmail}
+                            />
+                            <div className={UserSettingsPrivateCSS.errMsgClass}> {displayErrors.newEmailErr} </div>
+                            <button onClick={() => submitChangeEmail()} type = "button">Change Email</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            :
+            <div>
+                Does not exist. Please log in.
+            </div>}
         </div>
     )
 }

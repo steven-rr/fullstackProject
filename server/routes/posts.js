@@ -10,8 +10,75 @@ const sequelize= require("sequelize")
 router.get('/byUserId/:UserId', async (request, response) => {
     const UserId = request.params.UserId;
     const postData = await Posts.findAll({
-        where: {UserId: UserId}
+        where: {UserId: UserId}, 
+        include: [ {model: Likes}, {model: Dislikes}] 
     })
+    // if user exists, append to the postData array whether user likes or dislikes. 
+    let postIDsDisliked =[];
+    let postIDsLiked =[];
+
+    if(UserId)
+    {
+        const userLikes = await Likes.findAll({where: {UserId: UserId , PostId: {[Op.not]: null}}})
+
+        // find which post ID's liked by user. 
+        for(let i =0; i< userLikes.length;i ++)
+        {
+            postIDsLiked.push(userLikes[i].dataValues.PostId)
+
+            console.log ("hi!")
+        }
+        
+        // console.log("postdata: ", postData[0].dataValues.title)
+        // console.log("userInfo: ", request.user)
+        for(let i=0 ; i < postIDsLiked.length; i++)
+        {
+            for(let j = 0; j < postData.length; j++)
+            {
+                
+                if(postIDsLiked[i] == postData[j].dataValues.id)
+                {
+                    postData[j].dataValues.liked = true
+                    
+                } 
+                else if(postData[j].dataValues.liked ==null)
+                {
+                    postData[j].dataValues.liked = false
+                }
+
+            }
+        }
+
+        // do the same for dislikes:
+        const userDislikes = await Dislikes.findAll({where: {UserId: UserId, PostId: {[Op.not]: null}}})
+
+        for(let i =0; i< userDislikes.length;i ++)
+        {
+            postIDsDisliked.push(userDislikes[i].dataValues.PostId)
+        }
+
+        for(let i=0 ; i < postIDsDisliked.length; i++)
+        {
+            for(let j = 0; j < postData.length; j++)
+            {
+                
+                if(postIDsDisliked[i] == postData[j].dataValues.id)
+                {
+                    postData[j].dataValues.disliked = true;
+                    break;
+                } 
+                else if(postData[j].dataValues.disliked == null)
+                {
+                    postData[j].dataValues.disliked = false
+                }
+
+            }
+        }
+    }
+    console.log("postIDsLiked2: ", postIDsLiked)
+    console.log("postIDsDisliked2: ", postIDsDisliked)
+
+
 
     // if post data not found, return 404. else, return post data.
     if(!postData)
