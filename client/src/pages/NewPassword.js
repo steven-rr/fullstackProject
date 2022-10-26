@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useParams, useHistory} from "react-router-dom"
-import ForgotPasswordCSS from "./ForgotPassword.module.css"
+import NewPasswordCSS from "./NewPassword.module.css"
 import axios from "axios"
 
 const NewPassword = () => {
@@ -105,12 +105,12 @@ const NewPassword = () => {
     if(sessionActive)
     {
         return (
-            <div className={ForgotPasswordCSS.pageContainer}>
-                <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
-                    <div className={ForgotPasswordCSS.headerStyle}> Change your Password </div>
+            <div className={NewPasswordCSS.pageContainer}>
+                <div className={NewPasswordCSS.createPostHeaderContainer}> 
+                    <div className={NewPasswordCSS.headerStyle}> Change your Password </div>
                 </div>
-                <form className= {ForgotPasswordCSS.formClass}>
-                    <div className={ForgotPasswordCSS.inputsClass}>
+                <form className= {NewPasswordCSS.formClass}>
+                    <div className={NewPasswordCSS.inputsClass}>
                         <label>Password</label>
                         <input
                             type= "password"
@@ -119,10 +119,10 @@ const NewPassword = () => {
                             onChange={handlePassword}
                             placeholder="Password..."
                         />
-                        <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.passwordErr} </div>
+                        <div className={NewPasswordCSS.errMsgClass}> {displayErrors.passwordErr} </div>
                     </div>
                     <div>
-                        <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Change Password</button>
+                        <button className={NewPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Change Password</button>
                     </div>
                 </form>
             </div>
@@ -131,9 +131,9 @@ const NewPassword = () => {
     else
     {
         return (
-            <div className={ForgotPasswordCSS.pageContainer}>
-                <div className={ForgotPasswordCSS.createPostHeaderContainer}> 
-                    <div className={ForgotPasswordCSS.headerStyle}> Link has expired! </div>
+            <div className={NewPasswordCSS.pageContainer}>
+                <div className={NewPasswordCSS.createPostHeaderContainer}> 
+                    <div className={NewPasswordCSS.headerStyle}> Link has expired! </div>
                 </div>
             </div>
         )
