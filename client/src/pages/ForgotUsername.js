@@ -90,7 +90,7 @@ const ForgotUsername = () => {
                                     setValues( currentVals => {
                                         return {...currentVals, email: ""}})
 
-                                    setDisplayMsg(currentVal => currentVal = "An email with the username has been sent to the email address provided." ) 
+                                    setDisplayMsg(currentVal => currentVal = "An password reset link has been sent to the email address provided." ) 
                                     console.log("email sent succesfully! " )
 
                                 })
