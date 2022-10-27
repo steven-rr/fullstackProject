@@ -18,6 +18,7 @@ const ForgotPassword = () => {
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ emailErr:''})
     const [invalidFlags, setInvalidFlags] = useState({submitEmailInvalid: true, submitInvalid: true})
+    const [displayMsg, setDisplayMsg] = useState("")
 
     // rerender when blur is triggered.
     const rerender = e =>
@@ -82,13 +83,15 @@ const ForgotPassword = () => {
                                 .then( res => {
                                     setValues( currentVals => {
                                         return {...currentVals, email: ""}})
-
+                                    setDisplayMsg(currentVal => currentVal = "An email with the username has been sent to the email address provided." ) 
                                     console.log("email sent succesfully! " )
 
                                 })
                                 .catch( (err) => {
                                     console.log("failed reset password.");
                                     console.log("error: ", err);
+                                    setDisplayMsg(currentVal => currentVal = "The email provided does not exist." ) 
+
                                 })
         };
 
@@ -133,6 +136,7 @@ const ForgotPassword = () => {
                                 className={ForgotPasswordCSS.textareaStyle}
                             />
                             <div className={ForgotPasswordCSS.errMsgClass}> {displayErrors.emailErr} </div>
+                            <div className={ForgotPasswordCSS.errMsgClass}> {displayMsg} </div>
                         </div>
                         <div>
                             <button className={ForgotPasswordCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Reset Password Link</button>
