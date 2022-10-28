@@ -13,7 +13,7 @@ const NewPassword = () => {
     const [sessionActive, setSessionActive] = useState(false);
     const [displayMsg, setDisplayMsg] = useState("")
     const [num, setNum]=  useState(0); 
-
+    
     // useeffect determines whter session is expired.
     useEffect( () => {
         axios.get("/api/users/resetpassword" , {params: token})
@@ -123,13 +123,14 @@ const NewPassword = () => {
                                 .then( res => {
                                     setValues( currentVals => {
                                         return {...currentVals, password: ""}})
+                                    setNum( val => {
+                                            return 0  
+                                          })
+    
                                     setDisplayMsg(currentVal => currentVal = `Your password has been updated. Please login with your new password` ) 
 
                                     console.log("password changed succesfully! " )
-                                    setNum( val => {
-                                        return 0  
-                                      })
-
+                                    
                                 })
                                 .catch( (err) => {
                                     setInternalErrors( curr => {
