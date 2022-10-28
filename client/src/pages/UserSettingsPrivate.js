@@ -250,7 +250,7 @@ const UserSettingsPrivate = () => {
                             <input
                                 type= "password"
                                 name= "newpassword"
-                                   onBlur={handleBlur}
+                                onBlur={handleBlur}
                                 onChange={handleNewPassword}
                                 placeholder="New Password..."
                                 value= {values.newPassword}
