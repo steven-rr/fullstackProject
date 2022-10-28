@@ -12,6 +12,7 @@ const NewPassword = () => {
     const [invalidFlags, setInvalidFlags] = useState({submitPasswordInvalid: true, submitInvalid: true})
     const [sessionActive, setSessionActive] = useState(false);
     const [displayMsg, setDisplayMsg] = useState("")
+    const [num, setNum]=  useState(0); 
 
     // useeffect determines whter session is expired.
     useEffect( () => {
@@ -23,6 +24,46 @@ const NewPassword = () => {
                 setSessionActive(false)
             )
     } , [])
+
+    useEffect( () => {
+        // check if username and password are filled out.
+        if(values.password === "" && num ==1) 
+        {
+            // internalErrors.passwordErr = "please enter a password."
+            setInternalErrors( curr=> {
+                return {...curr, passwordErr:  "please enter a password." }
+            })
+        }
+        else if(num == 1)
+        {
+            setInternalErrors( curr=> {
+                return {...curr, passwordErr: (values.password.length < 6 ) ? "minimum of 6 characters required": "" }
+            })
+        }
+        
+        // rerender any errors.
+        let val = values;
+        let ierrs = internalErrors;
+        let iFlags = invalidFlags;
+        console.log("useEffect submit errors:", val, ierrs, iFlags)
+
+    }, [values.password, num])
+
+    useEffect( () => {
+        setDisplayErrors( curr=> {
+            return {...curr, passwordErr: internalErrors.passwordErr}
+        })
+        let passwordErrBool = !(internalErrors.passwordErr == "");
+        console.log("password err from submit errs: ", passwordErrBool)
+        setInvalidFlags( curr=> {
+            return {...curr,submitPasswordInvalid:passwordErrBool , submitInvalid: passwordErrBool}
+        })
+        let val = values;
+        let ierrs = internalErrors;
+        let iFlags = invalidFlags;
+        console.log("useEffect2 submit errors:", val, ierrs, iFlags)
+    }, [internalErrors.passwordErr, num])
+
 
     // rerender when blur is triggered.
     const rerender = e =>
@@ -40,12 +81,11 @@ const NewPassword = () => {
             return {...curr, passwordErr: passwordErr}
         })
 
-       
-
-
         // rerender the errors.
         rerender();
-        
+        setNum( val => {
+          return 1  
+        })
     }
     // rerender when blur is triggered.
     const handleKeydown = (e) => {
@@ -55,60 +95,16 @@ const NewPassword = () => {
         }
     }
 
-    // implements client-side and server-side error handling.
-    const handleOnChangeErrors = async (name, value) => {
-        // handle client-side errors:
-        if(name === "password")
-        {   
-            setInternalErrors( curr=> {
-                return {...curr, passwordErr: (value.length < 6 ) ? "minimum of 6 characters required": "" }
-            })
-            // internalErrors.passwordErr= (value.length < 6 ) ? "minimum of 6 characters required": "";
-        }
-        console.log("change errors:", values, internalErrors, invalidFlags)
-
-    }
-    const handleSubmitErrors = async () => {
-        // check if username and password are filled out.
-        if(values.password === "")
-        {
-            // internalErrors.passwordErr = "please enter a password."
-            setInternalErrors( curr=> {
-                return {...curr, passwordErr:  "please enter a password." }
-            })
-        }
- 
-        // display errors 
-        // displayErrors.passwordErr = internalErrors.passwordErr;
-        let passwordErr = internalErrors.passwordErr; 
-        setDisplayErrors( curr=> {
-            return {...curr, passwordErr: passwordErr}
-        })
 
 
-        // determine if there are errors in any channels.
-        let passwordErrBool = !(passwordErr == "");
-        console.log("password err from submit errs: ", passwordErrBool)
-        setInvalidFlags( curr=> {
-            return {...curr,submitPasswordInvalid:passwordErrBool}
-        })
-        
-        // rerender any errors.
-        rerender();
-        let val = values;
-        let ierrs = internalErrors;
-        let iFlags = invalidFlags;
-        console.log("submit errors:", val, ierrs, iFlags)
-
-    }
 
     const handlePassword = async (e)=>{
         // update password state whenever user changes values of textfield.
         setValues( currentVals => {
-            return {...currentVals, password: e.target.value}})
-
+            return {password: e.target.value}
+        })
         // keep track internally of all errors. only display errors on blur.
-        handleOnChangeErrors("password", e.target.value);
+        console.log("handling password:", e.target.value)
     }
     const handleSubmit = async (e) => 
     {
@@ -116,8 +112,6 @@ const NewPassword = () => {
 
         // // in case user hits submit without blurring, handle blur async with submits.
         await handleBlur();
-        // // handle submit errors.
-        handleSubmitErrors();
 
         console.log("hit submit!")
         // submitting invalid:
@@ -132,6 +126,9 @@ const NewPassword = () => {
                                     setDisplayMsg(currentVal => currentVal = `Your password has been updated. Please login with your new password` ) 
 
                                     console.log("password changed succesfully! " )
+                                    setNum( val => {
+                                        return 0  
+                                      })
 
                                 })
                                 .catch( (err) => {
@@ -172,6 +169,7 @@ const NewPassword = () => {
                             onChange={handlePassword}
                             onKeyDown = {(e) => handleKeydown(e)}
                             placeholder="Password..."
+                            value= {values.password}
                             className={NewPasswordCSS.textareaStyle}
                         />
                         <div className={NewPasswordCSS.errMsgClass}> {displayErrors.passwordErr} </div>
