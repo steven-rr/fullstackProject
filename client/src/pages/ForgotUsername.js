@@ -21,9 +21,21 @@ const ForgotUsername = () => {
     const [internalErrors, setInternalErrors] = useState({ emailErr: ''})
     const [displayErrors, setDisplayErrors] = useState({ emailErr:''})
     const [displayMsg, setDisplayMsg] = useState("")
-
     const [invalidFlags, setInvalidFlags] = useState({submitEmailInvalid: true, submitInvalid: true})
-    
+    useEffect( () => {
+        setValues( currentVals => {
+            return {...currentVals, email: ""}})
+
+        setInternalErrors( currentVals => {
+            return {...currentVals, emailErr: ""}})
+
+        setDisplayErrors( currentVals => {
+            return {...currentVals, emailErr: ""}})
+
+        setInvalidFlags( currentVals => {
+            return {...currentVals, submitEmailInvalid: true, submitInvalid: true}})
+
+    }, [authState.forgotUser])
     // rerender when blur is triggered.
     const rerender = e =>
     {
@@ -31,7 +43,7 @@ const ForgotUsername = () => {
     }
 
     // display errors to user on blur events.
-    const handleBlur = async (e) => {
+    const handleBlur = async () => {
         // only set these displayerrors on blur!
         displayErrors.emailErr = internalErrors.emailErr;
 
@@ -74,16 +86,16 @@ const ForgotUsername = () => {
         // keep track internally of all errors. only display errors on blur.
         handleOnChangeErrors("email", e.target.value);
     }
-    const handleSubmit = async (e) => 
+    const handleSubmit = async () => 
     {
+        window.alert("SUBMIT!!!!!!!!!!!!")
         // in case user hits submit without blurring, handle blur async with submits.
         await handleBlur();
         // handle submit errors.
-        handleSubmitErrors();
+        await handleSubmitErrors();
         // submitting invalid:
         if(!invalidFlags.submitInvalid){
-
-            
+            window.alert("SUBMIT0!!!!!!!!!!!!")
             const response = await axios
                                 .post('/api/users/forgotusername',values)
                                 .then( res => {
@@ -100,8 +112,11 @@ const ForgotUsername = () => {
                                     setDisplayMsg(currentVal => currentVal = "The email provided does not exist." ) 
 
                                 })
-        };
-
+        }
+        else{
+            console.log("not submitting forgotusername!");
+            window.alert("SUBMIT2!!!!!!!!!!!!")
+        }
     }
     // handle clicking on the X button in login page
     const handlePageOff = () => {
@@ -135,17 +150,15 @@ const ForgotUsername = () => {
                             <label>Email</label>
                             <input
                                 type= "text"
-                                name= "email"
+                                name= "emailomg"
                                 onBlur={handleBlur}
                                 onChange={handleEmail}
-                                placeholder="Email..."
                                 onKeyDown = {(e) => handleKeydown(e)}
+                                placeholder="Email..."
                                 value= {values.email}
                                 className={ForgotUsernameCSS.textareaStyle}
                             />
                             <div className={ForgotUsernameCSS.errMsgClass}> {displayErrors.emailErr} </div>
-                            <div className={ForgotUsernameCSS.errMsgClass}> {displayMsg} </div>
-
                         </div>
                         <div>
                             <button className={ForgotUsernameCSS.buttonClass} onClick={() => handleSubmit()} type="button" > Send Username </button>

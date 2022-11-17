@@ -7,18 +7,80 @@ const {validateToken, peekToken}=require("../middleware/JWT.js")
 // get all comment data for a specific user. send to frontend.
 router.get('/byUserId/:UserId', async (request, response) => {
     const UserId = request.params.UserId;
-    const commentData = await Comments.findAll({
-        where: {UserId: UserId}
+    const comments = await Comments.findAll({
+        where: {UserId: UserId}, include: [{model: Likes} , {model: Dislikes}]
     })
 
     // if comment data not found, return 404. else, return post data.
-    if(!commentData)
+    if(!comments)
     {
         response.status(404).json({msg: "no posts found!!!"})
     }
     else
-    {
-        response.json(commentData)
+    {   
+        // loop through comments:
+        for(let i =0; i< comments.length; i++)
+        {
+            comments[i].dataValues.hasDescendants = false
+        }
+        // if user exists, append comment array on whether user likes or dislikes.
+        let commentIDsDisliked = [];
+        let commentIDsLiked    = [];
+
+        if(request.user)
+        {
+            const userLikes = await Likes.findAll({where: {UserId: UserId, CommentId: {[Op.not]: null} }})
+            // find which comment ID's liked by user
+            for(let i =0; i< userLikes.length;i ++)
+            {
+                commentIDsLiked.push(userLikes[i].dataValues.CommentId) 
+            }
+            for(let i=0 ; i < commentIDsLiked.length; i++)
+            {
+                for(let j = 0; j < comments.length; j++)
+                {
+                    
+                    if(commentIDsLiked[i] == comments[j].dataValues.id)
+                    {
+                        comments[j].dataValues.liked = true
+                        
+                    } 
+                    else if(comments[j].dataValues.liked ==null)
+                    {
+                        comments[j].dataValues.liked = false
+                    }
+
+                }
+            }
+            // do the same for dislikes:
+            const userDislikes = await Dislikes.findAll({where: {UserId: UserId, CommentId: {[Op.not]: null}}})
+
+            for(let i =0; i< userDislikes.length;i ++)
+            {
+                commentIDsDisliked.push(userDislikes[i].dataValues.CommentId)
+            }
+
+            for(let i=0 ; i < commentIDsDisliked.length; i++)
+            {
+                for(let j = 0; j < comments.length; j++)
+                {
+                    
+                    if(commentIDsDisliked[i] == comments[j].dataValues.id)
+                    {
+                        comments[j].dataValues.disliked = true;
+                        break;
+                    } 
+                    else if(comments[j].dataValues.disliked == null)
+                    {
+                        comments[j].dataValues.disliked = false
+                    }
+
+                }
+            }
+
+
+        }
+        response.json(comments)
     }
 })
 
