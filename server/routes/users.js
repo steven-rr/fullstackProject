@@ -352,26 +352,26 @@ router.post("/resetpassword", async (request, response) => {
 
     response.json("success!")
 
-    // // get token (from params) and newpassword from front end.
-    // const newPassword = request.body.password;
-    // const token= request.body.token;
+    // get token (from params) and newpassword from front end.
+    const newPassword = request.body.password;
+    const token= request.body.token;
 
-    // // find the user that correspodns to the resetToken, as long as expire Token is greater than. 
-    // // if not found ,return error. if found,  allow a password update, and expire the link.
-    // const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
-    // if(!user)
-    // {   
-    //     response.status(404).json("token has expired")
-    // }
-    // else
-    // {
-    //     bcrypt.hash(newPassword, 10).then( async (hash) =>
-    //     {
-    //         await Users.update({password: hash}, {where: {resetToken: token}});
-    //         await Users.update({expireToken: null} , {where: {resetToken: token}})
-    //         response.json("success!")
-    //     })
-    // }
+    // find the user that correspodns to the resetToken, as long as expire Token is greater than. 
+    // if not found ,return error. if found,  allow a password update, and expire the link.
+    const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
+    if(!user)
+    {   
+        response.status(404).json("token has expired")
+    }
+    else
+    {
+        bcrypt.hash(newPassword, 10).then( async (hash) =>
+        {
+            await Users.update({password: hash}, {where: {resetToken: token}});
+            await Users.update({expireToken: null} , {where: {resetToken: token}})
+            response.json("success!")
+        })
+    }
 })
 router.get("/resetpassword/", async (request, response) => {
     const token = await request.query[0];
