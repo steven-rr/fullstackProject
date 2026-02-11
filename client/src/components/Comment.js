@@ -10,7 +10,6 @@ import {AuthContext} from "../App"
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit2 } from "react-icons/fi";
 import { MdOutlineMoreHoriz } from "react-icons/md";
-import { set } from 'express/lib/application'
 
 // specifies max level to iterate over.
 const REPLY_THREAD_WIDTH = 5;
@@ -53,7 +52,6 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     useEffect( () => {
         commentBarRef.current ? setButtonsWidth(commentBarRef.current.scrollWidth) : setButtonsWidth(0)
         setOverflow();
-        console.log("buttonsWidth: ", buttonsWidth)
 
     }, [windowDimensions.width])
    
@@ -405,13 +403,17 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
 
         for (let i=0; i < substrings.length; i++)
         {
-            if(substrings[i] == "")
+            if(substrings[i] === "")
             {
-                toDisplay.push(<div> <br></br></div>)
+                toDisplay.push(<div key={`line-${comment.id}-${i}`}><br /></div>)
             }
             else
             {
-                toDisplay.push(<div className={CommentCSS.paragraphContent}><p className={CommentCSS.paragraphContent_p}>{substrings[i]}</p></div>)
+                toDisplay.push(
+                    <div key={`line-${comment.id}-${i}`} className={CommentCSS.paragraphContent}>
+                        <p className={CommentCSS.paragraphContent_p}>{substrings[i]}</p>
+                    </div>
+                )
             }
         }
     }
@@ -488,7 +490,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
     // const hasSiblings = false; 
     const nestedComments =  comments.map((commentChild, key) =>{ 
         if(commentChild == null) {
-            return 
+            return null
         }
         if(commentChild.parentId === comment.id)
         {
@@ -499,7 +501,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                 // iterate thru comments. if children at the max level have more children, include link to continue the thread.
                 for(let i =0; i<comments.length; i++)
                 {
-                    if(comments[i].parentId == commentChild.id)
+                    if(comments[i].parentId === commentChild.id)
                     {
                         return (
                             <ChildComment 
@@ -550,6 +552,7 @@ const Comment = ({comment,commentIdx, setComments, comments, setIndividualPostDa
                 )
             }
         }
+        return null;
     });
     
         return (
