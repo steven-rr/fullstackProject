@@ -223,10 +223,10 @@ const Form = () => {
     return (
         <div className={FormCSS.formContainer}>
             <div className={FormCSS.rocketWallpaperOuterContainer}>
-                <img className={FormCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
+                <img className={FormCSS.rocketWallpaperStyle} src= {rocketWallpaper} alt="" />    
             </div>
             <div className={FormCSS.loginContentContainer}>
-                <button className={FormCSS.XButtonClass} onClick={() => handleSignUpOff()} type = "button"> <MdClose size="30px"/></button>
+                <button className={FormCSS.XButtonClass} onClick={() => handleSignUpOff()} type = "button"> <MdClose size="30px" /></button>
                 <div className={FormCSS.loginWritingContainer}>
                     <div className= {FormCSS.textStyle}>Create an Account to post! </div>
                     <form className= {FormCSS.formClass}>
