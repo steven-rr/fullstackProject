@@ -88,14 +88,12 @@ const ForgotUsername = () => {
     }
     const handleSubmit = async () => 
     {
-        window.alert("SUBMIT!!!!!!!!!!!!")
         // in case user hits submit without blurring, handle blur async with submits.
         await handleBlur();
         // handle submit errors.
         await handleSubmitErrors();
         // submitting invalid:
         if(!invalidFlags.submitInvalid){
-            window.alert("SUBMIT0!!!!!!!!!!!!")
             const response = await axios
                                 .post('/api/users/forgotusername',values)
                                 .then( res => {
@@ -115,7 +113,6 @@ const ForgotUsername = () => {
         }
         else{
             console.log("not submitting forgotusername!");
-            window.alert("SUBMIT2!!!!!!!!!!!!")
         }
     }
     // handle clicking on the X button in login page
@@ -138,10 +135,10 @@ const ForgotUsername = () => {
     return (
         <div className={ForgotUsernameCSS.pageContainer}>
             <div className={ForgotUsernameCSS.rocketWallpaperOuterContainer}>
-                <img className={ForgotUsernameCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
+                <img className={ForgotUsernameCSS.rocketWallpaperStyle} src= {rocketWallpaper} alt="" />    
             </div>
             <div className={ForgotUsernameCSS.loginContentContainer}>
-                <button className={ForgotUsernameCSS.XButtonClass} onClick={() => handlePageOff()} type = "button"> <MdClose size="30px"/></button>
+                <button className={ForgotUsernameCSS.XButtonClass} onClick={() => handlePageOff()} type = "button"> <MdClose size="30px" /></button>
                 <div className= {ForgotUsernameCSS.loginWritingContainer}>
 
                     <div className={ForgotUsernameCSS.textStyle}> Recover your Username </div>
