@@ -12,7 +12,25 @@ const { OAuth2Client } = require('google-auth-library')
 const sgMail = require("@sendgrid/mail")
 const client = new OAuth2Client(process.env.CLIENT_ID)
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const sendgridApiKey = process.env.SENDGRID_API_KEY;
+if (sendgridApiKey) {
+    sgMail.setApiKey(sendgridApiKey);
+} else {
+    console.warn("SENDGRID_API_KEY is not set; outbound emails are disabled.");
+}
+
+const sendEmailSafe = async (emailToSend, context) => {
+    if (!sendgridApiKey) {
+        return;
+    }
+    try {
+        await sgMail.send(emailToSend);
+    } catch (error) {
+        const status = error?.code || error?.response?.statusCode || "unknown";
+        const details = error?.response?.body || error?.message || error;
+        console.error(`[SendGrid ${context}] failed (${status})`, details);
+    }
+};
 
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
@@ -50,7 +68,7 @@ router.post('/register', async (request, response) => {
 
 
         }
-        sgMail.send(emailToSend)
+        sendEmailSafe(emailToSend, "welcome-email")
         response.json(newUser)
     })
     
@@ -341,7 +359,7 @@ router.post("/forgotpassword", async (request, response) => {
 
 
                 }
-                sgMail.send(emailToSend)
+                sendEmailSafe(emailToSend, "forgot-password")
                 response.json("success!");
             }
         }
@@ -420,7 +438,7 @@ router.post("/forgotusername", async (request, response) => {
                     <h2> ${username} </h2>
                     ` 
                 }
-                sgMail.send(emailToSend)
+                sendEmailSafe(emailToSend, "forgot-username")
                 response.json("success!");
             }
         }
