@@ -6,12 +6,9 @@ import {AuthContext} from "../App"
 import {GoogleLogin} from "react-google-login"
 import rocketWallpaper from '../rocketWallpaper.png'
 import { MdClose,MdOutlineClose } from "react-icons/md";
-import { set } from 'express/lib/application'
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
-
-require('dotenv').config()
 
 const ChangeEmail = () => {
     // grabbing setAuthState.
@@ -113,17 +110,18 @@ const ChangeEmail = () => {
                                         console.log("success change email: ", res.data.msg)
                                     })
                                     .catch( (err) => {
-                                        console.log("catch change email err: ", err.response.data);
-                                        if(err.response.data.oldPasswordErr)
+                                        const errorData = err?.response?.data || {};
+                                        console.log("catch change email err: ", errorData);
+                                        if(errorData.oldPasswordErr)
                                             {   
-                                            internalErrors.oldPasswordErr = err.response.data.oldPasswordErr
-                                            displayErrors.oldPasswordErr = err.response.data.oldPasswordErr
+                                            internalErrors.oldPasswordErr = errorData.oldPasswordErr
+                                            displayErrors.oldPasswordErr = errorData.oldPasswordErr
 
                                         }
-                                        if(err.response.data.newEmailErr)
+                                        if(errorData.newEmailErr)
                                         {
-                                            internalErrors.newEmailErr = err.response.data.newEmailErr
-                                            displayErrors.newEmailErr = err.response.data.newEmailErr
+                                            internalErrors.newEmailErr = errorData.newEmailErr
+                                            displayErrors.newEmailErr = errorData.newEmailErr
 
                                         }
                                         rerender();
@@ -132,7 +130,7 @@ const ChangeEmail = () => {
     }
     return (
         <div className={ChangeEmailCSS.loginContainer}>
-            <button className={ChangeEmailCSS.XButtonClass} onClick={() => handleChangeEmailOff()} type = "button"> <MdClose size="30px"/></button>
+            <button className={ChangeEmailCSS.XButtonClass} onClick={() => handleChangeEmailOff()} type = "button"> <MdClose size="30px" /></button>
             <div className= {ChangeEmailCSS.loginWritingContainer}>
                     <div className={ChangeEmailCSS.textStyle}> Change Email </div>
                     <form className= {ChangeEmailCSS.formClass}>
