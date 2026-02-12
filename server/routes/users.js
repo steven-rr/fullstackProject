@@ -9,26 +9,61 @@ const {Users}= require('../models');
 const {Op} = require("sequelize")
 const {createTokens, validateToken}=require("../middleware/JWT.js")
 const { OAuth2Client } = require('google-auth-library') 
-const sgMail = require("@sendgrid/mail")
+const fetch = require("node-fetch");
 const client = new OAuth2Client(process.env.CLIENT_ID)
 
-const sendgridApiKey = process.env.SENDGRID_API_KEY;
-if (sendgridApiKey) {
-    sgMail.setApiKey(sendgridApiKey);
-} else {
-    console.warn("SENDGRID_API_KEY is not set; outbound emails are disabled.");
+const mailjetApiKey = process.env.MAILJET_API_KEY;
+const mailjetApiSecret = process.env.MAILJET_API_SECRET;
+if (!mailjetApiKey || !mailjetApiSecret) {
+    console.warn("MAILJET_API_KEY / MAILJET_API_SECRET are not set; outbound emails are disabled.");
 }
 
 const sendEmailSafe = async (emailToSend, context) => {
-    if (!sendgridApiKey) {
-        return;
+    if (!mailjetApiKey || !mailjetApiSecret) {
+        return { ok: false, reason: "MAILJET credentials are not set" };
     }
+
+    const fromEmail = process.env.MAILJET_FROM_EMAIL || process.env.EMAIL_USERNAME;
+    const fromName = process.env.MAILJET_FROM_NAME || "Space Launches";
+    if (!fromEmail) {
+        return { ok: false, reason: "MAILJET_FROM_EMAIL (or EMAIL_USERNAME) is not set" };
+    }
+
+    const auth = Buffer.from(`${mailjetApiKey}:${mailjetApiSecret}`).toString("base64");
+    const payload = {
+        Messages: [
+            {
+                From: { Email: fromEmail, Name: fromName },
+                To: [{ Email: emailToSend.to }],
+                Subject: emailToSend.subject,
+                TextPart: emailToSend.text || "",
+                HTMLPart: emailToSend.html || ""
+            }
+        ]
+    };
+
     try {
-        await sgMail.send(emailToSend);
+        const sendRes = await fetch("https://api.mailjet.com/v3.1/send", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${auth}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!sendRes.ok) {
+            const details = await sendRes.text();
+            console.error(`[Mailjet ${context}] failed (${sendRes.status})`, details);
+            return { ok: false, status: sendRes.status, details };
+        }
+
+        return { ok: true };
     } catch (error) {
-        const status = error?.code || error?.response?.statusCode || "unknown";
-        const details = error?.response?.body || error?.message || error;
-        console.error(`[SendGrid ${context}] failed (${status})`, details);
+        const status = error?.code || "unknown";
+        const details = error?.message || error;
+        console.error(`[Mailjet ${context}] failed (${status})`, details);
+        return { ok: false, status, details };
     }
 };
 
@@ -36,16 +71,15 @@ const sendEmailSafe = async (emailToSend, context) => {
 router.post('/register', async (request, response) => {
     // parse out info from frontend.
     const {username , password, email} = request.body;
-    
     // hash the password, then register user.
-    bcrypt.hash(password, 10).then( (hash) =>
-    {
+    try {
+        const hash = await bcrypt.hash(password, 10);
         const newUser = {
             username: username,
             password: hash,
             email: email
         };
-        Users.create(newUser);
+        const createdUser = await Users.create(newUser);
         // in this case, we want to send an email back saying welcome to space launches.
         console.log("trying to welcome the following user email: ", email)
         const emailToSend= {
@@ -65,14 +99,18 @@ router.post('/register', async (request, response) => {
             // Let's verify your single sender so you can start sending email.
             // < email here> 
             // Your link is active for 48 hours. After that, you will need to resend the verification email.
-
-
         }
-        sendEmailSafe(emailToSend, "welcome-email")
-        response.json(newUser)
-    })
-    
-    
+        const emailResult = await sendEmailSafe(emailToSend, "welcome-email");
+        response.status(201).json({
+            id: createdUser.id,
+            username: createdUser.username,
+            email: createdUser.email,
+            welcomeEmailSent: emailResult.ok === true
+        });
+    } catch (error) {
+        console.error("register failed:", error);
+        response.status(500).json({error: "unable to register user"});
+    }
 })
 // server-side validation.
 router.get('/register', async (request, response) => { 
@@ -337,7 +375,8 @@ router.post("/forgotpassword", async (request, response) => {
                 const token = buffer.toString("hex")
                 const expireToken = Date.now() + 3600000;
                 await Users.update({resetToken: token, expireToken: expireToken}, {where: {email:  request.body.email}})
-                const redirectLink =  process.env.DOMAIN   + `reset/${token}` ;
+                const baseDomain = (process.env.DOMAIN || "").trim().replace(/\/+$/, "");
+                const redirectLink =  `${baseDomain}/reset/${token}` ;
                 console.log("redirect to:",redirectLink)
                 const emailToSend= {
                     from: '"Space Launches" <spacelaunches@outlook.com>',
@@ -359,7 +398,11 @@ router.post("/forgotpassword", async (request, response) => {
 
 
                 }
-                sendEmailSafe(emailToSend, "forgot-password")
+                const emailResult = await sendEmailSafe(emailToSend, "forgot-password")
+                if(!emailResult.ok)
+                {
+                    return response.status(502).json({error: "Unable to send reset email at this time."});
+                }
                 response.json("success!");
             }
         }
@@ -367,40 +410,38 @@ router.post("/forgotpassword", async (request, response) => {
 })
 // reset password:
 router.post("/resetpassword", async (request, response) => {
-
-    response.json("success!")
-
-    // get token (from params) and newpassword from front end.
+    // get token and new password from front end.
     const newPassword = request.body.password;
-    const token= request.body.token;
-
-    // find the user that correspodns to the resetToken, as long as expire Token is greater than. 
-    // if not found ,return error. if found,  allow a password update, and expire the link.
+    const token = request.body.token;
+    if(!token || !newPassword)
+    {
+        return response.status(400).json({error: "token and password are required"});
+    }
+    // find the user that corresponds to the resetToken, as long as expireToken is greater than now.
     const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
     if(!user)
     {   
-        response.status(404).json("token has expired")
+        return response.status(404).json("token has expired")
     }
-    else
-    {
-        bcrypt.hash(newPassword, 10).then( async (hash) =>
-        {
-            await Users.update({password: hash}, {where: {resetToken: token}});
-            await Users.update({expireToken: null} , {where: {resetToken: token}})
-            response.json("success!")
-        })
-    }
+
+    const hash = await bcrypt.hash(newPassword, 10);
+    await Users.update({password: hash, expireToken: null, resetToken: null}, {where: {id: user.id}});
+    return response.json("success!")
 })
 router.get("/resetpassword/", async (request, response) => {
-    const token = await request.query[0];
+    const token = request.query.token || request.query[0];
+    if(!token)
+    {
+        return response.status(400).json("token is required");
+    }
     const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
     if(!user)
     {
-        response.status(404).json("token has expired")
+        return response.status(404).json("token has expired")
     }
     else
     {
-        response.json("link is valid.");
+        return response.json("link is valid.");
     }
 })
 
@@ -438,7 +479,11 @@ router.post("/forgotusername", async (request, response) => {
                     <h2> ${username} </h2>
                     ` 
                 }
-                sendEmailSafe(emailToSend, "forgot-username")
+                const emailResult = await sendEmailSafe(emailToSend, "forgot-username")
+                if(!emailResult.ok)
+                {
+                    return response.status(502).json({error: "Unable to send username email at this time."});
+                }
                 response.json("success!");
             }
         }
