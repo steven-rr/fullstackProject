@@ -73,6 +73,15 @@ router.post('/register', async (request, response) => {
     const {username , password, email} = request.body;
     // hash the password, then register user.
     try {
+        const usernameExists = await Users.findOne({ where: { username } });
+        if (usernameExists) {
+            return response.status(409).json({ usernameErr: "That username is taken!" });
+        }
+        const emailExists = await Users.findOne({ where: { email } });
+        if (emailExists) {
+            return response.status(409).json({ emailErr: "That email is taken!" });
+        }
+
         const hash = await bcrypt.hash(password, 10);
         const newUser = {
             username: username,
@@ -206,7 +215,7 @@ router.get('/logout',validateToken, async (request, response) => {
     {
         response.clearCookie("access-token");   
         console.log("succesfully deleted cookie.")
-        response.json(response.user)
+        response.json({msg: "logout successful"})
 
     }
     catch
@@ -244,6 +253,10 @@ router.put("/private/changepassword", validateToken, async (request, response) =
     // get user information using validateToken username.
     console.log("user ID:", request.user)
     const user =await Users.findOne({where: {id: request.user.id}})
+    if(!user)
+    {
+        return response.status(404).json({error: "user not found"});
+    }
 
     // err container, to be filled as errors pop up.
     let err = {};
@@ -297,6 +310,10 @@ router.put("/private/changeemail", validateToken, async (request, response) => {
     // get user information using validateToken username.
     console.log("user ID:", request.user)
     const user =await Users.findOne({where: {id: request.user.id}})
+    if(!user)
+    {
+        return response.status(404).json({error: "user not found"});
+    }
 
     // err container, to be filled as errors pop up.
     let err = {};
@@ -342,16 +359,16 @@ router.put("/private/changeemail", validateToken, async (request, response) => {
 // update password
 router.get("/private/getEmail", validateToken, async (request, response) => {
     const user =await Users.findOne({where: {id: request.user.id}})
-    console.log(user.dataValues.email)
     if(!user)
     {
         console.log("could not find")
-        response.json({msg: "could not find user."})
+        return response.status(404).json({msg: "could not find user."})
     }
     else
     {
+        console.log(user.dataValues.email)
         console.log("found")
-        response.json({email: user.dataValues.email});
+        return response.json({email: user.dataValues.email});
     }
 })
 
@@ -492,69 +509,66 @@ router.post("/forgotusername", async (request, response) => {
 
 // if user exists and password is correct, log in and return json web token.
 router.post('/googleoauth', async (request, response) => {
-    const {googleToken} = request.body;
-    console.log("google: ", googleToken)
-    const ticket = await client.verifyIdToken({
-        idToken: googleToken,
-        audience: process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID
-    });
-    const { name, email, picture } = ticket.getPayload();  
-    console.log(name, email);
-    console.log(picture);
+    try {
+        const {googleToken} = request.body;
+        if(!googleToken)
+        {
+            return response.status(400).json({error: "googleToken is required"});
+        }
 
-    //check if user is signed up. 
-    const user = await Users.findOne({ where: {email: email} })
+        console.log("google: ", googleToken)
+        const ticket = await client.verifyIdToken({
+            idToken: googleToken,
+            audience: process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID
+        });
+        const { name, email, picture } = ticket.getPayload();  
+        console.log(name, email);
+        console.log(picture);
 
-    // if account exists, login. else, create user. 
-    if(user)
-    {
-        const accessToken = createTokens(user.dataValues);
-        const expirationDate = 60*60*24*90*1000;
-        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
-        response.json({username: user.username, id: user.id})
-    }
-    else 
-    {
+        //check if user is signed up. 
+        const user = await Users.findOne({ where: {email: email} })
+
+        // if account exists, login. else, create user. 
+        if(user)
+        {
+            const accessToken = createTokens(user.dataValues);
+            const expirationDate = 60*60*24*90*1000;
+            response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+            return response.json({username: user.username, id: user.id})
+        }
+
         // loop until i find a random username that is valid.
         let newUsername;
+        let userExists;
         for(let i=0; i<500; i++)
         {
             newUsername = haiku(500)
-            userExists=  await Users.findOne({ where: {username: newUsername} })
+            userExists = await Users.findOne({ where: {username: newUsername} })
             if(!userExists)
             {
                 break
             }
         }
-        // create a random password that is very strong. 
-        crypto.randomBytes(200, async (err, buffer)=> {
-            if(err){
-                console.log(err)
-            }
-            else{
-                //succesfully create random password here:
-                const randomPassword = buffer.toString("hex")
-                // hash the password, then register user and sign in.
-                bcrypt.hash(randomPassword, 10).then( async (hash) =>
-                {
-                    // create user in database.
-                    let newUser = {
-                        username: newUsername,
-                        password: hash,
-                        email: email
-                    };
-                    newUser = await Users.create(newUser);
-                    //signin.
-                    console.log("new user:", newUser)
-                    const accessToken = createTokens(newUser.dataValues);
-                    const expirationDate = 60*60*24*90*1000;
-                    response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
-                    response.json({username: newUser.username, id: newUser.id})
-                })
-            }   
 
-        })
-       
+        // create a random password that is very strong.
+        const randomPassword = crypto.randomBytes(200).toString("hex")
+        const hash = await bcrypt.hash(randomPassword, 10)
+        // create user in database.
+        let newUser = {
+            username: newUsername,
+            password: hash,
+            email: email
+        };
+        newUser = await Users.create(newUser);
+        //signin.
+        console.log("new user:", newUser)
+        const accessToken = createTokens(newUser.dataValues);
+        const expirationDate = 60*60*24*90*1000;
+        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+        return response.json({username: newUser.username, id: newUser.id})
+    } catch (error) {
+        console.error("google oauth failed:", error?.message || error);
+        return response.status(401).json({error: "google authentication failed"});
     }
 })
 
