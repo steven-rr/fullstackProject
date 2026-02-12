@@ -294,9 +294,8 @@ router.put("/private/changepassword", validateToken, async (request, response) =
         // if no failures, update newpassword!
         else
         {
-            bcrypt.hash(newPassword, 10).then( async (hash)=> {
-                await Users.update({password: hash} , {where: {id: request.user.id}})
-            })
+            const hash = await bcrypt.hash(newPassword, 10);
+            await Users.update({password: hash} , {where: {id: request.user.id}})
             response.json({msg: "no backend change password errors!"});
         }
     })
