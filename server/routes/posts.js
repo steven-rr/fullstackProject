@@ -109,8 +109,11 @@ router.get('/',peekToken, async (request, response) => {
     await Posts.increment(['inflatedPriority'] , {by: 1000, where: {createdAt: {[Op.gt]: datetime}} })
 
 
-    // inflate priority by launchID.
-    await Posts.update({inflatedPriority: 999999}, {where: {launchId: nextUpLaunch.dataValues.launch_id}})
+    // inflate priority by launchID when an upcoming launch exists.
+    if(nextUpLaunch && nextUpLaunch.dataValues && nextUpLaunch.dataValues.launch_id)
+    {
+        await Posts.update({inflatedPriority: 999999}, {where: {launchId: nextUpLaunch.dataValues.launch_id}})
+    }
 
     // sort by priority.
     const postData = await Posts.findAll({
@@ -193,7 +196,7 @@ router.post("/", validateToken, async(request, response) => {
     // parse out info from body.
     const {title, contentText}  = request.body;
     // get current time the post is being posted in seconds.
-    let currTime_secs = (new Date()).getTime() / 1000
+    let currTime_secs = Math.floor((new Date()).getTime() / 1000)
 
     // use info from body, and info from token (user info).
     const newPost = {
@@ -299,6 +302,4 @@ router.delete("/:id", validateToken, async(request,response) => {
 
 
 module.exports = router;
-
-
 
