@@ -1,5 +1,20 @@
 require('dotenv').config()
 
+const supabaseSSL = {
+  ssl: {
+    require: true,
+    rejectUnauthorized: false
+  }
+}
+
+const prodConnectionVar = process.env.SUPABASE_DB_URL
+  ? 'SUPABASE_DB_URL'
+  : (process.env.DATABASE_URL ? 'DATABASE_URL' : null)
+
+if (process.env.NODE_ENV === 'production' && !prodConnectionVar) {
+  throw new Error('Missing SUPABASE_DB_URL (or DATABASE_URL) for production database connection.')
+}
+
 module.exports = {
   "development": {
     "username": process.env.DB_USERNAME_DEV,
@@ -17,10 +32,8 @@ module.exports = {
     "dialect": "mysql"
   },
   "production": {
-    "username": process.env.DB_USERNAME_PRODUCTION,
-    "password": process.env.DB_PASSWORD_PRODUCTION,
-    "database": process.env.DB_DATABASE_PRODUCTION,
-    "host": process.env.DB_HOST_PRODUCTION,
-    "dialect": "mysql"
+    "use_env_variable": prodConnectionVar,
+    "dialect": "postgres",
+    "dialectOptions": supabaseSSL
   }
 }

@@ -16,7 +16,7 @@ const validateToken = (request, response, next) => {
     // if no valid access token in cookies, return auth error.
     if(!accessToken)
     {
-        return response.status(404).json({error: "user not authenticated!"});
+        return response.status(401).json({error: "user not authenticated!"});
     }
 
     // try to make sure that the token is valid. if so, then authentication is good, can proceed with request.
@@ -34,7 +34,7 @@ const validateToken = (request, response, next) => {
     }
     catch(err)
     {
-        return response.status(404).json({error: err})
+        return response.status(401).json({error: err})
     }
 }
 

@@ -6,12 +6,9 @@ import {AuthContext} from "../App"
 import {GoogleLogin} from "react-google-login"
 import rocketWallpaper from '../rocketWallpaper.png'
 import { MdClose,MdOutlineClose } from "react-icons/md";
-import { set } from 'express/lib/application'
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[A-Za-z]+$/
   );
-
-require('dotenv').config()
 
 const ChangePassword = () => {
     // grabbing setAuthState.
@@ -113,16 +110,17 @@ const ChangePassword = () => {
                                         console.log("success change password: ", res.data.msg)
                                     })
                                     .catch( (err) => {
-                                        console.log("catch change password err: ", err.response.data);
-                                        if(err.response.data.oldPasswordErr)
+                                        const errorData = err?.response?.data || {};
+                                        console.log("catch change password err: ", errorData);
+                                        if(errorData.oldPasswordErr)
                                         {   
-                                            internalErrors.oldPasswordErr = err.response.data.oldPasswordErr
-                                            displayErrors.oldPasswordErr = err.response.data.oldPasswordErr
+                                            internalErrors.oldPasswordErr = errorData.oldPasswordErr
+                                            displayErrors.oldPasswordErr = errorData.oldPasswordErr
                                         }
-                                        if(err.response.data.newPasswordErr)
+                                        if(errorData.newPasswordErr)
                                         {
-                                            internalErrors.newPasswordErr = err.response.data.newPasswordErr
-                                            displayErrors.newPasswordErr = err.response.data.newPasswordErr
+                                            internalErrors.newPasswordErr = errorData.newPasswordErr
+                                            displayErrors.newPasswordErr = errorData.newPasswordErr
                                         }
                                         rerender();
                                     })
@@ -130,7 +128,7 @@ const ChangePassword = () => {
     }
     return (
         <div className={ChangePasswordCSS.loginContainer}>
-            <button className={ChangePasswordCSS.XButtonClass} onClick={() => handlePasswordOff()} type = "button"> <MdClose size="30px"/></button>
+            <button className={ChangePasswordCSS.XButtonClass} onClick={() => handlePasswordOff()} type = "button"> <MdClose size="30px" /></button>
             <div className= {ChangePasswordCSS.loginWritingContainer}>
                     <div className={ChangePasswordCSS.textStyle}> Change Password </div>
                     <form className= {ChangePasswordCSS.formClass}>

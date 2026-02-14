@@ -9,25 +9,86 @@ const {Users}= require('../models');
 const {Op} = require("sequelize")
 const {createTokens, validateToken}=require("../middleware/JWT.js")
 const { OAuth2Client } = require('google-auth-library') 
-const sgMail = require("@sendgrid/mail")
+const fetch = require("node-fetch");
 const client = new OAuth2Client(process.env.CLIENT_ID)
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const mailjetApiKey = process.env.MAILJET_API_KEY;
+const mailjetApiSecret = process.env.MAILJET_API_SECRET;
+if (!mailjetApiKey || !mailjetApiSecret) {
+    console.warn("MAILJET_API_KEY / MAILJET_API_SECRET are not set; outbound emails are disabled.");
+}
+
+const sendEmailSafe = async (emailToSend, context) => {
+    if (!mailjetApiKey || !mailjetApiSecret) {
+        return { ok: false, reason: "MAILJET credentials are not set" };
+    }
+
+    const fromEmail = process.env.MAILJET_FROM_EMAIL || process.env.EMAIL_USERNAME;
+    const fromName = process.env.MAILJET_FROM_NAME || "Space Launches";
+    if (!fromEmail) {
+        return { ok: false, reason: "MAILJET_FROM_EMAIL (or EMAIL_USERNAME) is not set" };
+    }
+
+    const auth = Buffer.from(`${mailjetApiKey}:${mailjetApiSecret}`).toString("base64");
+    const payload = {
+        Messages: [
+            {
+                From: { Email: fromEmail, Name: fromName },
+                To: [{ Email: emailToSend.to }],
+                Subject: emailToSend.subject,
+                TextPart: emailToSend.text || "",
+                HTMLPart: emailToSend.html || ""
+            }
+        ]
+    };
+
+    try {
+        const sendRes = await fetch("https://api.mailjet.com/v3.1/send", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${auth}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!sendRes.ok) {
+            const details = await sendRes.text();
+            console.error(`[Mailjet ${context}] failed (${sendRes.status})`, details);
+            return { ok: false, status: sendRes.status, details };
+        }
+
+        return { ok: true };
+    } catch (error) {
+        const status = error?.code || "unknown";
+        const details = error?.message || error;
+        console.error(`[Mailjet ${context}] failed (${status})`, details);
+        return { ok: false, status, details };
+    }
+};
 
 // register a user. only occurs after client-side and server-side validation.
 router.post('/register', async (request, response) => {
     // parse out info from frontend.
     const {username , password, email} = request.body;
-    
     // hash the password, then register user.
-    bcrypt.hash(password, 10).then( (hash) =>
-    {
+    try {
+        const usernameExists = await Users.findOne({ where: { username } });
+        if (usernameExists) {
+            return response.status(409).json({ usernameErr: "That username is taken!" });
+        }
+        const emailExists = await Users.findOne({ where: { email } });
+        if (emailExists) {
+            return response.status(409).json({ emailErr: "That email is taken!" });
+        }
+
+        const hash = await bcrypt.hash(password, 10);
         const newUser = {
             username: username,
             password: hash,
             email: email
         };
-        Users.create(newUser);
+        const createdUser = await Users.create(newUser);
         // in this case, we want to send an email back saying welcome to space launches.
         console.log("trying to welcome the following user email: ", email)
         const emailToSend= {
@@ -47,14 +108,18 @@ router.post('/register', async (request, response) => {
             // Let's verify your single sender so you can start sending email.
             // < email here> 
             // Your link is active for 48 hours. After that, you will need to resend the verification email.
-
-
         }
-        sgMail.send(emailToSend)
-        response.json(newUser)
-    })
-    
-    
+        const emailResult = await sendEmailSafe(emailToSend, "welcome-email");
+        response.status(201).json({
+            id: createdUser.id,
+            username: createdUser.username,
+            email: createdUser.email,
+            welcomeEmailSent: emailResult.ok === true
+        });
+    } catch (error) {
+        console.error("register failed:", error);
+        response.status(500).json({error: "unable to register user"});
+    }
 })
 // server-side validation.
 router.get('/register', async (request, response) => { 
@@ -150,7 +215,7 @@ router.get('/logout',validateToken, async (request, response) => {
     {
         response.clearCookie("access-token");   
         console.log("succesfully deleted cookie.")
-        response.json(response.user)
+        response.json({msg: "logout successful"})
 
     }
     catch
@@ -188,6 +253,10 @@ router.put("/private/changepassword", validateToken, async (request, response) =
     // get user information using validateToken username.
     console.log("user ID:", request.user)
     const user =await Users.findOne({where: {id: request.user.id}})
+    if(!user)
+    {
+        return response.status(404).json({error: "user not found"});
+    }
 
     // err container, to be filled as errors pop up.
     let err = {};
@@ -225,9 +294,8 @@ router.put("/private/changepassword", validateToken, async (request, response) =
         // if no failures, update newpassword!
         else
         {
-            bcrypt.hash(newPassword, 10).then( async (hash)=> {
-                await Users.update({password: hash} , {where: {id: request.user.id}})
-            })
+            const hash = await bcrypt.hash(newPassword, 10);
+            await Users.update({password: hash} , {where: {id: request.user.id}})
             response.json({msg: "no backend change password errors!"});
         }
     })
@@ -241,6 +309,10 @@ router.put("/private/changeemail", validateToken, async (request, response) => {
     // get user information using validateToken username.
     console.log("user ID:", request.user)
     const user =await Users.findOne({where: {id: request.user.id}})
+    if(!user)
+    {
+        return response.status(404).json({error: "user not found"});
+    }
 
     // err container, to be filled as errors pop up.
     let err = {};
@@ -286,16 +358,16 @@ router.put("/private/changeemail", validateToken, async (request, response) => {
 // update password
 router.get("/private/getEmail", validateToken, async (request, response) => {
     const user =await Users.findOne({where: {id: request.user.id}})
-    console.log(user.dataValues.email)
     if(!user)
     {
         console.log("could not find")
-        response.json({msg: "could not find user."})
+        return response.status(404).json({msg: "could not find user."})
     }
     else
     {
+        console.log(user.dataValues.email)
         console.log("found")
-        response.json({email: user.dataValues.email});
+        return response.json({email: user.dataValues.email});
     }
 })
 
@@ -319,7 +391,8 @@ router.post("/forgotpassword", async (request, response) => {
                 const token = buffer.toString("hex")
                 const expireToken = Date.now() + 3600000;
                 await Users.update({resetToken: token, expireToken: expireToken}, {where: {email:  request.body.email}})
-                const redirectLink =  process.env.DOMAIN   + `reset/${token}` ;
+                const baseDomain = (process.env.DOMAIN || "").trim().replace(/\/+$/, "");
+                const redirectLink =  `${baseDomain}/reset/${token}` ;
                 console.log("redirect to:",redirectLink)
                 const emailToSend= {
                     from: '"Space Launches" <spacelaunches@outlook.com>',
@@ -341,7 +414,11 @@ router.post("/forgotpassword", async (request, response) => {
 
 
                 }
-                sgMail.send(emailToSend)
+                const emailResult = await sendEmailSafe(emailToSend, "forgot-password")
+                if(!emailResult.ok)
+                {
+                    return response.status(502).json({error: "Unable to send reset email at this time."});
+                }
                 response.json("success!");
             }
         }
@@ -349,40 +426,38 @@ router.post("/forgotpassword", async (request, response) => {
 })
 // reset password:
 router.post("/resetpassword", async (request, response) => {
-
-    response.json("success!")
-
-    // get token (from params) and newpassword from front end.
+    // get token and new password from front end.
     const newPassword = request.body.password;
-    const token= request.body.token;
-
-    // find the user that correspodns to the resetToken, as long as expire Token is greater than. 
-    // if not found ,return error. if found,  allow a password update, and expire the link.
+    const token = request.body.token;
+    if(!token || !newPassword)
+    {
+        return response.status(400).json({error: "token and password are required"});
+    }
+    // find the user that corresponds to the resetToken, as long as expireToken is greater than now.
     const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
     if(!user)
     {   
-        response.status(404).json("token has expired")
+        return response.status(404).json("token has expired")
     }
-    else
-    {
-        bcrypt.hash(newPassword, 10).then( async (hash) =>
-        {
-            await Users.update({password: hash}, {where: {resetToken: token}});
-            await Users.update({expireToken: null} , {where: {resetToken: token}})
-            response.json("success!")
-        })
-    }
+
+    const hash = await bcrypt.hash(newPassword, 10);
+    await Users.update({password: hash, expireToken: null, resetToken: null}, {where: {id: user.id}});
+    return response.json("success!")
 })
 router.get("/resetpassword/", async (request, response) => {
-    const token = await request.query[0];
+    const token = request.query.token || request.query[0];
+    if(!token)
+    {
+        return response.status(400).json("token is required");
+    }
     const user = await Users.findOne({where: {resetToken: token, expireToken: {[Op.gt]: Date.now()} }});
     if(!user)
     {
-        response.status(404).json("token has expired")
+        return response.status(404).json("token has expired")
     }
     else
     {
-        response.json("link is valid.");
+        return response.json("link is valid.");
     }
 })
 
@@ -420,7 +495,11 @@ router.post("/forgotusername", async (request, response) => {
                     <h2> ${username} </h2>
                     ` 
                 }
-                sgMail.send(emailToSend)
+                const emailResult = await sendEmailSafe(emailToSend, "forgot-username")
+                if(!emailResult.ok)
+                {
+                    return response.status(502).json({error: "Unable to send username email at this time."});
+                }
                 response.json("success!");
             }
         }
@@ -429,69 +508,66 @@ router.post("/forgotusername", async (request, response) => {
 
 // if user exists and password is correct, log in and return json web token.
 router.post('/googleoauth', async (request, response) => {
-    const {googleToken} = request.body;
-    console.log("google: ", googleToken)
-    const ticket = await client.verifyIdToken({
-        idToken: googleToken,
-        audience: process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID
-    });
-    const { name, email, picture } = ticket.getPayload();  
-    console.log(name, email);
-    console.log(picture);
+    try {
+        const {googleToken} = request.body;
+        if(!googleToken)
+        {
+            return response.status(400).json({error: "googleToken is required"});
+        }
 
-    //check if user is signed up. 
-    const user = await Users.findOne({ where: {email: email} })
+        console.log("google: ", googleToken)
+        const ticket = await client.verifyIdToken({
+            idToken: googleToken,
+            audience: process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID
+        });
+        const { name, email, picture } = ticket.getPayload();  
+        console.log(name, email);
+        console.log(picture);
 
-    // if account exists, login. else, create user. 
-    if(user)
-    {
-        const accessToken = createTokens(user.dataValues);
-        const expirationDate = 60*60*24*90*1000;
-        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
-        response.json({username: user.username, id: user.id})
-    }
-    else 
-    {
+        //check if user is signed up. 
+        const user = await Users.findOne({ where: {email: email} })
+
+        // if account exists, login. else, create user. 
+        if(user)
+        {
+            const accessToken = createTokens(user.dataValues);
+            const expirationDate = 60*60*24*90*1000;
+            response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+            return response.json({username: user.username, id: user.id})
+        }
+
         // loop until i find a random username that is valid.
         let newUsername;
+        let userExists;
         for(let i=0; i<500; i++)
         {
             newUsername = haiku(500)
-            userExists=  await Users.findOne({ where: {username: newUsername} })
+            userExists = await Users.findOne({ where: {username: newUsername} })
             if(!userExists)
             {
                 break
             }
         }
-        // create a random password that is very strong. 
-        crypto.randomBytes(200, async (err, buffer)=> {
-            if(err){
-                console.log(err)
-            }
-            else{
-                //succesfully create random password here:
-                const randomPassword = buffer.toString("hex")
-                // hash the password, then register user and sign in.
-                bcrypt.hash(randomPassword, 10).then( async (hash) =>
-                {
-                    // create user in database.
-                    let newUser = {
-                        username: newUsername,
-                        password: hash,
-                        email: email
-                    };
-                    newUser = await Users.create(newUser);
-                    //signin.
-                    console.log("new user:", newUser)
-                    const accessToken = createTokens(newUser.dataValues);
-                    const expirationDate = 60*60*24*90*1000;
-                    response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
-                    response.json({username: newUser.username, id: newUser.id})
-                })
-            }   
 
-        })
-       
+        // create a random password that is very strong.
+        const randomPassword = crypto.randomBytes(200).toString("hex")
+        const hash = await bcrypt.hash(randomPassword, 10)
+        // create user in database.
+        let newUser = {
+            username: newUsername,
+            password: hash,
+            email: email
+        };
+        newUser = await Users.create(newUser);
+        //signin.
+        console.log("new user:", newUser)
+        const accessToken = createTokens(newUser.dataValues);
+        const expirationDate = 60*60*24*90*1000;
+        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+        return response.json({username: newUser.username, id: newUser.id})
+    } catch (error) {
+        console.error("google oauth failed:", error?.message || error);
+        return response.status(401).json({error: "google authentication failed"});
     }
 })
 

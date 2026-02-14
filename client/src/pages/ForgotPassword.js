@@ -116,10 +116,10 @@ const ForgotPassword = () => {
     return (
         <div className={ForgotPasswordCSS.pageContainer}>
             <div className={ForgotPasswordCSS.rocketWallpaperOuterContainer}>
-                <img className={ForgotPasswordCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
+                <img className={ForgotPasswordCSS.rocketWallpaperStyle} src= {rocketWallpaper} alt="" />    
             </div>
             <div className={ForgotPasswordCSS.loginContentContainer}>
-                <button className={ForgotPasswordCSS.XButtonClass} onClick={() => handlePageOff()} type = "button"> <MdClose size="30px"/></button>
+                <button className={ForgotPasswordCSS.XButtonClass} onClick={() => handlePageOff()} type = "button"> <MdClose size="30px" /></button>
                 <div className= {ForgotPasswordCSS.loginWritingContainer}>
                     <div className={ForgotPasswordCSS.textStyle}> Reset your Password </div>
                     <form className= {ForgotPasswordCSS.formClass}>

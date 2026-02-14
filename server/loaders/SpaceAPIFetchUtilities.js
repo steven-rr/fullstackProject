@@ -46,7 +46,7 @@ const parseLaunchData = async(data_in, fetchFuture) => {
     try{ imgURL                =  await data_in.image;                             } catch {imgURL =null}
     try{ vidURL                =  await data_in.vidURLs[0].url;                    } catch {vidURL =null}
     try{ launchDate            =  await new Date(data_in.net);                     } catch {launchDate =null}
-    try{ launchSeconds         =  launchDate.getTime()/1000                      } catch {launchSeconds =null}
+    try{ launchSeconds         =  Math.floor(launchDate.getTime()/1000)          } catch {launchSeconds =null}
     try{ padName               =  await data_in.pad.name;                          } catch {padName =null}
     try{ locationName          =  await data_in.pad.location.name;                 } catch {locationName =null}
     try{ countryCode           =  await data_in.pad.location.country_code;         } catch {countryCode =null}
@@ -92,7 +92,7 @@ const createNewPost = async( newLaunch) => {
     // if no post is found, create a new post for the launch!
     if(!foundPost) 
     {
-        let currTime_secs = (new Date()).getTime() / 1000
+        let currTime_secs = Math.floor((new Date()).getTime() / 1000)
         const newPost = {
             title: "Discussion thread -- " + newLaunch.title,
             contentText: newLaunch.mission_description + " -- To Launch: " + newLaunch.launchDate,

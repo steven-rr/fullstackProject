@@ -19,24 +19,23 @@ import Page404 from "./pages/Page404"
 import Navbar from "./components/Navbar"
 import React, {useState, useEffect, useRef, createContext} from 'react'
 import axios from   "axios" 
-import {BrowserRouter as Router, Switch, Route, useHistory, useLocation} from 'react-router-dom'
+import {Switch, Route, useLocation} from 'react-router-dom'
 
 export const AuthContext = createContext()
 
 function App() {
   // reset any relevant state when clicking a link in nav bar.
-  const [value, setValue]=  useState(0);
   const location = useLocation();
-  const submitHandler = e =>
+  const submitHandler = () =>
   {
-    setValue(currentValue=> currentValue+1);
+    return;
   }
   const loginRef = useRef();
 
   // keep track of auth state in the app.
   const [authState, setAuthState] = useState({username: "", UserId: "", authStatus: false, loginOn: false, signUp: false, forgotPass: false, forgotUser: false, flag1: true, changeEmail: false, changePassword: false});
   const handleLoginClick = (e) => {
-    if(e.target == loginRef.current)
+    if(e.target === loginRef.current)
     {
       setAuthState( currentAuthState=> {
         return { ...currentAuthState, loginOn: false}
@@ -47,23 +46,19 @@ function App() {
     
   }
   // check if the token is valid, if so, true. else. false.
-  useEffect( async () => {
-      await axios
-              .get("/api/users/validate")
-              .then( (response) =>{
-                  console.log("user is logged in.  authenticated");
-                  setAuthState( currentAuthState =>{ 
-                    return {...currentAuthState, username: response.data.username, UserId: response.data.id, authStatus: true}
-                  });
-                  console.log(response);
-              })
-              .catch( (err) => {
-                console.log("user is not authenticated.")
-                setAuthState( currentAuthState =>{ 
-                  return {...currentAuthState, username: "", UserId: "", authStatus: false}
-                });
-              })
-      console.log("AUTHSTATE:" ,authState);
+  useEffect(() => {
+      axios
+        .get("/api/users/validate")
+        .then((response) => {
+          setAuthState((currentAuthState) => {
+            return {...currentAuthState, username: response.data.username, UserId: response.data.id, authStatus: true}
+          });
+        })
+        .catch(() => {
+          setAuthState((currentAuthState) => {
+            return {...currentAuthState, username: "", UserId: "", authStatus: false}
+          });
+        });
   }, [])
 
   // check if location changes, if so, remove all modals

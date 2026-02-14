@@ -6,11 +6,9 @@ import {AuthContext} from "../App"
 import {GoogleLogin} from "react-google-login"
 import rocketWallpaper from '../rocketWallpaper.png'
 import { MdClose,MdOutlineClose } from "react-icons/md";
-import { set } from 'express/lib/application'
-
-require('dotenv').config()
 
 const Login = () => {
+    const googleClientId = process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID;
     // grabbing setAuthState.
     const {authState, setAuthState} = useContext(AuthContext)
 
@@ -55,7 +53,7 @@ const Login = () => {
     const handleBlur = async () => {
         // only set these displayerrors on blur!
         displayErrors.usernameErr = internalErrors.usernameErr;
-        displayErrors.emailErr = internalErrors.emailErr;
+        displayErrors.passwordErr = internalErrors.passwordErr;
     
         // rerender the errors.
         rerender();
@@ -104,7 +102,7 @@ const Login = () => {
         // determine if there are errors in any channels.
         invalidFlags.submitUsernameInvalid = (internalErrors.usernameErr === "") ? false: true;
         invalidFlags.submitPWInvalid = (internalErrors.passwordErr === "") ? false: true;
-        invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid || invalidFlags.submitEmailInvalid)
+        invalidFlags.submitInvalid = (invalidFlags.submitUsernameInvalid || invalidFlags.submitPWInvalid)
         
         // rerender any errors.
         rerender();
@@ -142,15 +140,16 @@ const Login = () => {
                                 .catch( (err) => {
                                     console.log("failed login.");
                                     console.log("error: ", err);
+                                    const errorData = err?.response?.data || {};
 
                                     
-                                    if(err.response.data.usernameErr)
+                                    if(errorData.usernameErr)
                                     {   
-                                        internalErrors.usernameErr = err.response.data.usernameErr
+                                        internalErrors.usernameErr = errorData.usernameErr
                                     }
-                                    if(err.response.data.passwordErr)
+                                    if(errorData.passwordErr)
                                     {
-                                        internalErrors.passwordErr = err.response.data.passwordErr
+                                        internalErrors.passwordErr = errorData.passwordErr
                                     }
                                
                                     displayErrors.usernameErr = internalErrors.usernameErr;
@@ -241,19 +240,21 @@ const Login = () => {
     return (
         <div className={LoginCSS.loginContainer}>
             <div className={LoginCSS.rocketWallpaperOuterContainer}>
-                <img className={LoginCSS.rocketWallpaperStyle} src= {rocketWallpaper}/>    
+                <img className={LoginCSS.rocketWallpaperStyle} src= {rocketWallpaper} alt="" />    
             </div>
             <div className={LoginCSS.loginContentContainer}>
-                <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> <MdClose size="30px"/></button>
+                <button className={LoginCSS.XButtonClass} onClick={() => handleLoginOff()} type = "button"> <MdClose size="30px" /></button>
                 <div className= {LoginCSS.loginWritingContainer}>
                     <div className={LoginCSS.textStyle}> Login</div>
-                    <GoogleLogin 
-                                clientId={process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID}
-                                buttonText="Log in with Google"
-                                onSuccess={handleGoogleLoginSuccess}
-                                onFailure={handleGoogleLoginFailure}
-                                cookiePolicy={'single_host_origin'}
-                            />
+                    {googleClientId ? (
+                        <GoogleLogin 
+                            clientId={googleClientId}
+                            buttonText="Log in with Google"
+                            onSuccess={handleGoogleLoginSuccess}
+                            onFailure={handleGoogleLoginFailure}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                    ) : null}
                     <div className={LoginCSS.orClass}>OR </div>
                     <form className= {LoginCSS.formClass}>
                         <div className={LoginCSS.inputsClass}>
@@ -298,7 +299,6 @@ const Login = () => {
                                 {/* <Link to ="/resetUsername" className={LoginCSS.anchorForgotInfoClass}> username?</Link> */}
                             </div>
                             <div> no account?  <div className={LoginCSS.anchorForgotInfoClass} onClick={() => handleSignUp()}> sign up</div></div>
-                            {console.log("google oath: ",process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)}
                             
                         </div>
                     </form>
