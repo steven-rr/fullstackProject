@@ -57,26 +57,18 @@ router.post("/like", validateToken, async(request, response) => {
             await LaunchesUpcoming.increment('likeCounter', { where: {postId:PostId}}); 
         }
 
-        // if a dislike exists , destroy it and increment counter back up on both tables. 
+        // if a dislike exists , destroy it and increment counter back up on both tables.
         if(dislikeExists)
         {
             await Dislikes.destroy({where:  {UserId: UserId, PostId: PostId}})
             await Posts.increment('likeCounter', { where: {id:PostId}});
             if(launchPrev)
             {
-                // if dislike exist, we destroyed it so increment the likeCounter. 
-                if(dislikeExists)
-                {
-                    await LaunchesPrevious.increment('likeCounter', { where: {postId:PostId}});
-                }
+                await LaunchesPrevious.increment('likeCounter', { where: {postId:PostId}});
             }
             else
             {
-                // if dislike exist, we destroyed it so increment the likeCounter. 
-                if(dislikeExists)
-                {
-                    await LaunchesPrevious.increment('likeCounter', { where: {postId:PostId}});
-                }
+                await LaunchesUpcoming.increment('likeCounter', { where: {postId:PostId}});
             }
         }
 

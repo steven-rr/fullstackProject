@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express= require('express');
 const router = express.Router();
 const {Posts, Likes, Dislikes}= require('../models');
@@ -212,15 +211,18 @@ router.post("/", validateToken, async(request, response) => {
 
 // edit post content text:
 router.post("/editContentText", validateToken, async(request, response) => {
-    // parse out info from body:
     const {contentText, PostId}  = request.body;
 
-    // find post:
-    const postData = await Posts.update({contentText: contentText}, {where: {id: PostId}})
-    
-    console.log("edit post content text:" , postData)
-    response.json(postData)
+    const post = await Posts.findByPk(PostId);
+    if(!post) {
+        return response.status(404).json({msg: "post not found"});
+    }
+    if(request.user.id !== post.UserId) {
+        return response.status(403).json({msg: "forbidden: you are not the author of this post."});
+    }
 
+    const postData = await Posts.update({contentText: contentText}, {where: {id: PostId}})
+    response.json(postData)
 })
 
 
@@ -275,8 +277,9 @@ router.delete("/:id", validateToken, async(request,response) => {
 
     // find post:
     const individualPostData = await Posts.findByPk(postId)
-    console.log(request.user.id);
-    console.log(individualPostData);
+    if(!individualPostData) {
+        return response.status(404).json({msg: "post not found"});
+    }
     // if user ID is the same as userID for post, proceed. else, return forbidden.
     if(request.user.id === individualPostData.UserId)
     {
