@@ -159,20 +159,20 @@ const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =
     }
 }
 
-// delete outdated launches, and prepare for insertion. 
-const deleteOutdatedLaunches = (matchedID, Launches) => {
+// delete outdated launches, and prepare for insertion.
+const deleteOutdatedLaunches = async (matchedID, Launches) => {
     // if no match, replace all elements.
     if(matchedID == null)
     {
-        Launches.destroy({
+        await Launches.destroy({
             where: {},
             truncate: true
         })
-    } 
-    // if match, delete all elements before. 
+    }
+    // if match, delete all elements before.
     else
     {
-        Launches.destroy({
+        await Launches.destroy({
             where: { id: {[Op.lt]: matchedID} },
         })
     }

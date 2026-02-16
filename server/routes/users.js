@@ -10,7 +10,7 @@ const {Op} = require("sequelize")
 const {createTokens, validateToken}=require("../middleware/JWT.js")
 const { OAuth2Client } = require('google-auth-library') 
 const fetch = require("node-fetch");
-const client = new OAuth2Client(process.env.CLIENT_ID)
+const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_OATH_CLIENT_ID)
 
 const mailjetApiKey = process.env.MAILJET_API_KEY;
 const mailjetApiSecret = process.env.MAILJET_API_SECRET;
@@ -195,7 +195,7 @@ router.post('/login', async (request, response) => {
 
                 const accessToken = createTokens(user.dataValues);
                 const expirationDate = 60*60*24*90*1000;
-                response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+                response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' }) // storing payload into cookie.
                 response.json({username: user.username, id: user.id})
             }
         })
@@ -532,7 +532,7 @@ router.post('/googleoauth', async (request, response) => {
         {
             const accessToken = createTokens(user.dataValues);
             const expirationDate = 60*60*24*90*1000;
-            response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+            response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' }) // storing payload into cookie.
             return response.json({username: user.username, id: user.id})
         }
 
@@ -563,7 +563,7 @@ router.post('/googleoauth', async (request, response) => {
         console.log("new user:", newUser)
         const accessToken = createTokens(newUser.dataValues);
         const expirationDate = 60*60*24*90*1000;
-        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true }) // storing payload into cookie.
+        response.cookie("access-token", accessToken, {maxAge: expirationDate, httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' }) // storing payload into cookie.
         return response.json({username: newUser.username, id: newUser.id})
     } catch (error) {
         console.error("google oauth failed:", error?.message || error);

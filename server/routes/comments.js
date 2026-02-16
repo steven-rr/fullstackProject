@@ -194,7 +194,9 @@ router.delete("/:commentId", validateToken, async(request,response) => {
     const commentId =request.params.commentId;
     // find comment:
     const individualCommentData = await Comments.findByPk(commentId)
-    console.log("im in delete and here's the data: ", individualCommentData)
+    if(!individualCommentData) {
+        return response.status(404).json({msg: "comment not found"});
+    }
     // if user ID is the same as userID for comment, proceed. else, return forbidden.
     if(request.user.id === individualCommentData.UserId)
     {
@@ -243,33 +245,36 @@ router.post("/reply",validateToken, async(request, response) => {
     response.json(newReplyCreated)
 })
 
-// append a newreply from front end to backend sql server.
+// mark a comment as soft-deleted.
 router.post("/hasBeenDeleted/:commentId",validateToken, async(request, response) => {
 
-    const commentId = request.params.commentId; // set commentId.
-
-    console.log("marking following comment as deleted: ", commentId);
-        
-
+    const commentId = request.params.commentId;
+    const comment = await Comments.findByPk(commentId);
+    if(!comment) {
+        return response.status(404).json({msg: "comment not found"});
+    }
+    if(request.user.id !== comment.UserId) {
+        return response.status(403).json({msg: "forbidden: you are not the author of this comment."});
+    }
 
     const commentUpdated = await Comments.update({hasBeenDeleted: true } , {where: {id: commentId }})
-    console.log("comment updated:" , commentUpdated)
-
-
     response.json(commentUpdated)
 })
 
-// edit post content text:
+// edit comment content text:
 router.post("/editContentText", validateToken, async(request, response) => {
-    // parse out info from body:
     const {contentText, id}  = request.body;
 
-    // find post:
-    const commentData = await Comments.update({contentText: contentText}, {where: {id: id}})
-    
-    console.log("edit comment content text:" , commentData)
-    response.json(commentData)
+    const comment = await Comments.findByPk(id);
+    if(!comment) {
+        return response.status(404).json({msg: "comment not found"});
+    }
+    if(request.user.id !== comment.UserId) {
+        return response.status(403).json({msg: "forbidden: you are not the author of this comment."});
+    }
 
+    const commentData = await Comments.update({contentText: contentText}, {where: {id: id}})
+    response.json(commentData)
 })
 
 

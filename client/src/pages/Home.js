@@ -32,11 +32,12 @@ const Home = () => {
 
     // }
     //on render, get launch data from backend and display for the user.
-    useEffect( async () => {
+    useEffect(() => {
+        const fetchLaunches = async () => {
                 await axios
                         .get("/api/launches/previous")
                         .then(  (response) =>{
-                            
+
                             setLaunchData( (prevState) => {
 
                                 let stateSorted = [...prevState, ...response.data]
@@ -51,21 +52,21 @@ const Home = () => {
                                     else if(deltaTimeA < deltaTimeB)
                                     {
                                         return -1;
-                                    } 
+                                    }
                                     else
-                                    {   
+                                    {
                                         return 0;
                                     }
                                 })
                                 return stateSorted
                             })
-                            
+
 
                         })
                         .catch( (err) => {
                             console.log("ERROR in Home.js: ", err)
                         })
-                await axios 
+                await axios
                         .get("/api/launches/upcoming")
                         .then(  (response) =>{
 
@@ -83,33 +84,35 @@ const Home = () => {
                                     else if(deltaTimeA < deltaTimeB)
                                     {
                                         return -1;
-                                    } 
+                                    }
                                     else
-                                    {   
+                                    {
                                         return 0;
                                     }
                                 })
                                 return stateSorted
-                            })                            
-                            
-                            
+                            })
+
+
                         })
                         .catch( (err) => {
                             console.log("ERROR in Home.js: ", err)
-                        }) 
-                
+                        })
+
                 console.log("launchDataGeneral!: " ,launchData)
                 console.log("ran first useeffect.")
-                
+        };
+        fetchLaunches();
     }, []);
-    useEffect( async () => {
+    useEffect(() => {
+        const fetchCountries = async () => {
                 await axios
                         .get("/api/launches/uniqueCountries")
                         .then( (response) => {
                             let countryCodeArray = [];
                             let countryNameArray = [];
-                            for (var i = 0; i < response.data.length; i++) 
-                            {   
+                            for (var i = 0; i < response.data.length; i++)
+                            {
                                 countryNameArray.push(response.data[i].countryName)
                                 countryCodeArray.push(response.data[i].countryCode)
                             }
@@ -125,6 +128,8 @@ const Home = () => {
                         .catch( (err) => {
                             console.log("error in unique countries: ", err)
                         })
+        };
+        fetchCountries();
     }, [])
     useEffect ( () => {
                 let time = setInterval( () => {
