@@ -29,7 +29,7 @@ const setAppropriateVars= (fetchFuture) => {
 // fetch data from space api and store into SQL database.
 const SpaceAPIFetchHandler = async (fetchFuture) =>{   
     // make sure i fetch before hitting the limit.
-    if( APICountersThrottle() )
+    if( await APICountersThrottle() )
     {   
         // declare variables.
         var LaunchesTable;
@@ -55,7 +55,7 @@ const SpaceAPIFetchHandler = async (fetchFuture) =>{
                             }
 
                             // get oldest API launch id :
-                            oldest_Launch_ID = data.results[0].id
+                            const oldest_Launch_ID = data.results[0].id
 
                             // get SQL ID of element with oldest API launch ID.
                             let matched_SQL_ID =  await SpaceAPIUtils.findIDmatch(oldest_Launch_ID, LaunchesTable);

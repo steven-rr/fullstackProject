@@ -13,7 +13,8 @@ const APICountersThrottle = async () =>
     const APIcounter = await APICounters.findOne({ where: {id: '1'} })
   
     // check if API counter is less than threshold and return as bool.
-    return ( await (APIcounter.dataValues.counter < process.env.SPACE_API_THROTTLE_THRESHOLD) )
+    const threshold = process.env.SPACE_API_THROTTLE_THRESHOLD || 100;
+    return ( APIcounter.dataValues.counter < threshold )
 }
 
 module.exports = APICountersThrottle;

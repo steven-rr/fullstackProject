@@ -3,8 +3,9 @@ require('dotenv').config();
  
 const createTokens= (user)=> {
     const accessToken = sign(
-        {username: user.username, id: user.id}, 
-        process.env.JSON_WEB_TOKEN_SECRET_KEY
+        {username: user.username, id: user.id},
+        process.env.JSON_WEB_TOKEN_SECRET_KEY,
+        { expiresIn: '90d' }
         );
     return accessToken;
 }

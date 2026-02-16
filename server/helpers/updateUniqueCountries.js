@@ -71,7 +71,7 @@ const deriveSeenAlready = async() => {
     // now loop through all launches. 
     const launchDataPrevious = await LaunchesPrevious.findAll()
     const launchDataUpcoming = await LaunchesUpcoming.findAll()
-    seenAlready = ["Global", "USA", "CHN", "RUS"]
+    const seenAlready = ["Global", "USA", "CHN", "RUS"]
 
     launchDataPrevious.forEach( async (launchDatum) => {
         
@@ -99,13 +99,13 @@ const deriveSeenAlready = async() => {
 }
 const updateUniqueCountries = async () => {
 
-    UniqueCountries.destroy({
+    await UniqueCountries.destroy({
         where: {},
         truncate: true})
 
     const seenAlready = await deriveSeenAlready()
     seenAlready.push("UNK")
-    forloopToFinish(seenAlready)
+    await forloopToFinish(seenAlready)
     
         
 

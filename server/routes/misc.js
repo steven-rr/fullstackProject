@@ -19,21 +19,19 @@ router.post('/', (request, response) =>
 
 router.get('/getPreviousLaunches', async (request, response) => {
 
-    const api_url = `https://ll.thespacedevs.com/2.2.0/launch/previous`
+    const api_url = `https://lldev.thespacedevs.com/2.2.0/launch/previous`
     const fetch_response = await fetch(api_url)
     const json = await fetch_response.json()
     response.json(json)
-    console.log(json)
 
 })
 
 router.get('/getUpcomingLaunches', async (request, response) => {
 
-    const api_url = `https://ll.thespacedevs.com/2.2.0/launch/upcoming`
+    const api_url = `https://lldev.thespacedevs.com/2.2.0/launch/upcoming`
     const fetch_response = await fetch(api_url)
     const json = await fetch_response.json()
     response.json(json)
-    console.log(json)
 
 })
 
