@@ -1,19 +1,15 @@
 const {Op} = require("sequelize")
-const {APICounters}= require('../models');
-const {Posts, UniqueCountries}= require('../models');
+const {Posts}= require('../models');
 const fetch = require("node-fetch")
-const APICountersCheck = require("./SpaceAPICountersHelpers/APICountersCheck.js")
 const APICountersIncrement = require("./SpaceAPICountersHelpers/APICountersIncrement.js")
 const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js");
 
 
-// This is called after the Individual API call is made. The purpose of this is to parse out launch data from the api call and return a newLaunch object. 
+// This is called after the Individual API call is made. The purpose of this is to parse out launch data from the api call and return a newLaunch object.
 // "data_in" has the response from the api call.
 const parseLaunchData = async(data_in, fetchFuture) => {
 
-   
-
-    // this is definitely a new launch, proceed.. 
+    // this is definitely a new launch, proceed..
     let launch_id;
     let title;
     let vehicle_description;
@@ -22,13 +18,13 @@ const parseLaunchData = async(data_in, fetchFuture) => {
     let imgURL;
     let vidURL;
     let launchDate;
-    let launchSeconds; 
+    let launchSeconds;
     let padName;
-    let locationName; 
+    let locationName;
     let countryCode;
-    let futureFlag; 
+    let futureFlag;
     let futureFlagToInsert;
-    
+
     if(fetchFuture)
     {
         futureFlagToInsert = "Y"
@@ -52,7 +48,7 @@ const parseLaunchData = async(data_in, fetchFuture) => {
     try{ countryCode           =  await data_in.pad.location.country_code;         } catch {countryCode =null}
     try{ futureFlag            =  futureFlagToInsert                               } catch {futureFlag =null}
 
-    let newLaunch = {   
+    let newLaunch = {
         launch_id: launch_id,
         title: title,
         vehicle_description: vehicle_description,
@@ -67,18 +63,16 @@ const parseLaunchData = async(data_in, fetchFuture) => {
         countryCode: countryCode,
         futureFlag: futureFlag
     };
-    
-    // find if a post with the launch Id already exists. 
+
+    // find if a post with the launch Id already exists.
     const foundPost = await Posts.findOne({
         where: {launchId: newLaunch.launch_id}
-    })  
+    })
     // if it does, add the post ID.
     if(foundPost)
     {
         newLaunch.postId = foundPost.id;
     }
-
-    
 
     return newLaunch;
 }
@@ -87,10 +81,8 @@ const createNewPost = async( newLaunch) => {
     const foundPost = await Posts.findOne({
         where: {launchId: newLaunch.launch_id}
     })
-    console.log("... CREATE.... NEW........POST.....:", newLaunch)
-    console.log( " " );
     // if no post is found, create a new post for the launch!
-    if(!foundPost) 
+    if(!foundPost)
     {
         let currTime_secs = Math.floor((new Date()).getTime() / 1000)
         const newPost = {
@@ -101,122 +93,105 @@ const createNewPost = async( newLaunch) => {
             timePosted_seconds: currTime_secs
         };
         const newPostCreated= await Posts.create(newPost);
-        console.log("... NEW.... POST........CREATED.....:", newPostCreated)
-
         newLaunch.postId = newPostCreated.id;
-        console.log("... NEW.... LAUNCH........MODIFIED.....:", newLaunch)
     }
     return newLaunch
-
 }
 
-// insert launches from external SPACE api.
-const insertNewLaunches = async (data_results,start_idx, fetchFuture,Launches) =>{
-    // insert launches 1 by 1 within this loop.     
-    for(let i = start_idx; i < 10; i++)
-    {
-        // make sure i dont exceed API call limit.
-        if( await APICountersThrottle() )
-        {
-            let api_url;
-            if(fetchFuture)
-            {
-                api_url = `https://lldev.thespacedevs.com/2.2.0/launch/upcoming/${data_results[i].id}`
-            }
-            else
-            {
-                api_url = `https://lldev.thespacedevs.com/2.2.0/launch/previous/${data_results[i].id}`
-            } 
-            console.log("requesting this id: ", data_results[i].id)
-            let fetch_response = await fetch(api_url)
-            
-            // parse out fetch_response. add data to table. 
-            await fetch_response
-                        .json()
-                        .then( async (data) => {
-                            console.log("INSERTTTTT... NEW.... LAUNCHES........")
-                            
-                            // find if launch already exists with given launch Id. if it does, don't proceed.
-                            const foundLaunch = await Launches.findOne({
-                                where: {launch_id: data.id}
-                            })
-                            // if launch not found, this is definitely a new launch. proceed. 
-                            if (!foundLaunch)
-                            {
-                                let newLaunch = await parseLaunchData(data, fetchFuture);
-                                newLaunch = await createNewPost(newLaunch);
-                                await Launches.create(newLaunch);
-                            }
-                            
-                            
-                            
-                            
-                        })
+// fetch detail data for launches and upsert into DB.
+// skips launches that already exist — saves API calls for next cycle.
+// returns count of launches now present in the DB from this batch.
+const fetchAndUpsertLaunches = async (data_results, fetchFuture, Launches) => {
+    let upsertCount = 0;
 
-            // increment API counter.
+    for (let i = 0; i < data_results.length; i++)
+    {
+        const launchIdFromList = data_results[i].id;
+
+        // check if this launch already exists in DB
+        const existingLaunch = await Launches.findOne({
+            where: { launch_id: launchIdFromList }
+        });
+
+        // if it already exists, skip the individual API call
+        if (existingLaunch) {
+            console.log("Launch " + launchIdFromList + " already exists, skipping API call.");
+            upsertCount++;
+            continue;
+        }
+
+        // check throttle before each API call
+        if (!(await APICountersThrottle())) {
+            console.log("Rate limit reached, stopping fetch. Got " + upsertCount + " launches so far.");
+            break;
+        }
+
+        // this is a new launch — fetch individual detail
+        let api_url;
+        if (fetchFuture) {
+            api_url = `https://lldev.thespacedevs.com/2.2.0/launch/upcoming/${launchIdFromList}`;
+        } else {
+            api_url = `https://lldev.thespacedevs.com/2.2.0/launch/previous/${launchIdFromList}`;
+        }
+
+        console.log("Fetching detail for new launch: ", launchIdFromList);
+
+        try {
+            const fetch_response = await fetch(api_url);
             await APICountersIncrement();
+
+            const data = await fetch_response.json();
+
+            let newLaunch = await parseLaunchData(data, fetchFuture);
+            newLaunch = await createNewPost(newLaunch);
+            await Launches.create(newLaunch);
+
+            upsertCount++;
+            console.log("Inserted launch: " + launchIdFromList);
+        } catch (err) {
+            console.log("Error fetching/inserting launch " + launchIdFromList + ":", err);
+            // continue to next launch rather than failing entirely
         }
     }
+
+    return upsertCount;
 }
 
-// delete outdated launches, and prepare for insertion.
-const deleteOutdatedLaunches = async (matchedID, Launches) => {
-    // if no match, replace all elements.
-    if(matchedID == null)
-    {
-        await Launches.destroy({
-            where: {},
-            truncate: true
-        })
+// prune excess launches down to a maximum count, keeping the most recent.
+// called AFTER all upserts are done.
+const pruneExcessLaunches = async (maxCount, fetchFuture, Launches) => {
+    const totalCount = await Launches.count();
+    if (totalCount <= maxCount) {
+        return;
     }
-    // if match, delete all elements before.
-    else
-    {
-        await Launches.destroy({
-            where: { id: {[Op.lt]: matchedID} },
-        })
-    }
-}   
 
-// find SQL ID of the oldest launch id element
-const findIDmatch = async (oldestID, Launches) =>{
-    const insertionPoint = await Launches.findOne({ where: {launch_id: oldestID} })
-                                .then( data => {
+    // for previous launches, keep highest launchSeconds (most recent past).
+    // for upcoming launches, keep lowest launchSeconds (soonest upcoming).
+    const order = fetchFuture ? [['launchSeconds', 'ASC']] : [['launchSeconds', 'DESC']];
 
-                                    // return id of matching element.
-                                    return data.dataValues.id;
-                                })
-                                .catch( (err) =>  null )
-    return insertionPoint;
-}
-// return max ID.
-const findMaxID = async (Launches) =>{
-    const maxIdx = await Launches
-                            .findOne( {order: [['id','DESC']]} )
-                            .then( data => data.dataValues.id)
-                            .catch( (err) => null)
-    return maxIdx;
-}
-// find start index.
-const findStartIDX =  (matchedID, max_idx) =>  {
-    let start_idx;
-    if(max_idx == null || matchedID ==null)
-    {
-        start_idx = 0;
-    }
-    else
-    {
-        start_idx = max_idx - matchedID + 1;
-    }
-    return start_idx;
+    // find the IDs of launches to keep
+    const launchesToKeep = await Launches.findAll({
+        attributes: ['id'],
+        order: order,
+        limit: maxCount
+    });
+    const idsToKeep = launchesToKeep.map(l => l.id);
+
+    // delete everything NOT in the keep list
+    const deleted = await Launches.destroy({
+        where: {
+            id: { [Op.notIn]: idsToKeep }
+        }
+    });
+    console.log("Pruned " + deleted + " excess launches from " + (fetchFuture ? "upcoming" : "previous") + " table.");
 }
 
-// get previous launches, and sort ascending. 
+// get previous launches, and sort ascending.
 const sortAscending = (data_json_results)=> {
     let data_json_results_new = []
     for(let i =0 ; i<10; i++)
     {
-        let idx = 9-i; 
+        let idx = 9-i;
         data_json_results_new[i] = data_json_results[idx];
     }
     return data_json_results_new
@@ -225,10 +200,7 @@ const sortAscending = (data_json_results)=> {
 
 module.exports = {
     parseLaunchData: parseLaunchData,
-    insertNewLaunches: insertNewLaunches,
-    deleteOutdatedLaunches: deleteOutdatedLaunches,
-    findIDmatch:findIDmatch,
-    findMaxID: findMaxID,
-    findStartIDX:findStartIDX,
+    fetchAndUpsertLaunches: fetchAndUpsertLaunches,
+    pruneExcessLaunches: pruneExcessLaunches,
     sortAscending: sortAscending
 }

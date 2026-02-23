@@ -1,15 +1,12 @@
 const {LaunchesPrevious} = require('../models')
 const {LaunchesUpcoming} = require('../models')
-const {Op} = require("sequelize")
-const {APICounters}= require('../models');
 const fetch = require("node-fetch")
 const SpaceAPIUtils = require("./SpaceAPIFetchUtilities")
 
-const APICountersCheck = require("./SpaceAPICountersHelpers/APICountersCheck.js")
 const APICountersIncrement = require("./SpaceAPICountersHelpers/APICountersIncrement.js")
 const APICountersThrottle = require("./SpaceAPICountersHelpers/APICountersThrottle.js")
 
-const setAppropriateVars= (fetchFuture) => {
+const setAppropriateVars = (fetchFuture) => {
     let LaunchesTable;
     let api_url;
 
@@ -26,61 +23,51 @@ const setAppropriateVars= (fetchFuture) => {
     }
     return {LaunchesTable, api_url}
 }
-// fetch data from space api and store into SQL database.
-const SpaceAPIFetchHandler = async (fetchFuture) =>{   
-    // make sure i fetch before hitting the limit.
-    if( await APICountersThrottle() )
-    {   
-        // declare variables.
-        var LaunchesTable;
-        let api_url;
-        
-        // use appropriate variables.
-        ({LaunchesTable, api_url} = setAppropriateVars(fetchFuture));
-        
-        const fetch_response = await fetch(api_url)
 
-        // increment API counter.
+// fetch data from space api and store into SQL database.
+// uses "fetch first, swap later" — never deletes data until replacements are confirmed.
+const SpaceAPIFetchHandler = async (fetchFuture) => {
+    // make sure we haven't hit the API limit.
+    if (!(await APICountersThrottle())) {
+        return;
+    }
+
+    let LaunchesTable, api_url;
+    ({LaunchesTable, api_url} = setAppropriateVars(fetchFuture));
+
+    try {
+        const fetch_response = await fetch(api_url);
         await APICountersIncrement();
 
+        const data = await fetch_response.json();
 
-        // fetch response. parse out id's.
-        const json = await fetch_response
-                        .json()
-                        .then( async (data) => {
-                            // always sort ascending. 
-                            if(!fetchFuture)
-                            {
-                                data.results = SpaceAPIUtils.sortAscending(data.results);
-                            }
+        // sort ascending for previous launches (most recent last).
+        let results = data.results;
+        if (!fetchFuture) {
+            results = SpaceAPIUtils.sortAscending(results);
+        }
 
-                            // get oldest API launch id :
-                            const oldest_Launch_ID = data.results[0].id
+        // fetch detail and upsert for each launch that's new.
+        // launches already in the DB are skipped (no API call wasted).
+        const upsertCount = await SpaceAPIUtils.fetchAndUpsertLaunches(
+            results, fetchFuture, LaunchesTable
+        );
 
-                            // get SQL ID of element with oldest API launch ID.
-                            let matched_SQL_ID =  await SpaceAPIUtils.findIDmatch(oldest_Launch_ID, LaunchesTable);
-                            
-                            // delete outdated launches 
-                            await SpaceAPIUtils.deleteOutdatedLaunches(matched_SQL_ID, LaunchesTable)
-                            
-                            //  find max id of table.
-                            let max_SQL_ID = await SpaceAPIUtils.findMaxID(LaunchesTable);
-                            
-                            // get start idx by finding 
-                            let start_SQL_ID = SpaceAPIUtils.findStartIDX(matched_SQL_ID, max_SQL_ID);
-                            
-                            // insert new launches.
-                            await SpaceAPIUtils.insertNewLaunches(data.results, start_SQL_ID, fetchFuture, LaunchesTable)
+        console.log("Upserted " + upsertCount + " launches (fetchFuture=" + fetchFuture + ")");
 
-                        })
-                        .catch( (err) => console.log("Error: ", err) )
+        // only prune if we have more than 10 launches in the table.
+        await SpaceAPIUtils.pruneExcessLaunches(10, fetchFuture, LaunchesTable);
+
+    } catch (err) {
+        console.log("Error in SpaceAPIFetchHandler:", err);
+        // API failure — existing data stays untouched.
     }
 }
 
-const SpaceAPIFetch = async () =>{  
+const SpaceAPIFetch = async () => {
     let fetchFuture = false;
     await SpaceAPIFetchHandler(fetchFuture);
     fetchFuture = true;
     await SpaceAPIFetchHandler(fetchFuture);
-} 
+}
 module.exports = SpaceAPIFetch;
