@@ -363,10 +363,7 @@ const Home = () => {
                     </div>
                 )}
 
-                <div className={HomeCSS.heroButtons}>
-                    <Link to="/" className={HomeCSS.heroButtonOutline}>Explore Launches</Link>
-                    <Link to="/blog" className={HomeCSS.heroButtonOutline}>Join Discussion</Link>
-                </div>
+                <Link to="/blog" className={HomeCSS.heroButtonOutline}>Join Discussion</Link>
             </div>
 
             {/* Launch Cards Section */}

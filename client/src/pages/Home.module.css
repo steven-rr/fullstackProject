@@ -23,7 +23,7 @@
     justify-content: center;
     width: 100%;
     min-height: auto;
-    background: linear-gradient(180deg, rgb(15, 15, 15) 0%, rgb(5, 5, 5) 50%, black 100%);
+    background-color: black;
     padding: 50px 20px 40px 20px;
     border-bottom: 1px solid rgb(40, 40, 40);
 }
@@ -115,13 +115,6 @@
     font-size: 30px;
     font-weight: 300;
     color: rgb(80, 80, 80);
-}
-.heroButtons
-{
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    margin-top: 10px;
 }
 .heroButtonOutline
 {
@@ -564,12 +557,6 @@
     .heroCountdownSeparator
     {
         font-size: 22px;
-    }
-    .heroButtons
-    {
-        flex-direction: column;
-        width: 100%;
-        max-width: 220px;
     }
     .heroButtonOutline
     {
