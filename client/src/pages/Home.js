@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react' 
+import React, { useState, useEffect } from 'react'
 import HomeCSS from "./Home.module.css"
 import Button from "../components/Button.js"
 import Footer from "../components/Footer"
-import axios from   "axios" 
+import axios from   "axios"
 import {Link} from "react-router-dom"
 import { MdArrowForwardIos } from "react-icons/md";
 import { MdOutlineLocationOn } from "react-icons/md";
@@ -324,8 +324,52 @@ const Home = () => {
         const timeLeft ={daysLeft: daysLeft, hoursLeft: hoursLeft, minutesLeft: minutesLeft, secondsLeft: secondsLeft}
         return timeLeft
     }
+    // find the next upcoming launch for the hero
+    const nextLaunch = launchData.find(l => l.futureFlag === "Y");
+    const nextLaunchTime = nextLaunch ? calcDeltaTime(new Date(nextLaunch.launchDate)) : null;
+
     return (
         <div className={HomeCSS.homeContainer}>
+            {/* Hero Section */}
+            <div className={HomeCSS.heroSection}>
+                <h1 className={HomeCSS.heroTitle}>SPACE LAUNCHES</h1>
+                <p className={HomeCSS.heroSubtitle}>Track real-time launches from around the world.</p>
+
+                {nextLaunch && (
+                    <div className={HomeCSS.heroNextLaunch}>
+                        <div className={HomeCSS.heroNextLabel}>NEXT LAUNCH</div>
+                        <div className={HomeCSS.heroNextName}>{nextLaunch.title}</div>
+                        <div className={HomeCSS.heroCountdown}>
+                            <div className={HomeCSS.heroCountdownBox}>
+                                <div className={HomeCSS.heroCountdownNumber}>{nextLaunchTime.daysLeft}</div>
+                                <div className={HomeCSS.heroCountdownLabel}>DAYS</div>
+                            </div>
+                            <div className={HomeCSS.heroCountdownSeparator}>:</div>
+                            <div className={HomeCSS.heroCountdownBox}>
+                                <div className={HomeCSS.heroCountdownNumber}>{nextLaunchTime.hoursLeft}</div>
+                                <div className={HomeCSS.heroCountdownLabel}>HRS</div>
+                            </div>
+                            <div className={HomeCSS.heroCountdownSeparator}>:</div>
+                            <div className={HomeCSS.heroCountdownBox}>
+                                <div className={HomeCSS.heroCountdownNumber}>{nextLaunchTime.minutesLeft}</div>
+                                <div className={HomeCSS.heroCountdownLabel}>MINS</div>
+                            </div>
+                            <div className={HomeCSS.heroCountdownSeparator}>:</div>
+                            <div className={HomeCSS.heroCountdownBox}>
+                                <div className={HomeCSS.heroCountdownNumber}>{nextLaunchTime.secondsLeft}</div>
+                                <div className={HomeCSS.heroCountdownLabel}>SECS</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className={HomeCSS.heroButtons}>
+                    <Link to="/" className={HomeCSS.heroButtonOutline}>Explore Launches</Link>
+                    <Link to="/blog" className={HomeCSS.heroButtonOutline}>Join Discussion</Link>
+                </div>
+            </div>
+
+            {/* Launch Cards Section */}
             <div className= {HomeCSS.headerStyle}> { (showAllFlag) ? "All Launches": ( (futureFlag == "Y") ? "Future Launches" : "Past Launches")}</div>
             {/* desktop button bar */}
             <div className={HomeCSS.buttnBarContainer}>

@@ -10,9 +10,142 @@
     background-color:  black;
     height: 100%;
     margin-top: 70px;
-    position: relative ; 
-    padding-bottom: 40px;    
+    position: relative ;
+    padding-bottom: 40px;
 }
+
+/* ---- Hero Section ---- */
+.heroSection
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: auto;
+    background: linear-gradient(180deg, rgb(15, 15, 15) 0%, rgb(5, 5, 5) 50%, black 100%);
+    padding: 50px 20px 40px 20px;
+    border-bottom: 1px solid rgb(40, 40, 40);
+}
+.heroTitle
+{
+    font-size: 52px;
+    font-family: Poppins;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.4rem;
+    margin: 0 0 16px 0;
+    text-align: center;
+}
+.heroSubtitle
+{
+    font-size: 18px;
+    font-family: Poppins;
+    color: rgb(160, 160, 160);
+    font-weight: 300;
+    letter-spacing: 0.05rem;
+    margin: 0 0 30px 0;
+    text-align: center;
+    max-width: 500px;
+}
+.heroNextLaunch
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.heroNextLabel
+{
+    font-size: 13px;
+    font-family: Poppins;
+    font-weight: 600;
+    color: rgb(117, 35, 35);
+    letter-spacing: 0.25rem;
+    margin-bottom: 10px;
+}
+.heroNextName
+{
+    font-size: 22px;
+    font-family: Poppins;
+    font-weight: 400;
+    color: rgb(200, 200, 200);
+    margin-bottom: 30px;
+    text-align: center;
+    max-width: 600px;
+}
+.heroCountdown
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+.heroCountdownBox
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(25, 25, 25);
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: 8px;
+    width: 80px;
+    height: 90px;
+}
+.heroCountdownNumber
+{
+    font-size: 36px;
+    font-family: Poppins;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+}
+.heroCountdownLabel
+{
+    font-size: 11px;
+    font-family: Poppins;
+    font-weight: 400;
+    color: rgb(120, 120, 120);
+    letter-spacing: 0.15rem;
+    margin-top: 6px;
+}
+.heroCountdownSeparator
+{
+    font-size: 30px;
+    font-weight: 300;
+    color: rgb(80, 80, 80);
+}
+.heroButtons
+{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-top: 10px;
+}
+.heroButtonOutline
+{
+    background-color: transparent;
+    border: 1px solid rgb(80, 80, 80);
+    color: rgb(160, 160, 160);
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: Poppins;
+    letter-spacing: 0.08rem;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s ease-out;
+}
+.heroButtonOutline:hover
+{
+    border-color: rgb(117, 35, 35);
+    color: white;
+}
+/* ---- End Hero Section ---- */
+
 .headerStyle
 {   
     display: block;
@@ -342,6 +475,24 @@
 
 @media screen and (max-width: 900px)
 {
+    .heroSection
+    {
+        padding: 40px 20px 30px 20px;
+    }
+    .heroTitle
+    {
+        font-size: 38px;
+        letter-spacing: 0.25rem;
+    }
+    .heroCountdownBox
+    {
+        width: 70px;
+        height: 80px;
+    }
+    .heroCountdownNumber
+    {
+        font-size: 30px;
+    }
     .launchItemsContainer
     {
 
@@ -375,6 +526,55 @@
 
 @media screen and (max-width: 700px)
 {
+    .heroSection
+    {
+        padding: 30px 16px 24px 16px;
+    }
+    .heroTitle
+    {
+        font-size: 28px;
+        letter-spacing: 0.15rem;
+    }
+    .heroSubtitle
+    {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+    .heroNextName
+    {
+        font-size: 18px;
+    }
+    .heroCountdown
+    {
+        gap: 4px;
+    }
+    .heroCountdownBox
+    {
+        width: 60px;
+        height: 70px;
+    }
+    .heroCountdownNumber
+    {
+        font-size: 24px;
+    }
+    .heroCountdownLabel
+    {
+        font-size: 9px;
+    }
+    .heroCountdownSeparator
+    {
+        font-size: 22px;
+    }
+    .heroButtons
+    {
+        flex-direction: column;
+        width: 100%;
+        max-width: 220px;
+    }
+    .heroButtonOutline
+    {
+        padding: 10px 16px;
+    }
     .mobileDropdownMenu
     {   
         position: absolute;
